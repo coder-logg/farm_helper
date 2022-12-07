@@ -21,7 +21,10 @@ CREATE TABLE IF NOT EXISTS car(
 
 CREATE TABLE IF NOT EXISTS status(
 	id serial primary key,
-	location varchar(30) NOT NULL
+	location varchar(30) NOT NULL,
+	progress varchar(20) check (progress='started' or progress='cultivation' or
+								progress='delivery' or progress='finished' or
+								progress='arbitration')
 );
 
 CREATE TABLE IF NOT EXISTS equipment(
@@ -32,10 +35,10 @@ CREATE TABLE IF NOT EXISTS equipment(
 );
 
 CREATE TABLE Review(
-   id serial PRIMARY KEY,
-   sendler_login varchar(10),
-   message varchar(255),
-   rate int
+	id serial PRIMARY KEY,
+	sendler_login varchar(10),
+	message varchar(255),
+	rate int
 );
 
 CREATE TABLE IF NOT EXISTS admin(
@@ -71,7 +74,7 @@ CREATE TABLE IF NOT EXISTS _order(
 	customer_id int references customer(id) NOT NULL,
 	order_detail_id int references order_detail(id) NOT NULL,
 	status_id int references status(id) NOT NULL,
-	cost int check(cost > 1) NOT NULL
+	cost int check(cost > 0) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS required_equipment(
