@@ -1,4 +1,4 @@
-CREATE FUNCTION recalculate_order_cost(order_id INT) RETURNS void AS $$
+CREATE OR REPLACE FUNCTION recalculate_order_cost(order_id INT) RETURNS void AS $$
 DECLARE
 	_order_detail record;
 	amount_plant INT;
@@ -126,7 +126,7 @@ begin
 end;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_order_date
+CREATE TRIGGER update_order_cost_rq
 AFTER INSERT ON required_equipment
 FOR EACH ROW
 EXECUTE FUNCTION update_order_cost_if_required_equipment_added();

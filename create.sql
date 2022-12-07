@@ -55,8 +55,8 @@ CREATE TABLE IF NOT EXISTS driver(
 
 CREATE TABLE IF NOT EXISTS plant(
 	id serial primary key,
-	name  varchar(30) NOT NULL UNIQUE,
-	сost int NOT NULL,
+	name varchar(30) NOT NULL UNIQUE,
+	cost int NOT NULL,
 	time_for_completed timestamp NOT NULL,
 	sunlight int NOT NULL
 );
