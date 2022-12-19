@@ -1,5 +1,5 @@
 CREATE TABLE Order_for_drive(
-    id PRIMARY KEY,
+    id int PRIMARY KEY,
     farmer_id int NOT NULL, 
     driver_id int NOT NULL,
     cost int CHECK(cost>0), 
@@ -17,7 +17,7 @@ CREATE TABLE Country(
 );
 CREATE INDEX idx_sunlight_amount on Country(sunlight_amount);
 CREATE TABLE Location(
-    id PRIMARY KEY,
+    id int PRIMARY KEY,
     country_name varchar(30),
     price_per_month int,
     square int CHECK(square>0),
@@ -26,14 +26,14 @@ CREATE TABLE Location(
 );
 CREATE INDEX idx_price_per_month on Location(price_per_month);
 CREATE TABLE Farm(
-   id PRIMARY KEY,
+   id int PRIMARY KEY,
    location_id int NOT NULL,
        FOREIGN KEY(location_id)
     REFERENCES Location(id),
 );
 
 CREATE TABLE Farmer(
-    id PRIMARY KEY,
+    id int PRIMARY KEY,
     farmer_inf_login int NOT NULL,
     balance int CHECK(balance>0), 
     farm_id int,
@@ -43,7 +43,7 @@ CREATE TABLE Farmer(
     REFERENCES farm(id),
 );
 CREATE TABLE Farmer_orders(
-   id PRIMARY KEY,
+   id int PRIMARY KEY,
    fermer_id int NOT NULL,
    order_id int,
        FOREIGN KEY(fermer_id)
@@ -58,7 +58,7 @@ CREATE TABLE Customer(
    mail varchar(50),
 );
 CREATE TABLE Review(
-   id PRIMARY KEY,
+   id int PRIMARY KEY,
    sendler_id int NOT NULL,
    message varchar(255) NOT NULL,
    rate int CHECK(rate>0 AND rate<5),
@@ -72,7 +72,7 @@ CREATE TABLE User(
 );
 
 CREATE TABLE Review_list(
-   id PRIMARY KEY,
+   id int PRIMARY KEY,
    rewiew_id int  NOT NULL 
    user_login varchar(10) NOT NULL,
    FOREIGN KEY(rewiew_id),
@@ -81,7 +81,7 @@ CREATE TABLE Review_list(
     REFERENCES User(id),
 );
 CREATE TABLE Arbitration(
-   id PRIMARY KEY,
+   id int PRIMARY KEY,
    order_id int NOT NULL,
    driver_id int  NOT NULL,
    fermer_id int NOT NULL,
