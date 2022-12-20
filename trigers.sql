@@ -29,7 +29,7 @@ begin
 	elsif tg_table_name = 'equipment' then
 		for row in select * from
 				order_detail join (select plant_id p from required_equipment where equipment_id = old.id) as rep on order_detail.plant_id = p loop
-			UPDATE _order SET cost = cost - old.cost + new.cost where order_detail_id = row.id;
+			UPDATE _order SET cost = cost - old.cost * old.amount + new.cost * new.amount where order_detail_id = row.id;
 		end loop;
 		return new;
 	end if;
@@ -46,7 +46,7 @@ execute function update_order_cost();
 CREATE TRIGGER upd_order_cost
 	AFTER UPDATE ON equipment
 	FOR EACH ROW
-WHEN (old.cost != new.cost)
+WHEN (old.cost != new.cost or old.amount != new.amount)
 execute function update_order_cost();
 
 CREATE OR REPLACE FUNCTION update_order_date_if_status_set_finished() RETURNS TRIGGER AS $$

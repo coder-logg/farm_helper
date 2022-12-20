@@ -1,35 +1,35 @@
 CREATE TABLE _user(
 	login varchar(10) PRIMARY KEY,
-	phone varchar(12),
-	mail varchar(50),
+	phone varchar(12) UNIQUE,
+	mail varchar(50) UNIQUE,
 	password varchar(15)
 );
 
 CREATE TABLE Customer(
 	id serial PRIMARY KEY,
 	name varchar(10),
-	phone varchar(12),
-	mail varchar(50)
+	phone varchar(12) UNIQUE,
+	mail varchar(50) UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS car(
 	id serial primary key,
 	mark varchar(15) NOT NULL,
-	number varchar(6) NOT NULL,
+	number varchar(6) NOT NULL UNIQUE,
 	capacity int
 );
+
+CREATE TYPE progress_stages AS ENUM ('started', 'cultivation','delivery','finished','arbitration');
 
 CREATE TABLE IF NOT EXISTS status(
 	id serial primary key,
 	location varchar(30) NOT NULL,
-	progress varchar(20) check (progress='started' or progress='cultivation' or
-								progress='delivery' or progress='finished' or
-								progress='arbitration')
+	progress progress_stages
 );
 
 CREATE TABLE IF NOT EXISTS equipment(
 	id serial primary key,
-	name varchar(30),
+	name varchar(30) UNIQUE,
 	cost int,
 	location varchar(30)
 );
@@ -48,8 +48,8 @@ CREATE TABLE IF NOT EXISTS admin(
 
 CREATE TABLE IF NOT EXISTS driver(
 	id serial primary key,
-	driver_inf_login varchar(10) references _user(login) NOT NULL,
-	car_id int references car(id) NOT NULL,
+	driver_inf_login varchar(10) references _user(login) NOT NULL UNIQUE,
+	car_id int references car(id) NOT NULL UNIQUE,
 	balance int
 );
 
@@ -72,15 +72,17 @@ CREATE TABLE IF NOT EXISTS order_detail(
 CREATE TABLE IF NOT EXISTS _order(
 	id serial primary key,
 	customer_id int references customer(id) NOT NULL,
-	order_detail_id int references order_detail(id) NOT NULL,
-	status_id int references status(id) NOT NULL,
+	order_detail_id int references order_detail(id) NOT NULL UNIQUE,
+	status_id int references status(id) NOT NULL UNIQUE,
 	cost int check(cost > 0) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS required_equipment(
 	id serial primary key,
 	plant_id int references plant(id),
-	equipment_id int references equipment(id)
+	equipment_id int references equipment(id),
+	amount int,
+	UNIQUE (plant_id, equipment_id)
 );
 
 CREATE TABLE Country(
@@ -162,6 +164,6 @@ CREATE TABLE Arbitration(
 
 CREATE TABLE IF NOT EXISTS arbitration_list(
 	id serial primary key,
-	arbitration_id int references arbitration(id) NOT NULL,
+	arbitration_id int references arbitration(id) NOT NULL UNIQUE,
 	admin_id int references admin(id) NOT NULL
 );
