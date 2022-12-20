@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS equipment(
 	location varchar(30)
 );
 
+CREATE INDEX equipment_cost ON equipment(cost);
+
 CREATE TABLE Review(
 	id serial PRIMARY KEY,
 	sendler_login varchar(10),
@@ -61,6 +63,8 @@ CREATE TABLE IF NOT EXISTS plant(
 	sunlight int NOT NULL
 );
 
+CREATE INDEX plant_cost ON plant(cost);
+
 CREATE TABLE IF NOT EXISTS order_detail(
 	id serial primary key,
 	plant_id int references plant(id) NOT NULL,
@@ -69,6 +73,8 @@ CREATE TABLE IF NOT EXISTS order_detail(
 	delivery_address varchar(30) NOT NULL
 );
 
+CREATE INDEX delivery_date ON order_detail(delivery_date);
+
 CREATE TABLE IF NOT EXISTS _order(
 	id serial primary key,
 	customer_id int references customer(id) NOT NULL,
@@ -76,6 +82,8 @@ CREATE TABLE IF NOT EXISTS _order(
 	status_id int references status(id) NOT NULL UNIQUE,
 	cost int check(cost > 0) NOT NULL
 );
+
+CREATE INDEX order_cost ON _order(cost);
 
 CREATE TABLE IF NOT EXISTS required_equipment(
 	id serial primary key,
