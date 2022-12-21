@@ -65,23 +65,28 @@ function pass_gen(len) {
     return str;
 }
 // Получаем случайный ключ массива
-for (var i = 0; i < 50; i++) {
-    console.log("INSERT INTO Farmer (id,farmer_inf_login,balance,farm_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");// Выведем, например: JavaScript
-    console.log("INSERT INTO Farmer_orders  (id,farmer_id, order_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");// Выведем, например: JavaScript
-    console.log("INSERT INTO Order_for_drive (id,driver_id,farmer_id,cost) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");// Выведем, например: JavaScript
-    console.log("INSERT INTO Arbitration (id,order_id,driver_id,fermer_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");// Выведем, например: JavaScript
+for (var i = 0; i < 10000; i++) {
+    console.log("INSERT INTO Farmer (id,farmer_inf_login,balance,farm_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");
+    console.log("INSERT INTO Order_for_drive (id,driver_id,farmer_id,cost) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");
+    console.log("INSERT INTO Arbitration (id,order_id,driver_id,fermer_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");
+    console.log("INSERT INTO Farm (id,location) VALUES (" + getRandomInt(100) + "," + getRandomInt(7) + ")")
 }
-for (i = 0; i < 100; i++) {
+for (var i = 0; i < 20000; i++) {
+    console.log("INSERT INTO Order_for_drive (id,driver_id,farmer_id,cost) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");
+    console.log("INSERT INTO Arbitration (id,order_id,driver_id,fermer_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");
+}
+for (i = 0; i < 15000; i++) {
     var login = pass_gen(10);
     var rand1 = Math.floor(Math.random() * message_enum.length);
     console.log("INSERT INTO User (login, phone, mail, password) VALUES ('" + login + "'," + Mock.getMobile() + ",'" + Mock.getEmail() + "','" + pass_gen(10) + "')");
-    console.log("INSERT INTO Customer (id, name, phone, mail) VALUES (" + getRandomInt(100) + ",'" + pass_gen(10) + "'," + Mock.getMobile() + ",'" + Mock.getEmail() + "','" + pass_gen(10) + "')")
     console.log("INSERT INTO Review_List  (id, review_id,user_login) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + ",'" + login + "')")
     console.log("INSERT INTO Review (id, sendler_id, message, rate) VALUES (" + getRandomInt(100) + "," + login + ",'" + message_enum[rand1] + "'," + getRandomInt(10) + ")")
 };
+for (i = 0; i < 10000; i++) {
+    console.log("INSERT INTO Customer (id, name, phone, mail) VALUES (" + getRandomInt(100) + ",'" + pass_gen(10) + "'," + Mock.getMobile() + ",'" + Mock.getEmail() + "','" + pass_gen(10) + "')")
+}
 for (i = 0; i < 25; i++) {
     var rand = Math.floor(Math.random() * country.length);
-    console.log("INSERT INTO Farm (id,location) VALUES (" + getRandomInt(100) + "," + getRandomInt(7) + ")")
     console.log("INSERT INTO Location (id,counry_name, price_per_month, square) VALUES (" + getRandomInt(7) + "," + country[rand] + "," + getRandomInt(100) + "," + getRandomInt(100) + ")")
 }
 for (i = 0; i < 7; i++) {
