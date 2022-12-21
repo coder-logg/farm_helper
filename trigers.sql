@@ -19,6 +19,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION update_order_cost() RETURNS TRIGGER AS $$
 declare
 	row record;
+	_cost int;
 begin
 	if tg_table_name = 'plant' then
 		for row in select * from
@@ -29,8 +30,18 @@ begin
 	elsif tg_table_name = 'equipment' then
 		for row in select * from
 				order_detail join (select plant_id p from required_equipment where equipment_id = old.id) as rep on order_detail.plant_id = p loop
-			UPDATE _order SET cost = cost - old.cost * old.amount + new.cost * new.amount where order_detail_id = row.id;
+			UPDATE _order SET cost = cost - old.cost + new.cost where order_detail_id = row.id;
 		end loop;
+		return new;
+	elsif tg_table_name = 'required_equipment' then
+		_cost = (select cost from equipment where id = old.plant_id);
+		for row in select * from order_detail where plant_id = old.plant_id loop
+			UPDATE _order SET cost = cost - old.amount * _cost + new.amount * _cost where order_detail_id = row.id;
+		end loop;
+		return new;
+	elsif tg_table_name = 'order_detail' then
+		_cost = (select cost from plant where id = old.plant_id);
+		UPDATE _order SET cost = cost - old.amount * _cost + new.amount * _cost where order_detail_id = old.id;
 		return new;
 	end if;
 	return null;
@@ -46,25 +57,33 @@ execute function update_order_cost();
 CREATE TRIGGER upd_order_cost
 	AFTER UPDATE ON equipment
 	FOR EACH ROW
-WHEN (old.cost != new.cost or old.amount != new.amount)
+WHEN (old.cost != new.cost)
+execute function update_order_cost();
+
+CREATE TRIGGER upd_order_cost_req_eq
+	AFTER UPDATE ON required_equipment
+	FOR EACH ROW
+	WHEN (old.amount != new.amount)
+execute function update_order_cost();
+
+CREATE TRIGGER upd_order_cost_ord_det
+	AFTER UPDATE ON order_detail
+	FOR EACH ROW
+	WHEN (old.amount != new.amount)
 execute function update_order_cost();
 
 CREATE OR REPLACE FUNCTION update_order_date_if_status_set_finished() RETURNS TRIGGER AS $$
 declare
 	cost int;
 	order_row record;
-	farmer_row record;
 	order_for_drive_row record;
 begin
-	if new.status == 'finished' then
+	if new.progress == 'finished' then
 		order_row = (select * from _order where status_id = new.id);
-		UPDATE order_detail
-		SET delivery_date = current_timestamp
-		where id = order_row.order_detail_id;
-		farmer_row = (select farmer_id from farmer_orders where order_id = order_row.cost);
-		order_for_drive_row = (SELECT * from order_for_drive where farmer_id = farmer_row.farmer_id);
+		UPDATE order_detail SET delivery_date = current_timestamp where id = order_row.order_detail_id;
+		order_for_drive_row = (SELECT * from order_for_drive where farmer_id = order_row.farmer_id);
 		cost = order_for_drive_row.cost;
-		UPDATE farmer SET balance = balance - cost where id = farmer_row.farmer_id;
+		UPDATE farmer SET balance = balance - cost where id = order_row.farmer_id;
 		UPDATE driver SET balance = balance + cost where id = order_for_drive_row.driver_id;
 	end if;
 	return new;
@@ -77,17 +96,14 @@ FOR EACH ROW
 when (old.progress != 'finished' and new.progress = 'finished')
 EXECUTE FUNCTION update_order_date_if_status_set_finished();
 
-
+--- todo remake this function
 CREATE OR REPLACE FUNCTION change_order_location() RETURNS TRIGGER AS $$
 declare
 	row record;
 begin
 	if new.location_id != old.location_id then
-		for row in select * from
-				_order join (select * from farmer_orders where farmer_id = (select id from farmer where farm_id = new.id)) as t on _order.id = t.order_id loop
-			UPDATE status SET location = (select country_name from location where id = old.location_id)
-			where id = row.status_id and (progress = 'cultivation' or progress = 'started');
-		end loop;
+		UPDATE status SET location = (select country_name from location where id = new.location_id)
+		where id = row.status_id and (progress = 'cultivation' or progress = 'started');
 	end if;
 	return new;
 end;

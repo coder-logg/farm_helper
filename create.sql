@@ -1,3 +1,5 @@
+CREATE TYPE progress_stages AS ENUM ('started', 'cultivation','delivery','finished','arbitration');
+
 CREATE TABLE _user(
 	login varchar(10) PRIMARY KEY,
 	phone varchar(12) UNIQUE,
@@ -18,8 +20,6 @@ CREATE TABLE IF NOT EXISTS car(
 	number varchar(6) NOT NULL UNIQUE,
 	capacity int
 );
-
-CREATE TYPE progress_stages AS ENUM ('started', 'cultivation','delivery','finished','arbitration');
 
 CREATE TABLE IF NOT EXISTS status(
 	id serial primary key,
@@ -59,8 +59,7 @@ CREATE TABLE IF NOT EXISTS plant(
 	id serial primary key,
 	name varchar(30) NOT NULL UNIQUE,
 	cost int NOT NULL,
-	time_for_completed timestamp NOT NULL,
-	sunlight int NOT NULL
+	time_for_completed int NOT NULL
 );
 
 CREATE INDEX plant_cost ON plant(cost);
@@ -74,17 +73,6 @@ CREATE TABLE IF NOT EXISTS order_detail(
 );
 
 CREATE INDEX delivery_date ON order_detail(delivery_date);
-
-CREATE TABLE IF NOT EXISTS _order(
-	id serial primary key,
-	farmer_id int references farmer(id) NOT NULL,
-	customer_id int references customer(id) NOT NULL,
-	order_detail_id int references order_detail(id) NOT NULL UNIQUE,
-	status_id int references status(id) NOT NULL UNIQUE,
-	cost int check(cost > 0) NOT NULL
-);
-
-CREATE INDEX order_cost ON _order(cost);
 
 CREATE TABLE IF NOT EXISTS required_equipment(
 	id serial primary key,
@@ -127,6 +115,17 @@ CREATE TABLE Farmer(
 	REFERENCES farm(id)
 );
 
+CREATE TABLE IF NOT EXISTS _order(
+	id serial primary key,
+	farmer_id int references farmer(id) NOT NULL,
+	customer_id int references customer(id) NOT NULL,
+	order_detail_id int references order_detail(id) NOT NULL UNIQUE,
+	status_id int references status(id) NOT NULL UNIQUE,
+	cost int check(cost > 0) NOT NULL
+);
+
+CREATE INDEX order_cost ON _order(cost);
+
 CREATE TABLE Order_for_drive(
 	id serial PRIMARY KEY,
 	driver_id int,
@@ -141,10 +140,10 @@ CREATE TABLE Order_for_drive(
 CREATE TABLE Review_list(
 	id serial PRIMARY KEY,
 	review_id int,
-	_user_login varchar(10),
+	user_login varchar(10),
 	FOREIGN KEY(review_id)
 	REFERENCES Review(id),
-	FOREIGN KEY(_user_login)
+	FOREIGN KEY(user_login)
 	REFERENCES _user(login)
 );
 
