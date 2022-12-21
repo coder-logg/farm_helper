@@ -77,6 +77,7 @@ CREATE INDEX delivery_date ON order_detail(delivery_date);
 
 CREATE TABLE IF NOT EXISTS _order(
 	id serial primary key,
+	farmer_id int references farmer(id) NOT NULL,
 	customer_id int references customer(id) NOT NULL,
 	order_detail_id int references order_detail(id) NOT NULL UNIQUE,
 	status_id int references status(id) NOT NULL UNIQUE,
@@ -135,16 +136,6 @@ CREATE TABLE Order_for_drive(
 	REFERENCES driver(id),
 	FOREIGN KEY(farmer_id)
 	REFERENCES farmer(id)
-);
-
-CREATE TABLE Farmer_orders(
-	id serial PRIMARY KEY,
-	farmer_id int,
-	order_id int,
-	FOREIGN KEY(farmer_id)
-	REFERENCES farmer(id),
-	FOREIGN KEY(order_id)
-	REFERENCES _order(id)
 );
 
 CREATE TABLE Review_list(

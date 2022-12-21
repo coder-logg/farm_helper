@@ -66,7 +66,7 @@ function pass_gen(len) {
 }
 // Получаем случайный ключ массива
 for (var i = 0; i < 50; i++) {
-    console.log("INSERT INTO Farmer (id,farmer_inf_login,balance,farm_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");// Выведем, например: JavaScript
+    console.log("INSERT INTO Farmer (id,farmer_inf_login,balance,farm_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ");");// Выведем, например: JavaScript
     console.log("INSERT INTO Farmer_orders  (id,farmer_id, order_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");// Выведем, например: JavaScript
     console.log("INSERT INTO Order_for_drive (id,driver_id,farmer_id,cost) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");// Выведем, например: JavaScript
     console.log("INSERT INTO Arbitration (id,order_id,driver_id,fermer_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ")");// Выведем, например: JavaScript
@@ -87,4 +87,27 @@ for (i = 0; i < 25; i++) {
 for (i = 0; i < 7; i++) {
     var rand1 = Math.floor(Math.random() * soil_type.length);
     console.log("INSERT INTO Country (name,soil_type, sunlight_amount) VALUES ('" + country[i] + "','" + soil_type[rand1] + "'," + getRandomInt(100) + ")")
+}
+
+equipment = ["культиватор бензиновый", "ножницы садовые", "аккумуляторный опрыскиватель", "газонокосилка бензиновая",
+    "шланг поливочный 100м", "шланг поливочный 50м", "шланг поливочный 30м", "лопата штыковая", "грабли",
+    "садовый трактор", "кусторез", "комплект садовых инструметов", "система полива"]
+brends = ["PATRIOT","GLORIA", "ЗУБР", "GARDENA", "KARCHER", "DAEWOO", "ВИХРЬ"]
+customer_number = 100
+
+for (e in equipment){
+    for (b in brends){
+        var name = "\"" + e + " " + b + "\""
+        console.log("INSERT INTO equipment (name, cost, location) VALUES (" + name + ", " + getRandomInt(10000) + "," + country[getRandomInt(country.length)] + ");")
+    }
+}
+progress = ['started', 'cultivation','delivery','finished','arbitration']
+
+for (i = 0; i < 50; i++){
+    console.log("INSERT INTO status (location, progress) VALUES ("+ country[getRandomInt(country.length)] + ", " + progress[getRandomInt(progress.length)] +");")
+    console.log("INSERT INTO status (customer_id, order_detail_id, status_id) VALUES ("+ country[getRandomInt(country.length)] + ", " + progress[getRandomInt(progress.length)] +");")
+}
+
+for (i = 0; i < 100; i++){
+    console.log("INSERT INTO admin (admin_inf_login) VALUES (i)")
 }
