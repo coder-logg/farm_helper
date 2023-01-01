@@ -129,55 +129,56 @@ function gen_timestamp() {
 
 
 for (i = 0; i < car_number; i++) {
-    console.log("INSERT INTO car (mark, number, capacity) VALUES (" + string_gen(15) + "," + gen_car_number() + "," + Mock.randomInt(20, 100)+ ");");
+    console.log("INSERT INTO car (mark, number, capacity) VALUES ('" + string_gen(15) + "', '" + gen_car_number() + "', " + Mock.randomInt(20, 100)+ ");");
 }
 
 // Получаем случайный ключ массива
 for (var i = 0; i < 10000; i++) {
     console.log("INSERT INTO Order_for_drive (id,driver_id,farmer_id,cost) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ");");
     console.log("INSERT INTO Arbitration (id,order_id,driver_id,farmer_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ");");
-    console.log("INSERT INTO Farm (id, location_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(7) + ")")
-}
-for (var i = 0; i < 20000; i++) {
-    console.log("INSERT INTO Order_for_drive (id,driver_id,farmer_id,cost) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ");");
-    console.log("INSERT INTO Arbitration (id,order_id,driver_id, farmer_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ");");
+    console.log("INSERT INTO Farm (id, location_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(7) + ");")
 }
 
 for (i = 0; i < users_number; i++) {
     var login = pass_gen(10);
     var rand1 = Math.floor(Math.random() * message_enum.length);
-    console.log("INSERT INTO _user (login, phone, mail, password) VALUES ('" + login + "'," + Mock.getMobile() + ",'" + Mock.getEmail() + "','" + pass_gen(10) + "');");
-    console.log("INSERT INTO Review_List  (id, review_id, user_login) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + ",'" + login + "');")
-    console.log("INSERT INTO Review (id, sendler_login, message, rate) VALUES (" + getRandomInt(100) + "," + login + ",'" + message_enum[rand1] + "'," + getRandomInt(10) + ");")
+    console.log("INSERT INTO _user (login, phone, mail, password) VALUES ('" + login + "', " + Mock.getMobile() + ", '" + Mock.getEmail() + "', '" + pass_gen(10) + "');");
+    console.log("INSERT INTO Review_List  (id, review_id, user_login) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + ", '" + login + "');")
+    console.log("INSERT INTO Review (id, sendler_login, message, rate) VALUES (" + getRandomInt(100) + ", '" + login + "', '" + message_enum[rand1] + "', " + getRandomInt(10) + ");")
     num = getRandomInt(3)
     a = 0
     b = 0
     c = 0
     if (num % 3 === 0 && a < farmer_number) {
-        console.log("INSERT INTO Farmer (id,farmer_inf_login,balance,farm_id) VALUES (" + getRandomInt(100) + "," + login + "," + getRandomInt(100) + "," + getRandomInt(100) + ");");
+        console.log("INSERT INTO Farmer (id,farmer_inf_login,balance,farm_id) VALUES (" + getRandomInt(100) + ", '" + login + "', " + getRandomInt(100) + "," + getRandomInt(100) + ");");
         a++
     }
     else if (num % 3 === 1 && b < driver_number) {
-        console.log("INSERT INTO driver (driver_inf_login, car_id, balance) VALUES (" + login + "," + getRandomInt(car_number) + "," + Mock.randomInt(-100, 10000000) + ");");
+        console.log("INSERT INTO driver (driver_inf_login, car_id, balance) VALUES ('" + login + "', " + getRandomInt(car_number) + ", " + Mock.randomInt(-100, 10000000) + ");");
         b++
     }
     else if (c < admin_number){
-        console.log("INSERT INTO admin (admin_inf_login) VALUES (" + login + ");");
+        console.log("INSERT INTO admin (admin_inf_login) VALUES ('" + login + "');");
         console.log("INSERT INTO arbitration_list (arbitration_id, admin_id) VALUES (" + getRandomInt(10000) + ", " + getRandomInt(i)+");");
         c++
     }
-};
+}
+
+for (var i = 0; i < 20000; i++) {
+    console.log("INSERT INTO Order_for_drive (id,driver_id,farmer_id,cost) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ");");
+    console.log("INSERT INTO Arbitration (id,order_id,driver_id, farmer_id) VALUES (" + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + "," + getRandomInt(100) + ");");
+}
 
 for (i = 0; i < customer_number; i++) {
-    console.log("INSERT INTO Customer (id, name, phone, mail) VALUES (" + getRandomInt(100) + ",'" + pass_gen(10) + "'," + Mock.getMobile() + ",'" + Mock.getEmail() + "','" + pass_gen(10) + "');")
+    console.log("INSERT INTO Customer (id, name, phone, mail) VALUES (" + getRandomInt(100) + ", '" + pass_gen(10) + "', " + Mock.getMobile() + ", '" + Mock.getEmail() + "', '" + pass_gen(10) + "');")
 }
 for (i = 0; i < 25; i++) {
     var rand = Math.floor(Math.random() * country.length);
-    console.log("INSERT INTO Location (id, country_name, price_per_month, square) VALUES (" + getRandomInt(7) + "," + country[rand] + "," + getRandomInt(100) + "," + getRandomInt(100) + ");")
+    console.log("INSERT INTO Location (id, country_name, price_per_month, square) VALUES (" + getRandomInt(7) + ", '" + country[rand] + "'," + getRandomInt(100) + "," + getRandomInt(100) + ");")
 }
 for (i = 0; i < 7; i++) {
     var rand1 = Math.floor(Math.random() * soil_type.length);
-    console.log("INSERT INTO Country (name,soil_type, sunlight_amount) VALUES ('" + country[i] + "','" + soil_type[rand1] + "'," + getRandomInt(100) + ");")
+    console.log("INSERT INTO Country (name,soil_type, sunlight_amount) VALUES ('" + country[i] + "', '" + soil_type[rand1] + "'," + getRandomInt(100) + ");")
 }
 
 equipment = ["культиватор бензиновый", "ножницы садовые", "аккумуляторный опрыскиватель", "газонокосилка бензиновая",
@@ -188,12 +189,12 @@ brends = ["PATRIOT", "GLORIA", "ЗУБР", "GARDENA", "KARCHER", "DAEWOO", "ВИ
 for (e in equipment){
     for (b in brends){
         var name = "\"" + e + " " + b + "\""
-        console.log("INSERT INTO equipment (name, cost, location) VALUES (" + name + ", " + getRandomInt(10000) + "," + country[getRandomInt(country.length)] + ");")
+        console.log("INSERT INTO equipment (name, cost, location) VALUES ('" + name + "', " + getRandomInt(10000) + ", '" + country[getRandomInt(country.length)] + "');")
     }
 }
 
 for (i = 1; i <= plant_number; i++){
-    console.log("INSERT INTO plant (name, cost, time_for_completed) VALUES ("+ string_gen(30) + ", " + Mock.randomInt(20, 1000) + ", " + Mock.randomInt(500, 2000) + ");")
+    console.log("INSERT INTO plant (name, cost, time_for_completed) VALUES ('"+ string_gen(30) + "', " + Mock.randomInt(20, 1000) + ", " + Mock.randomInt(500, 2000) + ");")
     console.log("INSERT INTO required_equipment (plant_id, equipment_id, amount) VALUES ("+ getRandomInt(plant_number)+ ", " + getRandomInt(equipment.length * brends.length) + ", " + getRandomInt(20) + ");")
 
 }
@@ -201,7 +202,7 @@ for (i = 1; i <= plant_number; i++){
 progress = ['started', 'cultivation','delivery','finished','arbitration']
 
 for (i = 1; i <= order_number; i++){
-    console.log("INSERT INTO status (location, progress) VALUES ("+ country[getRandomInt(country.length)] + ", " + progress[getRandomInt(progress.length)] +");")
-    console.log("INSERT INTO order_detail (plant_id, amount, delivery_date, delivery_address) VALUES ("+ getRandomInt(plant_number) + ", " + Mock.randomInt(500, 2000) + ", " + gen_timestamp() + ", " + string_gen(30) +");")
+    console.log("INSERT INTO status (location, progress) VALUES ('"+ country[getRandomInt(country.length)] + "', '" + progress[getRandomInt(progress.length)] +"');")
+    console.log("INSERT INTO order_detail (plant_id, amount, delivery_date, delivery_address) VALUES ("+ getRandomInt(plant_number) + ", " + Mock.randomInt(500, 2000) + ", '" + gen_timestamp() + "', '" + string_gen(30) +"');")
     console.log("INSERT INTO _order (farmer_id, customer_id, order_detail_id, status_id, cost) VALUES ("+ getRandomInt(farmer_number) + ", " + getRandomInt(customer_number) + ", " + i + ", " + i + ", " + Mock.randomInt(10000, 10000000) + ");")
 }
