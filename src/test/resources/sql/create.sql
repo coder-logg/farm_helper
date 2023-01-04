@@ -9,7 +9,7 @@ CREATE TABLE _user(
 
 CREATE TABLE Customer(
 	id serial PRIMARY KEY,
-	name varchar(10),
+	name varchar(50),
 	phone varchar(12) NOT NULL UNIQUE,
 	mail varchar(50) UNIQUE
 );
@@ -38,9 +38,9 @@ CREATE INDEX equipment_cost ON equipment(cost);
 
 CREATE TABLE Review(
 	id serial PRIMARY KEY,
-	sendler_id int NOT NULL,
+	sendler_login varchar(10) references _user(login) NOT NULL,
 	message varchar(255) NOT NULL,
-	rate int CHECK(rate>0 AND rate<5)
+	rate int CHECK(rate>=0 AND rate<=5)
 );
 
 CREATE INDEX idx_rate on Review(rate);
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS admin(
 CREATE TABLE IF NOT EXISTS driver(
 	id serial primary key,
 	driver_inf_login varchar(10) references _user(login) NOT NULL UNIQUE,
-	car_id int references car(id) NOT NULL UNIQUE,
+	car_id int references car(id) NOT NULL,
 	balance int
 );
 
