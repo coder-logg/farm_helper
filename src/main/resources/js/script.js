@@ -140,7 +140,7 @@ car_numbers = []
 function gen_car_number(){
     var abc = 'АБВГДЕЁЖЗИЙКЛМНОПРСТфХЦЧШЩЫЭЮЯ';
     res = abc.charAt(getRandomIdx(abc.length)) + getRandomIdx(9) + getRandomIdx(9) + getRandomIdx(9) + abc.charAt(getRandomIdx(abc.length)) + abc.charAt(getRandomIdx(abc.length))
-    if (!car_numbers.includes(res, 0)){
+    if (!car_numbers.includes(res)){
         car_numbers.push(res)
         return res
     }
@@ -217,8 +217,10 @@ for (i = 1; i <= users_number; i++) {
 }
 
 for (i = 1; i <= review_number; i++){
-    console.log("INSERT INTO Review (sendler_login, message, rate) VALUES ('" + logins[getRandomIdx(logins.length)] + "', '" + message_enum[getRandomIdx(message_enum.length)] + "', " + getRandomIdx(6) + ");")
-    console.log("INSERT INTO Review_List  (review_id, user_login) VALUES (" + getRandomInt(i) + ", '" + logins[getRandomIdx(logins.length)] + "');")
+    sender = logins[getRandomIdx(logins.length)]
+    while ((recipient = logins[getRandomIdx(logins.length)]) === sender);
+    console.log("INSERT INTO Review (sender_login, recipient_login,  message, rate) VALUES ('" + sender + "', '" + recipient + "', '" + message_enum[getRandomIdx(message_enum.length)] + "', " + getRandomIdx(6) + ");")
+    //console.log("INSERT INTO Review_List  (review_id, user_login) VALUES (" + getRandomInt(i) + ", '" + logins[getRandomIdx(logins.length)] + "');")
 }
 
 equipment = ["культиватор бензиновый", "ножницы садовые", "аккумуляторный опрыскиватель", "газонокосилка бензиновая",
@@ -250,8 +252,8 @@ for (i = 1; i <= order_number; i++){
 
 for (i = 1; i <= order_for_drive_number; i++) {
     console.log("INSERT INTO Order_for_drive (driver_id, farmer_id, cost) VALUES (" + getRandomInt(driver_number) + "," + getRandomInt(a) + "," + getRandomInt(100) + ");");
-    console.log("INSERT INTO Arbitration (order_id, driver_id, farmer_id) VALUES (" + i + "," + getRandomInt(driver_number) + "," + getRandomInt(a) + ");");
-    console.log("INSERT INTO arbitration_list (arbitration_id, admin_id) VALUES (" + i + ", " + getRandomInt(admin_number) +");");
+    console.log("INSERT INTO Arbitration (order_id, admin_id,  driver_id, farmer_id) VALUES (" + i + ", " + getRandomInt(admin_number) + "," + getRandomInt(driver_number) + "," + getRandomInt(a) + ");");
+//    console.log("INSERT INTO arbitration_list (arbitration_id, admin_id) VALUES (" + i + ", " + getRandomInt(admin_number) +");");
 }
 
 console.log("--- a=" + a)

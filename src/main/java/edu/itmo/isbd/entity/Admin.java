@@ -1,15 +1,22 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Admin {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String adminInfLogin;
 
-	public Admin() {
+	@OneToOne(optional=false, cascade= CascadeType.ALL)
+	@JoinColumn(name="admin_inf_login")
+	private User adminInfLogin;
+
+	public Admin() {}
+
+	public Admin(int id, User adminInfLogin) {
+		this.id = id;
+		this.adminInfLogin = adminInfLogin;
 	}
 
 	public int getId() {
@@ -21,11 +28,11 @@ public class Admin {
 		return this;
 	}
 
-	public String getAdminInfLogin() {
+	public User getAdminInfLogin() {
 		return adminInfLogin;
 	}
 
-	public Admin setAdminInfLogin(String adminInfLogin) {
+	public Admin setAdminInfLogin(User adminInfLogin) {
 		this.adminInfLogin = adminInfLogin;
 		return this;
 	}

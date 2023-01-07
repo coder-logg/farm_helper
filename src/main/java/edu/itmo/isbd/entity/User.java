@@ -1,9 +1,9 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "_user")
 public class User {
 	@Id
 	private String login;
@@ -11,8 +11,7 @@ public class User {
 	private String mail;
 	private String pass;
 
-	public User() {
-	}
+	public User() {}
 
 	public String getLogin() {
 		return login;

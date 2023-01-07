@@ -38,7 +38,7 @@ CREATE INDEX equipment_cost ON equipment(cost);
 
 CREATE TABLE Review(
 	id serial PRIMARY KEY,
-	sendler_login varchar(10) references _user(login) NOT NULL,
+	sender_login varchar(10) references _user(login) NOT NULL,
 	message varchar(255) NOT NULL,
 	rate int CHECK(rate>=0 AND rate<=5)
 );
@@ -95,9 +95,9 @@ CREATE INDEX idx_sunlight_amount on Country(sunlight_amount);
 
 CREATE TABLE Location(
 	id serial PRIMARY KEY,
-	country_name varchar(30),
-	price_per_month int,
-	square int CHECK(square>0),
+	country_name varchar(30) NOT NULL,
+	price_per_month int NOT NULL,
+	square int CHECK(square>0) NOT NULL,
 	FOREIGN KEY(country_name)
 	REFERENCES country(name)
 );
