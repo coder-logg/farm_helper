@@ -1,0 +1,63 @@
+.main_page {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+}
+
+.ava {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    margin-top: -180px;
+    position: relative;
+    width: 326px;
+    height: 326px;
+    overflow: hidden;
+    background: transparent;
+}
+
+.box::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 300px;
+    background: transparent;
+    border-radius: 50%;
+    z-index: 1;
+    box-shadow: 0 100px 0 40px transparent;
+}
+
+.box .circle {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 300px;
+    background: rgb(146, 19, 146);
+    overflow: hidden;
+    border-radius: 50%;
+    border: 6px solid black;
+}
+
+.box .circle img,
+.box img {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 40px;
+}
+
+.main_page .buttons button {
+    margin-left: 150px;
+    width: 280px;
+    margin-bottom: 40px;
+    height: 60px;
+}
