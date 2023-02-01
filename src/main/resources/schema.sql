@@ -1,4 +1,4 @@
-CREATE TYPE progress_stages AS ENUM ('started', 'cultivation','delivery','finished','arbitration');
+CREATE TYPE progress_stages AS ENUM ('STARTED', 'CULTIVATION','DELIVERY','FINISHED','ARBITRATION');
 
 CREATE TABLE _user(
 	login varchar(10) PRIMARY KEY,

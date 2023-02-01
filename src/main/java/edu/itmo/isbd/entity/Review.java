@@ -1,19 +1,26 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.*;
+import lombok.Data;
+
+import javax.persistence.*;
 
 @Entity
+@Data
 public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@ManyToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name = "sender_login")
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "sender_login", referencedColumnName = "login")
 	private User sender;
-	@ManyToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name = "recipient_login")
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "recipient_login", referencedColumnName = "login")
 	private User recipient;
+
 	private String message;
+
 	private int rate;
 
 	public Review() {}

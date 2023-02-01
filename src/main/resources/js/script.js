@@ -241,7 +241,7 @@ for (i = 1; i <= plant_number; i++){
 
 }
 
-progress = ['started', 'cultivation','delivery','finished','arbitration']
+progress = ['STARTED', 'CULTIVATION','DELIVERY','FINISHED','ARBITRATION']
 
 for (i = 1; i <= order_number; i++){
     console.log("INSERT INTO status (location, progress) VALUES ('"+ country[getRandomIdx(country.length)] + "', '" + progress[getRandomIdx(progress.length)] +"');")

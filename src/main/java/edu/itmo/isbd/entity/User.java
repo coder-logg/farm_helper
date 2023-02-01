@@ -1,15 +1,35 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.*;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "_user")
+@Data
 public class User {
 	@Id
 	private String login;
 	private String phone;
 	private String mail;
-	private String pass;
+	private String password;
+
+	@OneToOne(mappedBy = "adminInfLogin")
+	private Admin admin;
+
+	@OneToOne(mappedBy = "farmerInfLogin")
+	private Farmer farmer;
+
+	@OneToOne(mappedBy = "driverInf")
+	private Driver driver;
+
+	@OneToMany(mappedBy = "sender", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<Review> myReviews;
+
+	@OneToMany(mappedBy = "recipient", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Review> reviewsForMe;
 
 	public User() {}
 
@@ -40,12 +60,12 @@ public class User {
 		return this;
 	}
 
-	public String getPass() {
-		return pass;
+	public String getPassword() {
+		return password;
 	}
 
-	public User setPass(String pass) {
-		this.pass = pass;
+	public User setPassword(String pass) {
+		this.password = pass;
 		return this;
 	}
 }

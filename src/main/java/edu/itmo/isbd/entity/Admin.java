@@ -1,16 +1,24 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.*;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.util.List;
+
 
 @Entity
-public class Admin {
+@Data
+public class Admin{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@OneToOne(optional=false, cascade= CascadeType.ALL)
-	@JoinColumn(name="admin_inf_login")
+	@JoinColumn(name="admin_inf_login", referencedColumnName = "login")
 	private User adminInfLogin;
+
+	@OneToMany(mappedBy = "admin")
+	private List<Arbitration> arbitrations;
 
 	public Admin() {}
 

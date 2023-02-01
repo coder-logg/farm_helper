@@ -1,17 +1,23 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import lombok.Data;
+
+import javax.persistence.*;
 
 @Entity
+@Data
 public class Country {
 	@Id
 	private String name;
+
 	@Column(name = "soil_type")
 	private String soilType;
+
 	@Column(name = "sunlight_amount")
 	private int sunlightAmount;
+
+	@OneToOne(mappedBy = "country", cascade = CascadeType.ALL)
+	private Location location;
 
 	public Country() {}
 

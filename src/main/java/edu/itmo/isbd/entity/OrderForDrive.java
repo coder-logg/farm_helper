@@ -1,24 +1,31 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.*;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "order_for_drive")
+@Data
 public class OrderForDrive {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@ManyToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name = "driver_id", nullable = false)
+	@JoinColumn(name = "driver_id", nullable = false, referencedColumnName = "id")
 	private Driver driver;
 
 	@ManyToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name = "farmer_id", nullable = false)
+	@JoinColumn(name = "farmer_id", nullable = false, referencedColumnName = "id")
 	private Farmer farmer;
 
 	@Column(nullable = false)
 	private int cost;
+
+	@OneToMany(mappedBy = "order")
+	private List<Arbitration> arbitrations;
 
 	public OrderForDrive() {}
 

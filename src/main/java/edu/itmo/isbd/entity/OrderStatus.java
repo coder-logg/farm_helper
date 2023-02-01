@@ -1,6 +1,6 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "status")
@@ -10,10 +10,13 @@ public class OrderStatus {
 	private int id;
 	private String location;
 
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	private Stages progress;
 
-	static enum Stages {
+	@OneToOne(mappedBy = "status")
+	private Order order;
+
+	enum Stages {
 		STARTED, CULTIVATION, DELIVERY, FINISHED, ARBITRATION;
 	}
 

@@ -1,22 +1,33 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.*;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
+@Data
 public class Farmer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@OneToOne(optional = false, cascade = CascadeType.ALL)
+	@OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "farmer_inf_login")
 	private User farmerInfLogin;
 
 	private int balance;
 
-	@OneToOne
-	@JoinColumn(name = "farm_id")
+	@OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "farm_id", referencedColumnName = "id")
 	private Farm farm;
+
+	@OneToMany(mappedBy = "farmer", fetch=FetchType.EAGER)
+	private Set<OrderForDrive> deliveryOrders;
+
+	@OneToMany(mappedBy = "farmer", fetch = FetchType.EAGER)
+	private Set<Order> orders;
 
 	public Farmer() {}
 

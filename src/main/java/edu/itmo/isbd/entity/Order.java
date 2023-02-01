@@ -1,27 +1,31 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.*;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Data
 @Table(name = "_order")
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "farmer_id")
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "farmer_id", referencedColumnName = "id", nullable = false)
 	private Farmer farmer;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "customer_id")
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "customer_id", referencedColumnName = "id")
 	private Customer customer;
 
-	@OneToOne(optional = false)
+	@OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "order_detail_id", unique = true)
 	private OrderDetail detail;
 
-	@OneToOne(optional = false)
+	@OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "status_id", unique = true)
 	private OrderStatus status;
 

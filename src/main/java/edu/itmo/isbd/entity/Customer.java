@@ -1,11 +1,12 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Data
 public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +14,9 @@ public class Customer {
 	private String name;
 	private String phone;
 	private String mail;
+
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	private List<Order> orders;
 
 	public Customer() {}
 

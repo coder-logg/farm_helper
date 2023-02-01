@@ -1,15 +1,22 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.*;
+import lombok.Data;
+
+import javax.persistence.*;
 
 @Entity
+@Data
 public class Farm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
 	@OneToOne(optional = false)
 	@JoinColumn(name = "location_id")
 	private Location location;
+
+	@OneToOne(optional = false, mappedBy = "farm")
+	private Farmer owner;
 
 	public Farm() {}
 

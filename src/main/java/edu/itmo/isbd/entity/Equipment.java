@@ -1,11 +1,12 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Data
 public class Equipment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +14,12 @@ public class Equipment {
 	private String name;
 	private int cost;
 	private String location;
+
+	@ManyToMany
+	@JoinTable(name="required_equipment",
+			joinColumns=@JoinColumn(name="equipment_id"),
+			inverseJoinColumns=@JoinColumn(name="plant_id"))
+	private List<Plant> plants;
 
 	public Equipment() {}
 

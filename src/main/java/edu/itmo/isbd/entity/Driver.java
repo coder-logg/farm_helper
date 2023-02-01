@@ -1,23 +1,30 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.*;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Data
 public class Driver {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "driver_inf_login")
+	@JoinColumn(name = "driver_inf_login", referencedColumnName = "login")
 	private User driverInf;
 
 	@ManyToOne(optional = false, fetch = FetchType.EAGER,
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-	@JoinColumn(name = "car_id")
+	@JoinColumn(name = "car_id", referencedColumnName = "id")
 	private Car car;
 
 	private int balance;
+
+	@OneToMany(mappedBy = "driver")
+	private List<OrderForDrive> orders;
 
 	public Driver() {}
 

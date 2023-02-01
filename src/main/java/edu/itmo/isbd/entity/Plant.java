@@ -1,10 +1,13 @@
 package edu.itmo.isbd.entity;
 
-import jakarta.persistence.*;
+import lombok.Data;
+
+import javax.persistence.*;
 
 import java.util.List;
 
 @Entity
+@Data
 public class Plant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,11 +16,14 @@ public class Plant {
 	private int cost;
 	private int timeForCompleted;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name="required_equipment",
 			joinColumns=@JoinColumn(name="plant_id"),
 			inverseJoinColumns=@JoinColumn(name="equipment_id"))
 	private List<Equipment> requiredEquipments;
+
+	@OneToMany(mappedBy = "plant")
+	private List<OrderDetail> orderDetails;
 
 	public Plant(int id, String name, int cost, int timeForCompleted, List<Equipment> requiredEquipments) {
 		this.id = id;
