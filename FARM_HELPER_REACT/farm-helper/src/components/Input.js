@@ -10,7 +10,7 @@ export const Input = (props) => {
             <Col sm="3">
                 <Form.Control onChange={(event) => props.setValue(event.target.value)}
                     value={props.value}
-                    type={props.name} placeholder={props.name} />
+                    type={props.name ? props.name : ""} placeholder={props.description ? props.description : props.name} />
             </Col>
         </Form.Group>
     );

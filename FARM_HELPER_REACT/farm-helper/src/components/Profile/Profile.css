@@ -4,10 +4,13 @@
     justify-content: center;
 }
 
+.circle {
+    margin-top: 15%;
+}
+
 .ava {
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 .box {

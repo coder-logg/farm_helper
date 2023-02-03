@@ -1,7 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap"
 import React, { useState } from 'react';
 import './Main.css';
-import { Input } from "./Input";
+import { Input } from "../Input";
 import { registration } from "../../action/user";
 // import classes from './Dialogs.module.css';
 import Form from 'react-bootstrap/Form';
@@ -20,11 +20,12 @@ export const Registation = () => {
                 </Row>
                 <Row md={12} xs={12} xl={12} className="form">
                     <Form>
-                        <Input value={email} setValue={setEmail} id="formPlaintextEmail" name="Email" />
+                        <Input type="email"
+                            value={email} setValue={setEmail} id="formPlaintextEmail" name="Email" />
                         <Input value={login} setValue={setLogin} id="formPlaintextEmail" name="Login" />
                         <Input value={password} setValue={setPassword} id="formPlaintextPassword" name="Password" />
                         <Col sm={4} xs={12} md={12} className="main_button">
-                            <NavLink to='/login'>
+                            <NavLink to='/driver'>
                                 <Button variant="primary" type="submit">
                                     Submit
                                 </Button>

@@ -1,0 +1,28 @@
+@font-face {
+    font-family: 'Lato';
+    src: url('https://fonts.googleapis.com/css2?family=Lato:wght@900&display=swap');
+}
+
+.main_page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main_page table {
+    width: 100%;
+}
+
+.main_page .name {
+    font-family: 'Lato', sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+    background: white;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+.main_page .add_button {
+    width: 40%;
+}

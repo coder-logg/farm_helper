@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from "react-router-dom";
-import { Input } from "./Input"
+import { Input } from "../Input"
 export const Login = () => {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
