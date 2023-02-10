@@ -1,71 +1,87 @@
 package edu.itmo.isbd.entity;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.*;
+import edu.itmo.isbd.service.UserService;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "_user")
 @Data
-public class User {
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "login")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class User implements UserDetails {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	@Column(nullable = false)
 	private String login;
+	@Column(nullable = false)
 	private String phone;
+	@Column(nullable = false)
 	private String mail;
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@Column(nullable = false)
 	private String password;
 
-	@OneToOne(mappedBy = "adminInfLogin")
-	private Admin admin;
-
-	@OneToOne(mappedBy = "farmerInfLogin")
-	private Farmer farmer;
-
-	@OneToOne(mappedBy = "driverInf")
-	private Driver driver;
-
-	@OneToMany(mappedBy = "sender", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonManagedReference(value = "myReviews")
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
 	private Set<Review> myReviews;
 
-	@OneToMany(mappedBy = "recipient", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonManagedReference(value = "reviewsForMe")
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	@OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
 	private List<Review> reviewsForMe;
+
+	@Transient
+	protected UserService.Role ROLE;
 
 	public User() {}
 
-	public String getLogin() {
-		return login;
+	@JsonIgnore
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + ROLE.name()));
 	}
 
-	public User setLogin(String login) {
-		this.login = login;
-		return this;
+	@JsonIgnore
+	@Override
+	public String getUsername(){
+		return getLogin();
 	}
 
-	public String getPhone() {
-		return phone;
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
 	}
 
-	public User setPhone(String phone) {
-		this.phone = phone;
-		return this;
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
 	}
 
-	public String getMail() {
-		return mail;
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
 	}
 
-	public User setMail(String mail) {
-		this.mail = mail;
-		return this;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public User setPassword(String pass) {
-		this.password = pass;
-		return this;
+	@JsonIgnore
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }

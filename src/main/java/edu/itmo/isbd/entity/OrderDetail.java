@@ -1,15 +1,30 @@
 package edu.itmo.isbd.entity;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import lombok.*;
 
 import javax.persistence.*;
 
+import java.io.IOException;
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = false)
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "order_detail")
-@Data
-public class OrderDetail {
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
+
+public class OrderDetail extends JsonSerializer<OrderDetail> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -27,61 +42,24 @@ public class OrderDetail {
 	@Column(name = "delivery_address")
 	private String deliveryAddress;
 
+	@JsonIgnore
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
 	@OneToOne(mappedBy = "detail")
 	private Order order;
 
-	public OrderDetail() {}
-
-	public OrderDetail(int id, Plant plant, int amount, Date deliveryDate, String deliveryAddress) {
-		this.id = id;
-		this.plant = plant;
-		this.amount = amount;
-		this.deliveryDate = deliveryDate;
-		this.deliveryAddress = deliveryAddress;
+	@Override
+	public void serialize(OrderDetail orderDetail, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+		jsonGenerator.writeStartObject();
+		jsonGenerator.writeNumber(id);
+		jsonGenerator.writeObject(plant);
+		jsonGenerator.writeNumber(amount);
+		jsonGenerator.writeObject(deliveryDate);
+		jsonGenerator.writeString(deliveryAddress);
+		if (order != null)
+			jsonGenerator.writeNumber(order.getId());
+		else
+			jsonGenerator.writeNullField("order");
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public OrderDetail setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public Plant getPlant() {
-		return plant;
-	}
-
-	public OrderDetail setPlant(Plant plant) {
-		this.plant = plant;
-		return this;
-	}
-
-	public int getAmount() {
-		return amount;
-	}
-
-	public OrderDetail setAmount(int amount) {
-		this.amount = amount;
-		return this;
-	}
-
-	public Date getDeliveryDate() {
-		return deliveryDate;
-	}
-
-	public OrderDetail setDeliveryDate(Date deliveryDate) {
-		this.deliveryDate = deliveryDate;
-		return this;
-	}
-
-	public String getDeliveryAddress() {
-		return deliveryAddress;
-	}
-
-	public OrderDetail setDeliveryAddress(String deliveryAddress) {
-		this.deliveryAddress = deliveryAddress;
-		return this;
-	}
 }

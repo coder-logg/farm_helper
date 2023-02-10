@@ -1,12 +1,20 @@
 package edu.itmo.isbd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Car {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +23,9 @@ public class Car {
 	private String number;
 	private int capacity;
 
+	@JsonIgnore
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "car")
 	private List<Driver> drivers;
 
@@ -25,41 +36,5 @@ public class Car {
 		this.mark = mark;
 		this.number = number;
 		this.capacity = capacity;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public Car setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public String getMark() {
-		return mark;
-	}
-
-	public Car setMark(String mark) {
-		this.mark = mark;
-		return this;
-	}
-
-	public String getNumber() {
-		return number;
-	}
-
-	public Car setNumber(String number) {
-		this.number = number;
-		return this;
-	}
-
-	public int getCapacity() {
-		return capacity;
-	}
-
-	public Car setCapacity(int capacity) {
-		this.capacity = capacity;
-		return this;
 	}
 }

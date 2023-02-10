@@ -1,11 +1,16 @@
 package edu.itmo.isbd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Location {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,40 +34,4 @@ public class Location {
 	}
 
 	public Location() {}
-
-	public int getId() {
-		return id;
-	}
-
-	public Location setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public Country getCountry() {
-		return country;
-	}
-
-	public Location setCountry(Country country) {
-		this.country = country;
-		return this;
-	}
-
-	public int getPricePerMonth() {
-		return pricePerMonth;
-	}
-
-	public Location setPricePerMonth(int pricePerMonth) {
-		this.pricePerMonth = pricePerMonth;
-		return this;
-	}
-
-	public int getSquare() {
-		return square;
-	}
-
-	public Location setSquare(int square) {
-		this.square = square;
-		return this;
-	}
 }

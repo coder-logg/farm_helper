@@ -1,73 +1,54 @@
 package edu.itmo.isbd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import edu.itmo.isbd.service.UserService;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Entity
 @Data
-public class Driver {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
-	@OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "driver_inf_login", referencedColumnName = "login")
-	private User driverInf;
-
-	@ManyToOne(optional = false, fetch = FetchType.EAGER,
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
+@PrimaryKeyJoinColumn(name = "user_id")
+public class Driver extends User {
+	@ManyToOne(optional = false, fetch = FetchType.LAZY,
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name = "car_id", referencedColumnName = "id")
 	private Car car;
 
 	private int balance;
 
-	@OneToMany(mappedBy = "driver")
+	@JsonIgnore
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	@OneToMany(mappedBy = "driver", fetch = FetchType.LAZY)
 	private List<OrderForDrive> orders;
+
+	{
+		super.ROLE = UserService.Role.DRIVER;
+	}
 
 	public Driver() {}
 
-	public Driver(int id, User driverInf, Car car, int balance) {
-		this.id = id;
-		this.driverInf = driverInf;
-		this.car = car;
-		this.balance = balance;
+	public Driver(User user){
+		copyProperties(user, this);
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public Driver setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public User getDriverInf() {
-		return driverInf;
-	}
-
-	public Driver setDriverInf(User driverInf) {
-		this.driverInf = driverInf;
-		return this;
-	}
-
-	public Car getCar() {
-		return car;
-	}
-
-	public Driver setCar(Car car) {
-		this.car = car;
-		return this;
-	}
-
-	public int getBalance() {
-		return balance;
-	}
-
-	public Driver setBalance(int balance) {
-		this.balance = balance;
-		return this;
-	}
 }

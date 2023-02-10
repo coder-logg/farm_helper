@@ -1,6 +1,7 @@
 package isbd.repository;
 
 import edu.itmo.isbd.FarmHelper;
+import edu.itmo.isbd.entity.User;
 import edu.itmo.isbd.repository.UserRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -24,6 +25,20 @@ public class UserRepositoryTest{
 	@Test
 	public void contextTest(){
 		Assertions.assertNotNull(userRepository);
+	}
+
+	@Test
+	public void findUserByLoginTest(){
+		User user = userRepository.findUserByLogin("aidar");
+		Assertions.assertNotNull(user);
+		System.out.println(user);
+	}
+
+	@Test
+	public void findRandomUserTest(){
+		User user = userRepository.findRandomUser();
+		Assertions.assertNotNull(user);
+		System.out.println(user);
 	}
 
 

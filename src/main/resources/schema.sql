@@ -1,10 +1,11 @@
 CREATE TYPE progress_stages AS ENUM ('STARTED', 'CULTIVATION','DELIVERY','FINISHED','ARBITRATION');
 
 CREATE TABLE _user(
-	login varchar(10) PRIMARY KEY,
+	id serial primary key,
+	login varchar(10) NOT NULL UNIQUE,
 	phone varchar(12) NOT NULL UNIQUE,
 	mail varchar(50) NOT NULL UNIQUE,
-	password varchar(15) NOT NULL
+	password varchar(100) NOT NULL
 );
 
 CREATE TABLE Customer(
@@ -29,8 +30,8 @@ CREATE TABLE IF NOT EXISTS status(
 
 CREATE TABLE IF NOT EXISTS equipment(
 	id serial primary key,
-	name varchar(30) UNIQUE,
-	cost int,
+	name varchar(40) UNIQUE NOT NULL,
+	cost int NOT NULL,
 	location varchar(30)
 );
 
@@ -38,24 +39,22 @@ CREATE INDEX equipment_cost ON equipment(cost);
 
 CREATE TABLE Review(
 	id serial PRIMARY KEY,
-	sender_login varchar(10) references _user(login) NOT NULL,
-	recipient_login varchar(10) references _user(login) NOT NULL,
+	sender_id int references _user(id) NOT NULL,
+	recipient_id int references _user(id) NOT NULL,
 	message varchar(255) NOT NULL,
 	rate int CHECK(rate>=0 AND rate<=5),
-	UNIQUE (sender_login, recipient_login), CHECK (sender_login != Review.recipient_login)
+	UNIQUE (sender_id, recipient_id), CHECK (sender_id != Review.recipient_id)
 );
 
 CREATE INDEX idx_rate on Review(rate);
 
 CREATE TABLE IF NOT EXISTS admin(
-	id serial primary key,
-	admin_inf_login varchar(10) references _user(login) NOT NULL UNIQUE
+	user_id serial primary key references _user(id)
 );
 
 CREATE TABLE IF NOT EXISTS driver(
-	id serial primary key,
-	driver_inf_login varchar(10) references _user(login) NOT NULL UNIQUE,
-	car_id int references car(id) NOT NULL,
+	user_id serial primary key references _user(id),
+	car_id int references car(id),
 	balance int
 );
 
@@ -114,19 +113,16 @@ CREATE TABLE Farm(
 );
 
 CREATE TABLE Farmer(
-	id serial PRIMARY KEY,
-	farmer_inf_login varchar(10),
+	user_id serial PRIMARY KEY references _user(id),
 	balance int CHECK(balance>0),
 	farm_id int,
-	FOREIGN KEY(farmer_inf_login)
-	REFERENCES _user(login),
 	FOREIGN KEY(farm_id)
 	REFERENCES farm(id)
 );
 
 CREATE TABLE IF NOT EXISTS _order(
 	id serial primary key,
-	farmer_id int references farmer(id) NOT NULL,
+	farmer_id int references farmer(user_id) NOT NULL,
 	customer_id int references customer(id) NOT NULL,
 	order_detail_id int references order_detail(id) NOT NULL UNIQUE,
 	status_id int references status(id) NOT NULL UNIQUE,
@@ -141,22 +137,22 @@ CREATE TABLE Order_for_drive(
 	driver_id int NOT NULL,
 	cost int default 0 CHECK(cost>0) NOT NULL,
 	FOREIGN KEY(driver_id)
-	REFERENCES driver(id),
+	REFERENCES driver(user_id),
 	FOREIGN KEY(farmer_id)
-	REFERENCES farmer(id)
+	REFERENCES farmer(user_id)
 );
 
 CREATE TABLE Arbitration(
 	id serial PRIMARY KEY,
-	admin_id int references admin(id) NOT NULL,
+	admin_id int references admin(user_id) NOT NULL,
 	order_id int NOT NULL,
 	driver_id int NOT NULL,
 	farmer_id int NOT NULL,
 	FOREIGN KEY(order_id)
 	REFERENCES _order(id),
 	FOREIGN KEY(driver_id)
-	REFERENCES Driver(id),
+	REFERENCES driver(user_id),
 	FOREIGN KEY(farmer_id)
-	REFERENCES farmer(id)
+	REFERENCES farmer(user_id)
 );
 

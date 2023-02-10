@@ -1,9 +1,19 @@
 package edu.itmo.isbd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.*;
+
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "status")
+@Data
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class OrderStatus {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +23,9 @@ public class OrderStatus {
 	@Enumerated(EnumType.STRING)
 	private Stages progress;
 
+	@JsonIgnore
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
 	@OneToOne(mappedBy = "status")
 	private Order order;
 
@@ -26,32 +39,5 @@ public class OrderStatus {
 		this.id = id;
 		this.location = location;
 		this.progress = progress;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public OrderStatus setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public OrderStatus setLocation(String location) {
-		this.location = location;
-		return this;
-	}
-
-	public Stages getProgress() {
-		return progress;
-	}
-
-	public OrderStatus setProgress(Stages progress) {
-		this.progress = progress;
-		return this;
 	}
 }

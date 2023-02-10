@@ -226,9 +226,9 @@ equipment = ["культиватор бензиновый", "ножницы са
     "садовый трактор", "кусторез", "комплект садовых инструметов", "система полива"]
 brends = ["PATRIOT", "GLORIA", "ЗУБР", "GARDENA", "KARCHER", "DAEWOO", "ВИХРЬ", "SOLO"]
 
-for (e in equipment){
+for (i in equipment){
     for (k in brends){
-        var name = "\"" + e + " " + k + "\""
+        var name = "\"" + i + " " + k + "\""
         console.log("INSERT INTO equipment (name, cost, location) VALUES ('" + name + "', " + getRandomInt(10000) + ", '" + country[getRandomIdx(country.length)] + "');")
     }
 }

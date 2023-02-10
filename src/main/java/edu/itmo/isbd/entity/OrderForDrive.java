@@ -1,6 +1,12 @@
 package edu.itmo.isbd.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -8,22 +14,29 @@ import java.util.List;
 @Entity
 @Table(name = "order_for_drive")
 @Data
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class OrderForDrive {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@JsonBackReference
 	@ManyToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name = "driver_id", nullable = false, referencedColumnName = "id")
+	@JoinColumn(name = "driver_id", referencedColumnName = "user_id")
 	private Driver driver;
 
+	@JsonBackReference
 	@ManyToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name = "farmer_id", nullable = false, referencedColumnName = "id")
+	@JoinColumn(name = "farmer_id", referencedColumnName = "user_id")
 	private Farmer farmer;
 
-	@Column(nullable = false)
 	private int cost;
 
+	@JsonIgnore
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "order")
 	private List<Arbitration> arbitrations;
 
@@ -34,41 +47,5 @@ public class OrderForDrive {
 		this.driver = driver;
 		this.farmer = farmer;
 		this.cost = cost;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public OrderForDrive setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public Driver getDriver() {
-		return driver;
-	}
-
-	public OrderForDrive setDriver(Driver driver) {
-		this.driver = driver;
-		return this;
-	}
-
-	public Farmer getFarmer() {
-		return farmer;
-	}
-
-	public OrderForDrive setFarmer(Farmer farmer) {
-		this.farmer = farmer;
-		return this;
-	}
-
-	public int getCost() {
-		return cost;
-	}
-
-	public OrderForDrive setCost(int cost) {
-		this.cost = cost;
-		return this;
 	}
 }

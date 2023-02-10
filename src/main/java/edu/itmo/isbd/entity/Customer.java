@@ -1,12 +1,20 @@
 package edu.itmo.isbd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +23,10 @@ public class Customer {
 	private String phone;
 	private String mail;
 
-	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	@JsonIgnore
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	@OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
 	private List<Order> orders;
 
 	public Customer() {}
@@ -25,41 +36,5 @@ public class Customer {
 		this.name = name;
 		this.phone = phone;
 		this.mail = mail;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public Customer setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public Customer setName(String name) {
-		this.name = name;
-		return this;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public Customer setPhone(String phone) {
-		this.phone = phone;
-		return this;
-	}
-
-	public String getMail() {
-		return mail;
-	}
-
-	public Customer setMail(String mail) {
-		this.mail = mail;
-		return this;
 	}
 }

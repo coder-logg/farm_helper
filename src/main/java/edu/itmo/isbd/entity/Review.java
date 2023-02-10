@@ -1,22 +1,29 @@
 package edu.itmo.isbd.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Entity
 @Data
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@JsonBackReference(value = "myReviews")
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "sender_login", referencedColumnName = "login")
+	@JoinColumn(name = "sender_id", referencedColumnName = "id")
 	private User sender;
 
+	@JsonBackReference(value = "reviewsForMe")
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "recipient_login", referencedColumnName = "login")
+	@JoinColumn(name = "recipient_id", referencedColumnName = "id")
 	private User recipient;
 
 	private String message;
@@ -24,56 +31,4 @@ public class Review {
 	private int rate;
 
 	public Review() {}
-
-	public Review(int id, User sender, String message, int rate) {
-		this.id = id;
-		this.sender = sender;
-		this.message = message;
-		this.rate = rate;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public Review setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public User getSender() {
-		return sender;
-	}
-
-	public Review setSender(User sender) {
-		this.sender = sender;
-		return this;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public Review setMessage(String message) {
-		this.message = message;
-		return this;
-	}
-
-	public int getRate() {
-		return rate;
-	}
-
-	public Review setRate(int rate) {
-		this.rate = rate;
-		return this;
-	}
-
-	public User getRecipient() {
-		return recipient;
-	}
-
-	public Review setRecipient(User recipient) {
-		this.recipient = recipient;
-		return this;
-	}
 }

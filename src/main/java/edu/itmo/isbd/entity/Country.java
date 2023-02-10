@@ -1,11 +1,19 @@
 package edu.itmo.isbd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.lang.reflect.*;
 
 @Entity
 @Data
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "name")
 public class Country {
 	@Id
 	private String name;
@@ -16,6 +24,8 @@ public class Country {
 	@Column(name = "sunlight_amount")
 	private int sunlightAmount;
 
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
 	@OneToOne(mappedBy = "country", cascade = CascadeType.ALL)
 	private Location location;
 
@@ -25,32 +35,5 @@ public class Country {
 		this.name = name;
 		this.soilType = soilType;
 		this.sunlightAmount = sunlightAmount;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public Country setName(String name) {
-		this.name = name;
-		return this;
-	}
-
-	public String getSoilType() {
-		return soilType;
-	}
-
-	public Country setSoilType(String soilType) {
-		this.soilType = soilType;
-		return this;
-	}
-
-	public int getSunlightAmount() {
-		return sunlightAmount;
-	}
-
-	public Country setSunlightAmount(int sunlightAmount) {
-		this.sunlightAmount = sunlightAmount;
-		return this;
 	}
 }

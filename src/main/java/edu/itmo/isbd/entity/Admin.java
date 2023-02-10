@@ -1,48 +1,46 @@
 package edu.itmo.isbd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import edu.itmo.isbd.service.UserService;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import static org.springframework.beans.BeanUtils.copyProperties;
 
 
 @Entity
 @Data
-public class Admin{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
-	@OneToOne(optional=false, cascade= CascadeType.ALL)
-	@JoinColumn(name="admin_inf_login", referencedColumnName = "login")
-	private User adminInfLogin;
-
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
+@PrimaryKeyJoinColumn(name = "user_id")
+public class Admin extends User  {
+	@JsonIgnore
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "admin")
 	private List<Arbitration> arbitrations;
 
+	{
+		super.ROLE = UserService.Role.ADMIN;
+	}
+
 	public Admin() {}
 
-	public Admin(int id, User adminInfLogin) {
-		this.id = id;
-		this.adminInfLogin = adminInfLogin;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public Admin setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public User getAdminInfLogin() {
-		return adminInfLogin;
-	}
-
-	public Admin setAdminInfLogin(User adminInfLogin) {
-		this.adminInfLogin = adminInfLogin;
-		return this;
+	public Admin(User user){
+		copyProperties(user, this);
 	}
 }
 
