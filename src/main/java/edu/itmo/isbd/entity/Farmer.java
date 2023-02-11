@@ -27,7 +27,7 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 public class Farmer extends User{
 	private int balance;
 
-	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "farm_id", referencedColumnName = "id")
 	private Farm farm;
 

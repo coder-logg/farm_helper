@@ -114,7 +114,7 @@ CREATE TABLE Farm(
 
 CREATE TABLE Farmer(
 	user_id serial PRIMARY KEY references _user(id),
-	balance int CHECK(balance>0),
+	balance int,
 	farm_id int,
 	FOREIGN KEY(farm_id)
 	REFERENCES farm(id)
