@@ -8,9 +8,15 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from "react-router-dom";
 export const Registation = () => {
-    const [email, setEmail] = useState("");
-    const [login, setLogin] = useState("");
-    const [password, setPassword] = useState("");
+    const [mail, setMail] = useState('');
+    const [login, setLogin] = useState('');
+    const [password, setPassword] = useState('');
+    const [phone, setPhone] = useState('');
+    const [role, setRole] = useState('');
+    function handleSubmit(e) {
+        e.preventDefault();
+
+    }
     return (
         <section className="main_page" id="login">
             <Container>
@@ -19,18 +25,20 @@ export const Registation = () => {
                     <h3 className="slogan">help for your farm</h3>
                 </Row>
                 <Row md={12} xs={12} xl={12} className="form">
-                    <Form>
-                        <Input type="email"
-                            value={email} setValue={setEmail} id="formPlaintextEmail" name="Email" />
-                        <Input value={login} setValue={setLogin} id="formPlaintextEmail" name="Login" />
+                    <Form onSubmit={handleSubmit}>
+                        <Input value={login} setValue={setLogin} id="formPlaintextLogin" name="Login" />
+                        <Input value={phone} type="tel" setValue={setPhone} id="formPlaintextPhone" name="Phone" />
+                        <Input
+                            value={mail} setValue={setMail} id="formPlaintextEmail" type="email" name="email" />
                         <Input value={password} setValue={setPassword} id="formPlaintextPassword" name="Password" />
+                        <Input value={role} setValue={setRole} id="formPlaintextPassword" name="Role" />
                         <Col sm={4} xs={12} md={12} className="main_button">
                             <NavLink to='/driver'>
                                 <Button variant="primary" type="submit">
                                     Submit
                                 </Button>
                             </NavLink>
-                            <Button variant="primary" onClick={() => registration(email, login, password)} type="submit">
+                            <Button variant="primary" onClick={() => registration(login, phone, mail, password, role)} type="submit">
                                 Register
                             </Button>
                         </Col>

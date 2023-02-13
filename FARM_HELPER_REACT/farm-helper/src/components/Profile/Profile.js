@@ -39,10 +39,10 @@ export const Profile = () => {
                         </NavLink>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                    <NavLink to='/reviews'>
-                        <Button variant="secondary" type="submit">
-                            Reviews
-                        </Button>
+                        <NavLink to='/reviews'>
+                            <Button variant="secondary" type="submit">
+                                Reviews
+                            </Button>
                         </NavLink>
                     </Col>
                 </Row>
