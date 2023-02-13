@@ -252,18 +252,28 @@ for (i = 1; i <= plant_number; i++){
 
 const progress = ['STARTED', 'CULTIVATION','DELIVERY','FINISHED','ARBITRATION']
 
+farmerOrders = new Map()
+
 for (i = 1; i <= order_number; i++){
     console.log("INSERT INTO status (location, progress) VALUES ('"+ getRandomElm(country) + "', '" + getRandomElm(progress) +"');")
     console.log("INSERT INTO order_detail (plant_id, amount, delivery_date, delivery_address) VALUES ("+ getRandomInt(plant_number) + ", " + Mock.randomInt(500, 2000) + ", '" + gen_timestamp() + "', '" + string_gen(30) +"');")
-    console.log("INSERT INTO _order (farmer_id, customer_id, order_detail_id, status_id, cost) VALUES ("+ getRandomElm(farmers) + ", " + getRandomInt(customer_number) + ", " + i + ", " + i + ", " + Mock.randomInt(10000, 10000000) + ");")
+    farmerId = getRandomElm(farmers)
+    if (farmerOrders.has(farmerId))
+       farmerOrders.get(farmerId).push(i)
+    else
+        farmerOrders.set(farmerId, [i])
+    console.log("INSERT INTO _order (farmer_id, customer_id, order_detail_id, status_id, cost) VALUES ("+ farmerId + ", " + getRandomInt(customer_number) + ", " + i + ", " + i + ", " + Mock.randomInt(10000, 10000000) + ");")
 }
 
+// console.log(getRandomElm(Array.from(farmerOrders.keys())))
 
 for (i = 1; i <= order_for_drive_number; i++) {
-    console.log("INSERT INTO Order_for_drive (driver_id, farmer_id, cost) VALUES (" + getRandomElm(drivers) + "," + getRandomElm(farmers)+ "," + getRandomInt(100) + ");");
-    console.log("INSERT INTO Arbitration (order_id, admin_id,  driver_id, farmer_id) VALUES (" + i + ", " + getRandomElm(admins) + "," + getRandomElm(drivers) + "," + getRandomElm(farmers)+ ");");
-//    console.log("INSERT INTO arbitration_list (arbitration_id, admin_id) VALUES (" + i + ", " + getRandomElm(admins) +");");
+    let farmerId = getRandomElm(Array.from(farmerOrders.keys()))
+    console.log("INSERT INTO Order_for_drive (driver_id, farmer_id, order_id, cost) VALUES (" + getRandomElm(drivers) + "," + farmerId + "," + getRandomElm(farmerOrders.get(farmerId)) + "," + getRandomInt(100) + ");");
+    console.log("INSERT INTO Arbitration (order_for_drive_id, admin_id, driver_id, farmer_id) VALUES (" + i + ", " + getRandomElm(admins) + "," + getRandomElm(drivers) + "," + farmerId + ");");
 }
+
+
 
 // console.log("--- a=" + a)
 // console.log("--- b=" + b)

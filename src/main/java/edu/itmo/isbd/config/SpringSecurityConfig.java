@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,6 +18,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
@@ -33,6 +37,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+			.cors().and()
 			.csrf().disable()
 			.authorizeRequests()
 				.antMatchers("/", "/registration", "/test/**").permitAll()
@@ -40,20 +45,29 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/driver/*").hasRole("DRIVER")
 				.antMatchers("/admin/*").hasRole("ADMIN")
 				.anyRequest().authenticated()
+				.expressionHandler(webExpressionHandler())
 			.and()
 				.logout()
 				.permitAll()
 				.logoutSuccessUrl("/")
-				.and().httpBasic(z-> z.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+			.and().httpBasic(z-> z.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 	}
 
 	@Bean
-	AccessDecisionVoter hierarchyVoter() {
+	public RoleHierarchy roleHierarchy() {
 		RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
 		hierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER\n" +
+				"ROLE_ADMIN > ROLE_DRIVER\n" +
+				"ROLE_ADMIN > ROLE_FARMER\n" +
 				"ROLE_DRIVER > ROLE_USER\n" +
 				"ROLE_FARMER > ROLE_USER");
-		return new RoleHierarchyVoter(hierarchy);
+		return hierarchy;
+	}
+
+	private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
+		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
+		return defaultWebSecurityExpressionHandler;
 	}
 
 	@Override

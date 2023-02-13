@@ -8,6 +8,8 @@ CREATE TABLE _user(
 	password varchar(100) NOT NULL
 );
 
+CREATE INDEX user_login ON _user(login);
+
 CREATE TABLE Customer(
 	id serial PRIMARY KEY,
 	name varchar(50),
@@ -134,7 +136,10 @@ CREATE INDEX order_cost ON _order(cost);
 CREATE TABLE Order_for_drive(
 	id serial PRIMARY KEY,
 	farmer_id int NOT NULL,
-	driver_id int NOT NULL,
+	driver_id int default NULL,
+	order_id int references _order(id) NOT NULL,
+	creation_date timestamp NOT NULL default current_timestamp,
+	closing_date timestamp default NULL,
 	cost int default 0 CHECK(cost>0) NOT NULL,
 	FOREIGN KEY(driver_id)
 	REFERENCES driver(user_id),
@@ -145,11 +150,11 @@ CREATE TABLE Order_for_drive(
 CREATE TABLE Arbitration(
 	id serial PRIMARY KEY,
 	admin_id int references admin(user_id) NOT NULL,
-	order_id int NOT NULL,
+	order_for_drive_id int NOT NULL,
 	driver_id int NOT NULL,
 	farmer_id int NOT NULL,
-	FOREIGN KEY(order_id)
-	REFERENCES _order(id),
+	FOREIGN KEY(order_for_drive_id)
+	REFERENCES order_for_drive(id),
 	FOREIGN KEY(driver_id)
 	REFERENCES driver(user_id),
 	FOREIGN KEY(farmer_id)

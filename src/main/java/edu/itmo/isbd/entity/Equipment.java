@@ -40,40 +40,4 @@ public class Equipment {
 		this.cost = cost;
 		this.location = location;
 	}
-
-	public int getId() {
-		return id;
-	}
-
-	public Equipment setId(int id) {
-		this.id = id;
-		return this;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public Equipment setName(String name) {
-		this.name = name;
-		return this;
-	}
-
-	public int getCost() {
-		return cost;
-	}
-
-	public Equipment setCost(int cost) {
-		this.cost = cost;
-		return this;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public Equipment setLocation(String location) {
-		this.location = location;
-		return this;
-	}
 }

@@ -78,13 +78,13 @@ declare
 	order_row record;
 	order_for_drive_row record;
 begin
-	if new.progress == 'finished' then
+	if new.progress == 'FINISHED' then
 		order_row = (select * from _order where status_id = new.id);
 		UPDATE order_detail SET delivery_date = current_timestamp where id = order_row.order_detail_id;
 		order_for_drive_row = (SELECT * from order_for_drive where farmer_id = order_row.farmer_id);
 		cost = order_for_drive_row.cost;
-		UPDATE farmer SET balance = balance - cost where id = order_row.farmer_id;
-		UPDATE driver SET balance = balance + cost where id = order_for_drive_row.driver_id;
+		UPDATE farmer SET balance = balance - cost where user_id = order_row.farmer_id;
+		UPDATE driver SET balance = balance + cost where user_id = order_for_drive_row.driver_id;
 	end if;
 	return new;
 end;
@@ -93,7 +93,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER update_order_date
 AFTER UPDATE ON status
 FOR EACH ROW
-when (old.progress != 'finished' and new.progress = 'finished')
+when (old.progress != 'FINISHED' and new.progress = 'FINISHED')
 EXECUTE FUNCTION update_order_date_if_status_set_finished();
 
 --- todo remake this function
@@ -103,7 +103,7 @@ declare
 begin
 	if new.location_id != old.location_id then
 		UPDATE status SET location = (select country_name from location where id = new.location_id)
-		where id = row.status_id and (progress = 'cultivation' or progress = 'started');
+		where id = row.status_id and (progress = 'CULTIVATION' or progress = 'STARTED');
 	end if;
 	return new;
 end;
@@ -143,6 +143,23 @@ end;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER update_order_cost_rq
-AFTER INSERT ON required_equipment
-FOR EACH ROW
+	AFTER INSERT ON required_equipment
+	FOR EACH ROW
 EXECUTE FUNCTION update_order_cost_if_required_equipment_added();
+
+CREATE OR REPLACE FUNCTION check_order_belongs_to_farmer() RETURNS TRIGGER AS $$
+declare
+	row record;
+begin
+	select into row * from _order where id = new.order_id;
+	if row.farmer_id = new.farmer_id then
+		return new;
+	else raise 'Not satisfied constraint: %.order_id doesn''t belong to farmer with farmer_id = %', TG_TABLE_NAME, new.farmer_id;
+	end if;
+end;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER order_belongs_to_farmer
+BEFORE INSERT ON order_for_drive
+FOR EACH ROW
+EXECUTE FUNCTION check_order_belongs_to_farmer();

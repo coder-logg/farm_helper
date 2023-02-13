@@ -40,4 +40,8 @@ public class Order {
 	private OrderStatus status;
 
 	private int cost;
+
+	public Order(int id) {
+		this.id = id;
+	}
 }

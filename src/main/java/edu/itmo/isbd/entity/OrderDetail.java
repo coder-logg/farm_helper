@@ -23,7 +23,6 @@ import java.util.Date;
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
-
 public class OrderDetail extends JsonSerializer<OrderDetail> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

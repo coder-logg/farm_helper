@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import java.security.Principal;
 
 @Slf4j
+@CrossOrigin(methods = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.GET, RequestMethod.OPTIONS})
 @RestController
 @RequestMapping(value = "/")
 public class UserController {
@@ -33,7 +34,7 @@ public class UserController {
 	public ResponseEntity<User> registration(@RequestBody User user) throws URISyntaxException {
 		log.info("new user: " + user);
 		if (!ObjectUtils.allNotNull(user.getLogin(), user.getPassword(), user.getPhone(), user.getMail(), user.getROLE()))
-			throw new HttpException("Incomplete user data was given.", HttpStatus.BAD_REQUEST);
+			throw new HttpException("Incomplete user data was given.", HttpStatus.UNPROCESSABLE_ENTITY);
 		User dbUser = userService.registration(user);
 		log.info("new user was registered: {}", dbUser);
 		return ResponseEntity.created(new URI("/" + dbUser.getROLE().name().toLowerCase() + "/" + dbUser.getLogin())).body(dbUser);

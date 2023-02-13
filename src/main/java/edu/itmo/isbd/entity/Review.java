@@ -1,9 +1,9 @@
 package edu.itmo.isbd.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,12 +16,12 @@ public class Review {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@JsonBackReference(value = "myReviews")
+	@JsonIgnore
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "sender_id", referencedColumnName = "id")
 	private User sender;
 
-	@JsonBackReference(value = "reviewsForMe")
+	@JsonIgnore
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "recipient_id", referencedColumnName = "id")
 	private User recipient;
@@ -31,4 +31,30 @@ public class Review {
 	private int rate;
 
 	public Review() {}
+
+	@Nullable
+	@JsonProperty
+	public String getRecipientLogin(){
+		if (recipient != null)
+			return recipient.getLogin();
+		return null;
+	}
+
+	@JsonProperty
+	public void setRecipientLogin(String login){
+		recipient = new User(login);
+	}
+
+	@Nullable
+	@JsonProperty
+	public String getSenderLogin(){
+		if (sender != null)
+			return sender.getLogin();
+		return null;
+	}
+
+	@JsonProperty
+	public void setSenderLogin(String login){
+		sender = new User(login);
+	}
 }

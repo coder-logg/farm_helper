@@ -21,10 +21,13 @@ public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
 	@Column(nullable = false)
 	private String login;
+
 	@Column(nullable = false)
 	private String phone;
+
 	@Column(nullable = false)
 	private String mail;
 
@@ -32,13 +35,11 @@ public class User implements UserDetails {
 	@Column(nullable = false)
 	private String password;
 
-	@JsonManagedReference(value = "myReviews")
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
 	private Set<Review> myReviews;
 
-	@JsonManagedReference(value = "reviewsForMe")
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
@@ -48,6 +49,14 @@ public class User implements UserDetails {
 	protected UserService.Role ROLE;
 
 	public User() {}
+
+	public User(int id) {
+		this.id = id;
+	}
+
+	public User(String login) {
+		this.login = login;
+	}
 
 	@JsonIgnore
 	@Override

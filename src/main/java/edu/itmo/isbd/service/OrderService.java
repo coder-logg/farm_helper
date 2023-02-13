@@ -26,8 +26,7 @@ public class OrderService {
 			if (orderRepository.existsOrderById(order.getId()))
 				throw new HttpException("Something went wrong during delete order from db. Maybe value doesn't exists in db", HttpStatus.INTERNAL_SERVER_ERROR);
 			else return true;
-		}
-		else throw new HttpException("Order: " + order.getId() + "doesn't exists.", HttpStatus.CONFLICT);
+		} else throw new HttpException("Order: " + order.getId() + "doesn't exists.", HttpStatus.NOT_FOUND);
 	}
 
 

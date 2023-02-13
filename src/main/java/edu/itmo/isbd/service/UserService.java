@@ -1,9 +1,6 @@
 package edu.itmo.isbd.service;
 
-import edu.itmo.isbd.entity.Admin;
-import edu.itmo.isbd.entity.Driver;
-import edu.itmo.isbd.entity.Farmer;
-import edu.itmo.isbd.entity.User;
+import edu.itmo.isbd.entity.*;
 import edu.itmo.isbd.exception.HttpException;
 import edu.itmo.isbd.exception.UserAlreadyRegisteredException;
 import edu.itmo.isbd.repository.AdminRepository;
@@ -11,6 +8,7 @@ import edu.itmo.isbd.repository.DriverRepository;
 import edu.itmo.isbd.repository.FarmerRepository;
 import edu.itmo.isbd.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +83,7 @@ public class UserService implements UserDetailsService {
 		return getUserRole(user.getLogin());
 	}
 	
-	public Role getUserRole(String login){
+	public Role getUserRole(String login) throws UsernameNotFoundException{
 		if (userRepository.existsUserByLogin(login)) {
 			DriverRepository driverRepository = context.getBean(DriverRepository.class);
 			AdminRepository adminRepository = context.getBean(AdminRepository.class);
@@ -97,14 +95,14 @@ public class UserService implements UserDetailsService {
 			else if (adminRepository.existsAdminByLogin(login))
 				return Role.ADMIN;
 		}
-		return null;
+		throw new UsernameNotFoundException("User with username: " + login + " doesn't exist.");
 	}
 
 	@Transactional
 	public void deleteUser(String login){
 		if (userRepository.existsUserByLogin(login))
 			userRepository.deleteByLogin(login);
-		else throw new HttpException("User with given username doesn't exists.", HttpStatus.BAD_REQUEST);
+		else throw new HttpException("User with given username doesn't exists.", HttpStatus.NOT_FOUND);
 	}
 
 	public User getRandomUser(){
@@ -118,5 +116,4 @@ public class UserService implements UserDetailsService {
 			throw new UsernameNotFoundException("Unknown user: " + username);
 		return userFromDb;
 	}
-
 }

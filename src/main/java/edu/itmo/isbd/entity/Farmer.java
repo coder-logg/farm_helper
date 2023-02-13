@@ -1,18 +1,17 @@
 package edu.itmo.isbd.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import edu.itmo.isbd.service.UserService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -52,4 +51,39 @@ public class Farmer extends User{
 	public Farmer(User user){
 		copyProperties(user, this);
 	}
+
+	@JsonProperty
+	public void setOrderForDriveIds(List<Integer> orderForDriveIds){
+		deliveryOrders = new HashSet<>();
+		orderForDriveIds.forEach(id -> deliveryOrders.add(new OrderForDrive(id)));
+	}
+
+	@Nullable
+	@JsonProperty
+	public List<Integer> getOrderForDriveIds(){
+		if (deliveryOrders != null)
+			return deliveryOrders.stream().map(OrderForDrive::getId).collect(Collectors.toList());
+		return null;
+	}
+
+	@JsonProperty
+	public void setOrdersIds(List<Integer> ordersIds){
+		orders = new HashSet<>();
+		ordersIds.forEach(id -> orders.add(new Order(id)));
+	}
+
+	@Nullable
+	@JsonProperty
+	public List<Integer> getOrdersIds(){
+		if (orders != null)
+			return orders.stream().map(Order::getId).collect(Collectors.toList());
+		return null;
+	}
+
+
+//	@Nullable
+//	@JsonProperty
+//	public ___ get(){
+//
+//	}
 }

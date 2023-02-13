@@ -1,21 +1,17 @@
 package edu.itmo.isbd.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import edu.itmo.isbd.service.UserService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -49,6 +45,20 @@ public class Driver extends User {
 
 	public Driver(User user){
 		copyProperties(user, this);
+	}
+
+	@Nullable
+	@JsonProperty
+	public List<Integer> getOrderForDriveIds(){
+		if (orders != null)
+			return orders.stream().map(OrderForDrive::getId).collect(Collectors.toList());
+		return null;
+	}
+
+	@JsonProperty
+	public void setOrdersIds(List<Integer> ordersIds){
+		orders = new ArrayList<>();
+		ordersIds.forEach(id -> orders.add(new OrderForDrive(id)));
 	}
 
 }
