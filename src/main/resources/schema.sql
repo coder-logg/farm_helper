@@ -140,7 +140,7 @@ CREATE TABLE Order_for_drive(
 	order_id int references _order(id) NOT NULL,
 	creation_date timestamp NOT NULL default current_timestamp,
 	closing_date timestamp default NULL,
-	cost int default 0 CHECK(cost>0) NOT NULL,
+	cost int default 0 CHECK(cost >= 0) NOT NULL,
 	FOREIGN KEY(driver_id)
 	REFERENCES driver(user_id),
 	FOREIGN KEY(farmer_id)

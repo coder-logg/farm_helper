@@ -1,6 +1,7 @@
 package edu.itmo.isbd.service;
 
 import edu.itmo.isbd.entity.OrderForDrive;
+import edu.itmo.isbd.exception.EntityNotFoundException;
 import edu.itmo.isbd.exception.HttpException;
 import edu.itmo.isbd.repository.OrderForDriveRepository;
 import org.apache.commons.lang3.ObjectUtils;
@@ -20,14 +21,19 @@ public class OrderForDriveService {
 		else throw new HttpException("Incomplete data was given.", HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
-	public void removeOrderForDrive(OrderForDrive orderForDrive){
-		orderForDriveRepository.delete(orderForDrive);
+	public void removeOrderForDriveOrThrow(int id){
+		if (exists(id))
+			orderForDriveRepository.deleteById(id);
+		else throw new EntityNotFoundException("Order for drive with id=" + id + " wasn't found");
 	}
 
 	public OrderForDrive getOrderForDrive(int orderForDriveId){
 		return orderForDriveRepository
 				.findById(orderForDriveId)
-				.orElseThrow(() -> new HttpException("Order with given identifier wasn't found.", HttpStatus.NOT_FOUND));
+				.orElseThrow(() -> new EntityNotFoundException("Order for drive with id=" + orderForDriveId + " wasn't found"));
 	}
 
+	public boolean exists(int id){
+		return orderForDriveRepository.existsById(id);
+	}
 }

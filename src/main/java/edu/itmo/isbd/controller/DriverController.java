@@ -3,17 +3,19 @@ package edu.itmo.isbd.controller;
 import edu.itmo.isbd.entity.Driver;
 import edu.itmo.isbd.service.DriverService;
 import edu.itmo.isbd.service.OrderForDriveService;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.Principal;
 
-@CrossOrigin(methods = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.GET, RequestMethod.OPTIONS})
-@RestController
+@Controller
 @RequestMapping("/driver")
 public class DriverController {
 
@@ -23,13 +25,15 @@ public class DriverController {
 	@Autowired
 	private OrderForDriveService orderForDriveService;
 
-	@GetMapping("/{login}")
-	public ResponseEntity<Driver> getFarmer(@PathVariable String login){
-		return ResponseEntity.ok(driverService.getDriver(login));
+	@GetMapping("/login")
+	public ResponseEntity<Driver> getFarmer(Principal principal){
+		return ResponseEntity.ok(driverService.getDriverOrThrow(principal.getName()));
 	}
 
-	@ExceptionHandler({ConstraintViolationException.class})
-	public void exceptions(ConstraintViolationException exc, final HttpServletResponse response) throws IOException {
-		response.sendError(HttpStatus.UNPROCESSABLE_ENTITY.value(), exc.getMessage());
+	@PostMapping(value = "/registration", produces = "application/json")
+	public ResponseEntity<Driver> registerAdmin(@RequestBody Driver driver) throws URISyntaxException {
+		return ResponseEntity.created(new URI("/driver/login")).body(driverService.saveDriverOrThrow(driver));
 	}
+
+
 }
