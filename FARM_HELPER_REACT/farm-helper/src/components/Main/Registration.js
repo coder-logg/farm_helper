@@ -6,8 +6,9 @@ import { registration } from "../../action/user";
 // import classes from './Dialogs.module.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { NavLink } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 export const Registation = () => {
+    const history = useNavigate();
     const [mail, setMail] = useState('');
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
@@ -32,13 +33,8 @@ export const Registation = () => {
                             value={mail} setValue={setMail} id="formPlaintextEmail" type="email" name="email" />
                         <Input value={password} setValue={setPassword} id="formPlaintextPassword" name="Password" />
                         <Input value={role} setValue={setRole} id="formPlaintextPassword" name="Role" />
-                        <Col sm={4} xs={12} md={12} className="main_button">
-                            <NavLink to='/driver'>
-                                <Button variant="primary" type="submit">
-                                    Submit
-                                </Button>
-                            </NavLink>
-                            <Button variant="primary" onClick={() => registration(login, phone, mail, password, role)} type="submit">
+                        <Col sm={12} xs={12} md={12} xl={12} className="main_button">
+                            <Button variant="primary" onClick={() => registration(login, phone, mail, password, role, history)} type="submit">
                                 Register
                             </Button>
                         </Col>

@@ -56,8 +56,13 @@
 }
 
 .main_button button {
-    margin-left: 150px;
-    width: 100px;
+    margin-left: 230px;
+    width: 280px;
+}
+
+.main_button_log button {
+    margin-left: 100px;
+    width: 150px;
 }
 
 .role {

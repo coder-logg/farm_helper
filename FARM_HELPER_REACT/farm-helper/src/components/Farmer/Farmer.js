@@ -1,9 +1,9 @@
 import { Container, Row, Col } from "react-bootstrap"
-import './Profile.css';
+import '../Profile/Profile.css';
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from "react-router-dom";
-export const Profile = () => {
+export const Farmer = () => {
     return (
         <section className="main_page" id="login">
             <Container className="container">
@@ -25,14 +25,14 @@ export const Profile = () => {
                         </NavLink>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <NavLink to='/farm'>
+                        <NavLink to='/farmer'>
                             <Button variant="secondary" type="submit">
                                 Your Farm
                             </Button>
                         </NavLink>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <NavLink to='/choose_driver'>
+                        <NavLink to='/driver'>
                             <Button variant="secondary" type="submit">
                                 Choose driver
                             </Button>

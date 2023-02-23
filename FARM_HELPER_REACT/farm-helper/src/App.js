@@ -2,10 +2,10 @@ import logo from './logo.svg';
 import './App.css';
 import { Login } from './components/Main/Login';
 import { Registation } from './components/Main/Registration';
-import { Profile } from './components/Profile/Profile'
+import { Farmer } from './components/Farmer/Farmer'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route } from "react-router-dom";
-import { Routes, Switch } from "react-router";
+import { Routes, Navigate } from "react-router";
 import { Orders } from './components/Farmer/Orders/Orders';
 import { ChooseDriver } from './components/Farmer/ChooseDriver/ChooseDriver';
 import { Farm } from './components/Farmer/Farm/Farm';
@@ -17,14 +17,13 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Login />
         <Routes>
           <Route path='/registration' element={<Registation />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/farmer/:login' element={<Farmer />} />
           <Route path='/orders' element={<Orders />} />
-          <Route path='/choose_driver' element={<ChooseDriver />} />
-          <Route path='/farm' element={<Farm />} />
+          <Route path='/driver:login' element={<ChooseDriver />} />
+          <Route path='/farmer' element={<Farm />} />
           <Route path='/reviews' element={<Reviews />} />
           <Route path='/driver' element={<Driver />} />
           <Route path='/car' element={<Car />} />
