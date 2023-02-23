@@ -22,10 +22,10 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/farmer/:login' element={<Farmer />} />
           <Route path='/orders' element={<Orders />} />
-          <Route path='/driver:login' element={<ChooseDriver />} />
+          <Route path='/choose_driver' element={<ChooseDriver />} />
           <Route path='/farmer' element={<Farm />} />
           <Route path='/reviews' element={<Reviews />} />
-          <Route path='/driver' element={<Driver />} />
+          <Route path='/driver/:login' element={<Driver />} />
           <Route path='/car' element={<Car />} />
           <Route path='/drive_order' element={<DriveOrder />} />
         </Routes>

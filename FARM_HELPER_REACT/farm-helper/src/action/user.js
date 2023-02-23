@@ -13,11 +13,11 @@ export const registration = async (login, phone, mail, password, role, history) 
         console.log(response.data.message)
         if (response.data.login == response.data.login) {
             if (response.data.role == "FARMER") {
-                history.push(`/farmer/${response.data.login}`);
+                history(`/farmer/${response.data.login}`);
                 return true;
             }
             if (response.data.role == "DRIVER") {
-                history.push(`/driver/${response.data.login}`);
+                history(`/driver/${response.data.login}`);
                 return true;
             }
         }
@@ -28,12 +28,25 @@ export const registration = async (login, phone, mail, password, role, history) 
         }
     }
 }
-export const log = async (login, password) => {
+export const log = async (login, password, history) => {
+    // const token = `${login}:${password}`;
+    // const encodedToken = Buffer.from(token).toString('base64');
     try {
-        const response = await axios.post('http://localhost:8190/login', {
-            login,
-            password
-        })
+        const response = await axios.get(`http://localhost:8190/login`,
+            {
+                headers: { 'Authorization': 'Basic ' + btoa(login + ':' + password) }
+            }
+        )
+        if (response.data.login == response.data.login) {
+            if (response.data.role == "FARMER") {
+                history(`/farmer/${response.data.login}`);
+                return true;
+            }
+            if (response.data.role == "DRIVER") {
+                history(`/driver/${response.data.login}`);
+                return true;
+            }
+        }
         console.log(response.data.message)
     }
 

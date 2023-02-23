@@ -1,9 +1,11 @@
 import { Container, Row, Col } from "react-bootstrap"
 import '../Profile/Profile.css';
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from "react-router-dom";
 export const Farmer = () => {
+    const { login } = useParams();
     return (
         <section className="main_page" id="login">
             <Container className="container">
@@ -15,6 +17,7 @@ export const Farmer = () => {
                             </div>
                         </div>
                     </div>
+                    <div className="hello">Привет {login}</div>
                 </Row>
                 <Row md={4} xs={2} xl={12} className="buttons">
                     <Col md={4} xs={12} xl={6}>
