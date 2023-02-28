@@ -34,6 +34,10 @@ public class Equipment {
 
 	public Equipment() {}
 
+	public Equipment(int id) {
+		this.id = id;
+	}
+
 	public Equipment(int id, String name, int cost, String location) {
 		this.id = id;
 		this.name = name;

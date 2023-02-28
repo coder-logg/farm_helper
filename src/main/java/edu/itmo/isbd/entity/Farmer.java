@@ -48,6 +48,10 @@ public class Farmer extends User{
 
 	public Farmer() {}
 
+	public Farmer(String login) {
+		super(login);
+	}
+
 	public Farmer(User user){
 		copyProperties(user, this);
 	}

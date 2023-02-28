@@ -16,7 +16,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
 
-@Controller
+@RestController
 @RequestMapping("/farmer")
 public class FarmerController {
 	@Autowired

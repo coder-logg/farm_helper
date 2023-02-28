@@ -15,19 +15,19 @@ public class OrderForDriveService {
 	@Autowired
 	private OrderForDriveRepository orderForDriveRepository;
 
-	public OrderForDrive addOrderForDrive(OrderForDrive orderForDrive){
+	public OrderForDrive saveOrThrow(OrderForDrive orderForDrive){
 		if (ObjectUtils.allNotNull(orderForDrive.getCost(), orderForDrive.getDriver(), orderForDrive.getFarmer()))
 			return orderForDriveRepository.save(orderForDrive);
 		else throw new HttpException("Incomplete data was given.", HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
-	public void removeOrderForDriveOrThrow(int id){
+	public void removeOrThrow(int id) {
 		if (exists(id))
 			orderForDriveRepository.deleteById(id);
 		else throw new EntityNotFoundException("Order for drive with id=" + id + " wasn't found");
 	}
 
-	public OrderForDrive getOrderForDrive(int orderForDriveId){
+	public OrderForDrive get(int orderForDriveId) throws EntityNotFoundException {
 		return orderForDriveRepository
 				.findById(orderForDriveId)
 				.orElseThrow(() -> new EntityNotFoundException("Order for drive with id=" + orderForDriveId + " wasn't found"));

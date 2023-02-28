@@ -1,6 +1,7 @@
 package edu.itmo.isbd.service;
 
 import edu.itmo.isbd.entity.Order;
+import edu.itmo.isbd.exception.EntityNotFoundException;
 import edu.itmo.isbd.exception.HttpException;
 import edu.itmo.isbd.repository.OrderRepository;
 import lombok.NonNull;
@@ -20,13 +21,19 @@ public class OrderService {
 		return orderRepository.save(order);
 	}
 
-	public boolean deleteOrder(@NonNull Order order){
+	public boolean deleteOrder(@NonNull Order order) throws HttpException {
 		if (orderRepository.existsOrderById(order.getId())) {
 			orderRepository.delete(order);
 			if (orderRepository.existsOrderById(order.getId()))
-				throw new HttpException("Something went wrong during delete order from db. Maybe value doesn't exists in db", HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new HttpException("Something went wrong during delete order from db.", HttpStatus.INTERNAL_SERVER_ERROR);
 			else return true;
-		} else throw new HttpException("Order: " + order.getId() + "doesn't exists.", HttpStatus.NOT_FOUND);
+		} else throw new EntityNotFoundException("Order: " + order.getId() + "doesn't exists.");
+	}
+
+	public Order get(int id) throws EntityNotFoundException {
+		return orderRepository
+				.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Order with given id = " + id + "doesn't exists"));
 	}
 
 

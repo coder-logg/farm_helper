@@ -4,6 +4,7 @@ package edu.itmo.isbd.config;
 import edu.itmo.isbd.filter.RegistrationFilter;
 import edu.itmo.isbd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserService userService;
 
+	private final String[] swagger = {"/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**"};
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -47,43 +50,42 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.headers().httpStrictTransportSecurity().disable()
 				.and()
 				.formLogin().disable()
-			.csrf().disable()
-			.authorizeRequests()
+				.csrf().disable()
+				.authorizeRequests()
 				.antMatchers("/", "/registration", "/test/**").permitAll()
 				.and()
 				.authorizeRequests()
-//				.antMatchers("/registration").anonymous()
-//				.antMatchers("/farmer/*").hasRole("FARMER")
-//				.antMatchers("/driver/*").hasRole("DRIVER")
-//				.antMatchers("/admin/*").hasRole("ADMIN")
+				.antMatchers(swagger).permitAll()
+				.and()
+				.authorizeRequests()
+				.antMatchers("/farmer/*").hasRole("FARMER")
+				.antMatchers("/driver/*").hasRole("DRIVER")
+				.antMatchers("/admin/*").hasRole("ADMIN")
 				.anyRequest().authenticated()
-//				.expressionHandler(webExpressionHandler())
+				.expressionHandler(webExpressionHandler())
 //			.and()
 //				.logout()
 //				.permitAll()
 //				.logoutSuccessUrl("/")
 			.and().httpBasic();
-//		http.formLogin().disable();
-//		http.cors();
-//		http.headers().httpStrictTransportSecurity().disable();
 	}
 
-//	@Bean
-//	public RoleHierarchy roleHierarchy() {
-//		RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
-//		hierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER\n" +
-//				"ROLE_ADMIN > ROLE_DRIVER\n" +
-//				"ROLE_ADMIN > ROLE_FARMER\n" +
-//				"ROLE_DRIVER > ROLE_USER\n" +
-//				"ROLE_FARMER > ROLE_USER");
-//		return hierarchy;
-//	}
-//
-//	private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
-//		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
-//		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
-//		return defaultWebSecurityExpressionHandler;
-//	}
+	@Bean
+	public RoleHierarchy roleHierarchy() {
+		RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+		hierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER\n" +
+				"ROLE_ADMIN > ROLE_DRIVER\n" +
+				"ROLE_ADMIN > ROLE_FARMER\n" +
+				"ROLE_DRIVER > ROLE_USER\n" +
+				"ROLE_FARMER > ROLE_USER");
+		return hierarchy;
+	}
+
+	private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
+		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
+		return defaultWebSecurityExpressionHandler;
+	}
 
 	@Override
 	public void configure(AuthenticationManagerBuilder builder) throws Exception {

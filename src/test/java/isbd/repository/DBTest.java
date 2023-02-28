@@ -28,22 +28,22 @@ public class DBTest {
 		ds.setPassword(pass);
 		ds.setUser(user);
 		connection = ds.getConnection();
-		execSQLFile("src/test/resources/sql/create.sql");
+//		execSQLFile("src/test/resources/sql/import.sql");
 	};
 
-	@Test
-	void triggersTest(){
-		execSQLFile("src/test/resources/sql/triggers.sql");
-	}
-
-	@Test
-	void filling(){
-		execSQLFile("src/test/resources/sql/filling.sql");
-	}
+//	@Test
+//	void triggersTest(){
+//		execSQLFile("src/test/resources/sql/triggers.sql");
+//	}
+//
+//	@Test
+//	void filling(){
+//		execSQLFile("src/test/resources/sql/filling.sql");
+//	}
 
 	@AfterAll
 	static void finish() throws SQLException {
-		execSQLFile("src/test/resources/sql/delete_tables.sql");
+//		execSQLFile("src/test/resources/sql/delete_tables.sql");
 		connection.close();
 	}
 

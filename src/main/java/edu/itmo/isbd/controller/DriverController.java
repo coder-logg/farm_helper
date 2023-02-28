@@ -6,16 +6,13 @@ import edu.itmo.isbd.service.OrderForDriveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
 
-@Controller
+@RestController
 @RequestMapping("/driver")
 public class DriverController {
 
@@ -27,13 +24,11 @@ public class DriverController {
 
 	@GetMapping("/login")
 	public ResponseEntity<Driver> getFarmer(Principal principal){
-		return ResponseEntity.ok(driverService.getDriverOrThrow(principal.getName()));
+		return ResponseEntity.ok(driverService.getOrThrow(principal.getName()));
 	}
 
 	@PostMapping(value = "/registration", produces = "application/json")
 	public ResponseEntity<Driver> registerAdmin(@RequestBody Driver driver) throws URISyntaxException {
-		return ResponseEntity.created(new URI("/driver/login")).body(driverService.saveDriverOrThrow(driver));
+		return ResponseEntity.created(new URI("/driver/login")).body(driverService.saveOrThrow(driver));
 	}
-
-
 }

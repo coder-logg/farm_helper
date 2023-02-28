@@ -4,6 +4,7 @@ import edu.itmo.isbd.entity.Admin;
 import edu.itmo.isbd.exception.UserAlreadyRegisteredException;
 import edu.itmo.isbd.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class AdminService{
 	private AdminRepository adminRepository;
 
 	@Autowired
+	@Lazy
 	PasswordEncoder passwordEncoder;
 
 	public Admin registration(Admin user){
@@ -36,8 +38,8 @@ public class AdminService{
 	}
 
 	public Admin getAdminOrThrow(String login) throws UsernameNotFoundException {
-		if (checkAdminExists(login))
-			return adminRepository.findAdminByLogin(login);
-		else throw new UsernameNotFoundException("Admin with username " + login + " was not found");
+			return adminRepository
+					.findAdminByLogin(login)
+					.orElseThrow(() -> new UsernameNotFoundException("Admin with username " + login + " was not found"));
 	}
 }

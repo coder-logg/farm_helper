@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS car(
 CREATE TABLE IF NOT EXISTS status(
 	id serial primary key,
 	location varchar(30) NOT NULL,
-	progress progress_stages
+	progress progress_stages default 'STARTED'
 );
 
 CREATE TABLE IF NOT EXISTS equipment(

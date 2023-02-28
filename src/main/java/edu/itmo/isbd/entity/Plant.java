@@ -35,18 +35,17 @@ public class Plant {
 
 	@Nullable
 	@JsonProperty
-	public List<Integer> getRequiredEquipmentsIds(){
+	public List<Integer> getRequiredEquipmentIds(){
 		if (requiredEquipments == null)
 			return null;
 		return requiredEquipments.stream().map(Equipment::getId).collect(Collectors.toList());
 	}
 
 	@JsonProperty
-	public void setRequiredEquipmentsIds(List<Integer> requiredEquipments){
+	public void setRequiredEquipmentIds(List<Integer> requiredEquipments){
 		this.requiredEquipments = new ArrayList<>();
 		requiredEquipments.forEach(x -> {
-			Equipment eq = new Equipment();
-			eq.setId(x);
+			Equipment eq = new Equipment(x);
 			this.requiredEquipments.add(eq);
 		});
 	}

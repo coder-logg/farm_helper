@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @Order(1)
 @Component
-public class CachingRequestFilter extends GenericFilter {
+public class CachedBodyRequestFilter extends GenericFilter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
