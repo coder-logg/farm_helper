@@ -4,8 +4,7 @@ import { Login } from './components/Main/Login';
 import { Registation } from './components/Main/Registration';
 import { Farmer } from './components/Farmer/Farmer'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Route } from "react-router-dom";
-import { Routes, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Orders } from './components/Farmer/Orders/Orders';
 import { ChooseDriver } from './components/Farmer/ChooseDriver/ChooseDriver';
 import { Farm } from './components/Farmer/Farm/Farm';
@@ -13,25 +12,38 @@ import { Reviews } from './components/Reviews';
 import { Driver } from './components/Driver/Driver';
 import { Car } from './components/Driver/Car';
 import { DriveOrder } from './components/Driver/DriveOrder';
+import { Admin } from './components/Admin/Admin';
+import { Arbitration } from './components/Admin/Arbitration/Arbitrarion';
 function App() {
   return (
-    <div className="App">
+    <div className='App'>
       <BrowserRouter>
         <Routes>
           <Route path='/registration' element={<Registation />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/farmer/:login' element={<Farmer />} />
-          <Route path='/orders' element={<Orders />} />
+          <Route path='/arbitration' element={<Arbitration />} />
+          <Route path='/orders/:login/*' element={<Orders />} />
           <Route path='/choose_driver' element={<ChooseDriver />} />
-          <Route path='/farmer' element={<Farm />} />
+          <Route path='/farm/' element={<Farm />} />
           <Route path='/reviews' element={<Reviews />} />
-          <Route path='/driver/:login' element={<Driver />} />
+          <Route path='/driver/:login/*' element={<Driver />} />
+          <Route path='/admin/:login' element={<Admin />} />
           <Route path='/car' element={<Car />} />
           <Route path='/drive_order' element={<DriveOrder />} />
+          <Route path='/farmer/:login/*' element={<Farmer />} />
+          {/* <Route path="/farmer/:login/*" element={<PrivateRoute element={<Farmer />} />} /> */}
         </Routes>
       </BrowserRouter>
     </div>
   );
 }
-
+function PrivateRoute({ element, ...rest }) {
+  const isAuthenticated = localStorage.getItem('isAuthenticated');
+  console.log(localStorage)
+  return (
+    <div>
+      {isAuthenticated ? element : <Navigate to="/login" />}
+    </div>
+  );
+}
 export default App;

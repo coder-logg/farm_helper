@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { Farmer } from "../components/Farmer/Farmer"
-import { Driver } from "../components/Driver/Driver"
+
 export const registration = async (login, phone, mail, password, role, history) => {
     try {
         const response = await axios.post('http://localhost:8190/registration', {
@@ -28,22 +27,26 @@ export const registration = async (login, phone, mail, password, role, history) 
         }
     }
 }
-export const log = async (login, password, history) => {
-    // const token = `${login}:${password}`;
-    // const encodedToken = Buffer.from(token).toString('base64');
+export const Log = async (login, password, history) => {
     try {
         const response = await axios.get(`http://localhost:8190/login`,
             {
                 headers: { 'Authorization': 'Basic ' + btoa(login + ':' + password) }
             }
         )
-        if (response.data.login == response.data.login) {
+        if (response.data.login == login) {
+            // const token = response.headers.authorization.split(' ')[1];
+            // localStorage.setItem('token', token);
             if (response.data.role == "FARMER") {
                 history(`/farmer/${response.data.login}`);
                 return true;
             }
             if (response.data.role == "DRIVER") {
                 history(`/driver/${response.data.login}`);
+                return true;
+            }
+            if (response.data.role == "ADMIN") {
+                history(`/admin/${response.data.login}`);
                 return true;
             }
         }

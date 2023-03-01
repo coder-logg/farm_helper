@@ -1,13 +1,12 @@
 import { Container, Row, Col } from "react-bootstrap"
 import '../Profile/Profile.css';
+import './Admin.css';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
-export const Farmer = () => {
+export const Admin = () => {
     const { login } = useParams();
-    const history = useNavigate();
     return (
         <section className="main_page" id="login">
             <Container className="container">
@@ -19,16 +18,18 @@ export const Farmer = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="hello">Привет фермер {login}</div>
+                    <div className="hi">Привет админ {login}</div>
                 </Row>
                 <Row md={4} xs={2} xl={12} className="buttons">
                     <Col md={4} xs={12} xl={6}>
-                        <Button onClick={() => history(`/orders/${login}`)} variant="secondary" type="submit">
-                            Orders
-                        </Button>
+                        <NavLink to='/arbitration'>
+                            <Button variant="secondary" type="submit">
+                                Arbitration
+                            </Button>
+                        </NavLink>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <NavLink to='/farmer'>
+                        <NavLink to='/farm'>
                             <Button variant="secondary" type="submit">
                                 Your Farm
                             </Button>

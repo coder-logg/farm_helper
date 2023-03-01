@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from "react-router-dom";
 import { Input } from "../Input";
-import { log } from '../../action/user'
+import { Log } from '../../action/user'
 import { useNavigate } from 'react-router-dom';
 export const Login = () => {
     const history = useNavigate();
@@ -27,7 +27,7 @@ export const Login = () => {
                         <Input value={login} setValue={setLogin} id="formPlaintextEmail" name="Login" />
                         <Input value={password} setValue={setPassword} id="formPlaintextPassword" name="Password" />
                         <Col sm={4} xs={12} md={12} className="main_button_log">
-                            <Button variant="primary" onClick={() => log(login, password, history)} type="submit">
+                            <Button variant="primary" onClick={() => Log(login, password, history)} type="submit">
                                 Submit
                             </Button>
                             <NavLink to='/registration'>

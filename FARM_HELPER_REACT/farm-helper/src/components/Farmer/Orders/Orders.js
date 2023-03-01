@@ -3,13 +3,29 @@ import '../Farmer.css';
 import React, { useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { Input } from "../../Input";
+import { useParams } from 'react-router-dom';
+import { add_order } from "../../../action/order";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 export const Orders = () => {
     const [plant, setPlant] = useState("");
     const [amount, setAmount] = useState("");
     const [date, setDate] = useState("");
     const [address, setAddress] = useState("");
-    const [phone, setPhone] = useState("");
+    const [customer, setCustomer] = useState("");
     const [driver, setDriver] = useState("");
+    const { login } = useParams();
+    const plants = ['Apple', 'EDIBLE', 'VARIEGATED', 'ORNAMENTAL', 'TRAILING', 'MEDICINAL', 'ROSE', 'HYDRANGEA']
+    const customers = ['Chanelle Mckee',
+        'Cynthia Underwood',
+        'Greta Howard',
+        'Stella Gamble',
+        'Riya Sullivan',
+        'Wilma Ayers',
+        'Lenny Blevins',
+        'Lili Meyer',
+        'Azaan Holt',
+        'Edwin Fisher']
     return (
         <section className="main_page" id="login">
             <Container>
@@ -55,13 +71,22 @@ export const Orders = () => {
                         </Table>
                     </Col>
                     <Col sm={4} xs={6} md={6}>
-                        <Input value={plant} setValue={setPlant} id="formPlaintext" name="Plant" description="Choose plant" />
+                        Plant
+                        <DropdownButton value={plant} id="dropdown-item-button" title={plant ? plant : "Choose type of plant"}>
+                            {plants.map(
+                                (plant_choose) => (
+                                    <Dropdown.Item value={plant_choose} onClick={() => setPlant(plant_choose)} >{plant_choose}</Dropdown.Item>))}
+                        </DropdownButton>
                         <Input value={amount} setValue={setAmount} id="formPlaintext" name="Amount" description="Amount plant" />
                         <Input value={date} setValue={setDate} id="formPlaintext" name="Date" description="Delivery date" />
                         <Input value={address} setValue={setAddress} id="formPlaintext" name="Address" description="Delivery address" />
-                        <Input value={phone} setValue={setPhone} id="formPlaintet" name="Phone" />
-                        <Input value={driver} setValue={setDriver} id="formPlaintext" name="Driver" />
-                        <Button className="add_button" variant="primary" type="submit">
+                        Customer
+                        <DropdownButton value={customer} id="dropdown-item-button" title={customer ? customer : "Choose name of customer"}>
+                            {customers.map(
+                                (customer_choose) => (
+                                    <Dropdown.Item value={customer_choose} onClick={() => setCustomer(customer_choose)} >{customer_choose}</Dropdown.Item>))}
+                        </DropdownButton>
+                        <Button className="add_button" onClick={() => { add_order(login, date, amount, plant) }} variant="warning" type="submit">
                             ADD
                         </Button>
                     </Col>

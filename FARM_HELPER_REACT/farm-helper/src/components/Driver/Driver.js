@@ -17,7 +17,7 @@ export const Driver = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="hello">Привет {login}</div>
+                    <div className="hello">Привет водитель {login}</div>
                 </Row>
                 <Row md={4} xs={2} xl={12} className="buttons">
                     <Col md={4} xs={12} xl={6}>
