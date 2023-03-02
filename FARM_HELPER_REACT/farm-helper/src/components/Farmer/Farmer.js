@@ -3,9 +3,10 @@ import '../Profile/Profile.css';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import { NavLink } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 export const Farmer = () => {
+    const { state } = useLocation();
+    const balance = state.balance;
     const { login } = useParams();
     const history = useNavigate();
     return (
@@ -19,7 +20,8 @@ export const Farmer = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="hello">Привет фермер {login}</div>
+                    <div className="hello">Привет фермер {login} </div>
+                    <div className="hello">Ваш баланс {balance} </div>
                 </Row>
                 <Row md={4} xs={2} xl={12} className="buttons">
                     <Col md={4} xs={12} xl={6}>
@@ -28,25 +30,19 @@ export const Farmer = () => {
                         </Button>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <NavLink to='/farmer'>
-                            <Button variant="secondary" type="submit">
-                                Your Farm
-                            </Button>
-                        </NavLink>
+                        <Button onClick={() => history(`/farm/${login}`)} variant="secondary" type="submit">
+                            Your Farm
+                        </Button>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <NavLink to='/driver'>
-                            <Button variant="secondary" type="submit">
-                                Choose driver
-                            </Button>
-                        </NavLink>
+                        <Button onClick={() => history(`/choose_driver/${login}`)} variant="secondary" type="submit">
+                            Choose driver
+                        </Button>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <NavLink to='/reviews'>
-                            <Button variant="secondary" type="submit">
-                                Reviews
-                            </Button>
-                        </NavLink>
+                        <Button onClick={() => history(`/reviews/${login}`)} variant="secondary" type="submit">
+                            Reviews
+                        </Button>
                     </Col>
                 </Row>
             </Container>

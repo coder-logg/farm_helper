@@ -1,14 +1,30 @@
 import { Container, Row, Col } from "react-bootstrap"
 import '../Farmer.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { Input } from "../../Input";
+import { useParams } from 'react-router-dom';
+import { add_farm, get_farms } from "../../../action/farmer";
 export const Farm = () => {
     const [location, setLocation] = useState("");
     const [square, setSquare] = useState("");
     const [soil, setSoil] = useState("");
     const [sunlight, setSunlight] = useState("");
     const [price, setPrice] = useState("");
+    const { login } = useParams();
+    const [farms, setFarms] = useState([]);
+    useEffect(() => {
+        const fetchData = async (login) => {
+            try {
+                const farms = await get_farms();
+                console.log(farms);
+                setFarms(farms);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, [login]);
     return (
         <section className="main_page" id="login">
             <Container>
@@ -31,22 +47,15 @@ export const Farm = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Apple</td>
-                                    <td>1000</td>
-                                    <td>2023-05-05</td>
-                                    <td>SPB Kronversky</td>
-                                    <td>+791189798432</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Banana</td>
-                                    <td>400</td>
-                                    <td>2023-05-05</td>
-                                    <td>SPB Kronversky</td>
-                                    <td>+791189798432</td>
-                                </tr>
+                                {farms.map((farm) =>
+                                    <tr>
+                                        <td>{farm.id}</td>
+                                        <td>{farm.location}</td>
+                                        <td>{farm.square}</td>
+                                        <td>{farm.soil_type}</td>
+                                        <td>{farm.sunlight}</td>
+                                        <td>{farm.price_per_month}</td>
+                                    </tr>)}
                             </tbody>
                         </Table>
                     </Col>
@@ -56,9 +65,7 @@ export const Farm = () => {
                         <Input value={soil} setValue={setSoil} id="formPlaintext" name="Soil_type" description="Land in Farm" />
                         <Input value={sunlight} setValue={setSunlight} id="formPlaintext" name="Sunlight" description="Sun amount" />
                         <Input value={price} setValue={setPrice} id="formPlaintext" name="Price" description="Price per month" />
-
-
-                        <Button className="add_button" variant="primary" type="submit">
+                        <Button onClick={() => { add_farm(login, location, square, soil, sunlight, price) }} className="add_button" variant="primary" type="submit">
                             ADD
                         </Button>
                     </Col>

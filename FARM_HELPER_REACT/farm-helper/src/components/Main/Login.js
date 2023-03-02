@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { NavLink } from "react-router-dom";
 import { Input } from "../Input";
 import { Log } from '../../action/user'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 export const Login = () => {
     const history = useNavigate();
     const [login, setLogin] = useState("");

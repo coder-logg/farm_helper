@@ -4,8 +4,12 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from "react-router-dom";
+import { useNavigate, useLocation } from 'react-router-dom';
 export const Driver = () => {
     const { login } = useParams();
+    const history = useNavigate();
+    const { state } = useLocation();
+    const balance = state.balance;
     return (
         <section className="main_page" id="login">
             <Container className="container">
@@ -35,11 +39,9 @@ export const Driver = () => {
                         </NavLink>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <NavLink to='/reviews'>
-                            <Button variant="secondary" type="submit">
-                                Reviews
-                            </Button>
-                        </NavLink>
+                        <Button onClick={() => history(`/reviews/${login}`)} variant="secondary" type="submit">
+                            Reviews
+                        </Button>
                     </Col>
                 </Row>
             </Container>

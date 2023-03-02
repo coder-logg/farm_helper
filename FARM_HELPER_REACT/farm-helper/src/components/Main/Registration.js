@@ -7,6 +7,8 @@ import { registration } from "../../action/user";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 export const Registation = () => {
     const history = useNavigate();
     const [mail, setMail] = useState('');
@@ -14,6 +16,7 @@ export const Registation = () => {
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [role, setRole] = useState('');
+    const roles = ["ADMIN", "FARMER", "DRIVER"]
     function handleSubmit(e) {
         e.preventDefault();
 
@@ -32,7 +35,12 @@ export const Registation = () => {
                         <Input
                             value={mail} setValue={setMail} id="formPlaintextEmail" type="email" name="email" />
                         <Input value={password} setValue={setPassword} id="formPlaintextPassword" name="Password" />
-                        <Input value={role} setValue={setRole} id="formPlaintextPassword" name="Role" />
+                        Role
+                        <DropdownButton value={role} id="dropdown-item-button" title={role ? role : "Choose role"}>
+                            {roles.map(
+                                (rol) => (
+                                    <Dropdown.Item value={rol} onClick={() => setRole(rol)} >{rol}</Dropdown.Item>))}
+                        </DropdownButton>
                         <Col sm={12} xs={12} md={12} xl={12} className="main_button">
                             <Button variant="primary" onClick={() => registration(login, phone, mail, password, role, history)} type="submit">
                                 Register

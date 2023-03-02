@@ -14,6 +14,7 @@ import { Car } from './components/Driver/Car';
 import { DriveOrder } from './components/Driver/DriveOrder';
 import { Admin } from './components/Admin/Admin';
 import { Arbitration } from './components/Admin/Arbitration/Arbitrarion';
+import { AddToDB } from './components/Admin/AddToDB';
 function App() {
   return (
     <div className='App'>
@@ -21,16 +22,17 @@ function App() {
         <Routes>
           <Route path='/registration' element={<Registation />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/arbitration' element={<Arbitration />} />
-          <Route path='/orders/:login/*' element={<Orders />} />
-          <Route path='/choose_driver' element={<ChooseDriver />} />
-          <Route path='/farm/' element={<Farm />} />
-          <Route path='/reviews' element={<Reviews />} />
-          <Route path='/driver/:login/*' element={<Driver />} />
+          <Route path='/arbitration/:login/' element={<Arbitration />} />
+          <Route path='/orders/:login/' element={<Orders />} />
+          <Route path='/choose_driver/:login/' element={<ChooseDriver />} />
+          <Route path='/farm/:login/' element={<Farm />} />
+          <Route path='/reviews/:login/' element={<Reviews />} />
+          <Route path='/driver/:login/' element={<Driver />} />
           <Route path='/admin/:login' element={<Admin />} />
+          <Route path='/add_to_db/:login' element={<AddToDB />} />
           <Route path='/car' element={<Car />} />
           <Route path='/drive_order' element={<DriveOrder />} />
-          <Route path='/farmer/:login/*' element={<Farmer />} />
+          <Route path='/farmer/:login/' element={<Farmer />} />
           {/* <Route path="/farmer/:login/*" element={<PrivateRoute element={<Farmer />} />} /> */}
         </Routes>
       </BrowserRouter>

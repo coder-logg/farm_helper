@@ -1,10 +1,10 @@
 import { Container, Row, Col } from "react-bootstrap"
 import '../Farmer.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { Input } from "../../Input";
 import { useParams } from 'react-router-dom';
-import { add_order } from "../../../action/order";
+import { add_order, get_orders } from "../../../action/farmer";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 export const Orders = () => {
@@ -13,8 +13,8 @@ export const Orders = () => {
     const [date, setDate] = useState("");
     const [address, setAddress] = useState("");
     const [customer, setCustomer] = useState("");
-    const [driver, setDriver] = useState("");
     const { login } = useParams();
+    const [orders, setOrders] = useState([]);
     const plants = ['Apple', 'EDIBLE', 'VARIEGATED', 'ORNAMENTAL', 'TRAILING', 'MEDICINAL', 'ROSE', 'HYDRANGEA']
     const customers = ['Chanelle Mckee',
         'Cynthia Underwood',
@@ -26,6 +26,19 @@ export const Orders = () => {
         'Lili Meyer',
         'Azaan Holt',
         'Edwin Fisher']
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const orders = await get_orders(login);
+                console.log(orders);
+                setOrders(orders);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, [login]);
+
     return (
         <section className="main_page" id="login">
             <Container>
@@ -49,24 +62,16 @@ export const Orders = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Apple</td>
-                                    <td>1000</td>
-                                    <td>2023-05-05</td>
-                                    <td>SPB Kronversky</td>
-                                    <td>+791189798432</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Banana</td>
-                                    <td>400</td>
-                                    <td>2023-05-05</td>
-                                    <td>SPB Kronversky</td>
-                                    <td>+791189798432</td>
-                                    <td>NULL</td>
-                                </tr>
+                                {orders.map((order) =>
+                                    <tr>
+                                        <td>{order.id}</td>
+                                        <td>{order.plant}</td>
+                                        <td>{order.amount}</td>
+                                        <td>{order.delivery_date}</td>
+                                        <td>{order.address}</td>
+                                        <td>{order.customer}</td>
+                                        <td>{order.driver}</td>
+                                    </tr>)}
                             </tbody>
                         </Table>
                     </Col>
