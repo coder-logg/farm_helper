@@ -22,14 +22,14 @@ export const add_driver = async (farmerLogin, orderId, driverId, auth) => {
             farmerLogin,
             orderId,
             driverId
-        })
+        }, { headers: { "Authorization": auth } })
         window.location.reload()
     }
     catch (e) {
         console.log(e)
     }
 }
-export const add_farm = async (farmerLogin, location, square, soil_type, sunlight, price) => {
+export const add_farm = async (farmerLogin, location, square, soil_type, sunlight, price, auth) => {
     try {
         const response = await axios.post(`http://localhost:8190/create_farm`, {
             farmerLogin,
@@ -38,32 +38,22 @@ export const add_farm = async (farmerLogin, location, square, soil_type, sunligh
             soil_type,
             sunlight,
             price
-        })
-        if (response.ok) {
-            alert('ГУД!')
-        }
-        else {
-            alert('Беда')
-        }
+        }, { headers: { "Authorization": auth } })
+        window.location.reload();
     }
     catch (e) {
         console.log(e)
     }
 }
-export const add_review = async (login, loginToReview, rate, message) => {
+export const add_review = async (login, loginToReview, rate, message, auth) => {
     try {
         const response = await axios.post(`http://localhost:8190/add_review`, {
             login,
             loginToReview,
             rate,
             message
-        })
-        if (response.ok) {
-            alert('ГУД!')
-        }
-        else {
-            alert('Беда')
-        }
+        }, { headers: { "Authorization": auth } })
+        window.location.reload();
     }
     catch (e) {
         console.log(e)
@@ -78,52 +68,34 @@ export const get_orders = async (id, auth) => {
         console.log(e)
     }
 }
-export const get_drivers = async () => {
+export const get_drivers = async (auth) => {
     try {
-        const response = await axios.get(`http://localhost:8190/drivers/`, {
-        })
-        // return response.data;
-        return [
-            { "id": 0, "plant": "Apple", "id_driver": "1", "amount": 2, "address": "SPB", "customer": "Artur", "driver": "NULL" }]
+        const response = await axios.get(`http://localhost:8190/drivers/`, { headers: { "Authorization": auth } })
+        return response.data;
     }
     catch (e) {
         console.log(e)
-        return [
-            { "id": 0, "name": "Artur", "rate": 10, "car_capacity": 400 },
-            { "id": 1, "name": "Anton", "rate": 8, "car_capacity": 500 },
-            { "id": 2, "name": "Roman", "rate": 9, "car_capacity": 100 }]
-
     }
 }
-export const get_reviews = async (id) => {
+export const get_reviews = async (id, auth) => {
     try {
         const response = await axios.get(`http://localhost:8190/reviews/`, {
             id
-        })
-        // return response.data;
-        return []
+        }, { headers: { "Authorization": auth } })
+        return response.data;
     }
     catch (e) {
         console.log(e)
-        return [
-            { "id": 0, "login": "Artur", "rate": 10, "message": "GOOD" },
-            { "id": 1, "login": "Anton", "rate": 8, "message": "NICE" },
-            { "id": 2, "login": "Roman", "rate": 9, "message": "PERFECT" }]
     }
 }
-export const get_farms = async (id) => {
+export const get_farms = async (id, auth) => {
     try {
         const response = await axios.get(`http://localhost:8190/farms/`, {
             id
-        })
-        // return response.data;
-        return []
+        }, { headers: { "Authorization": auth } })
+        return response.data;
     }
     catch (e) {
         console.log(e)
-        return [
-            { "id": 0, "location": "SPB", "square": 2000, "soil_type": "почва", "sunlight": 10, "price_per_month": 1000 },
-            { "id": 1, "location": "USA", "square": 3000, "soil_type": "чернозем", "sunlight": 15, "price_per_month": 2000 },
-            { "id": 2, "location": "China", "square": 1500, "soil_type": "глина", "sunlight": 16, "price_per_month": 500 }]
     }
 }
