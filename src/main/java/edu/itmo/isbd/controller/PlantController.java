@@ -7,6 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+
 @RestController
 @RequestMapping("/plants")
 public class PlantController {
@@ -20,16 +24,15 @@ public class PlantController {
 
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> postPlant(@RequestBody Plant plant) {
-		plantService.savePlant(plant);
-		return ResponseEntity.ok().build();
+	public ResponseEntity<?> postPlant(@RequestBody Plant plant) throws URISyntaxException {
+		return ResponseEntity.created(new URI("/plants/" + plantService.savePlant(plant).getId())).build();
 	}
 
-//	@GetMapping("/all")
-//	@PreAuthorize("hasAnyRole('FARMER', 'ADMIN')")
-//	public ResponseEntity<List<Plant>> getAll(@RequestParam(defaultValue = "0") Integer pageNo,
-//											  @RequestParam(defaultValue = "10") Integer pageSize,
-//											  @RequestParam(defaultValue = "name") String sortBy){
-//		return ResponseEntity.ok(plantService.getAllPlants(pageNo, pageSize, sortBy));
-//	}
+	@GetMapping("/all")
+	@PreAuthorize("hasAnyRole('FARMER', 'ADMIN')")
+	public ResponseEntity<List<Plant>> getAll(@RequestParam(defaultValue = "0") Integer pageNo,
+											  @RequestParam(defaultValue = "10") Integer pageSize,
+											  @RequestParam(defaultValue = "name") String sortBy){
+		return ResponseEntity.ok(plantService.getAllPlants(pageNo, pageSize, sortBy));
+	}
 }

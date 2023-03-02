@@ -28,8 +28,8 @@ public class PlantService {
 				.orElseThrow(() -> new EntityNotFoundException("Plant with id = " + id + " wasn't found"));
 	}
 
-	public void savePlant(Plant plant) {
-		plantRepository.save(plant);
+	public Plant savePlant(Plant plant) {
+		return plantRepository.save(plant);
 	}
 
 	public List<Plant> getAllPlants(Integer pageNo, Integer pageSize, String sortBy) {
