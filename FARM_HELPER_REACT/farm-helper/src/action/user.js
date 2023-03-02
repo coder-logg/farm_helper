@@ -12,17 +12,18 @@ export const registration = async (login, phone, mail, password, role, history) 
         console.log(response.data.message)
         if (response.data.login == response.data.login) {
             const state = response.data;
+            const auth = 'Basic ' + btoa(login + ':' + password)
             console.log(state)
             if (response.data.role == "FARMER") {
-                history.pushState(state, " ", `/farmer/${response.data.login}`, { state: response.data });
+                history(`/farmer/${response.data.login}`, { state: { response: response.data, auth: auth } });
                 return true;
             }
             if (response.data.role == "DRIVER") {
-                history(`/driver/${response.data.login}`, { state: response.data });
+                history(`/driver/${response.data.login}`, { state: { response: response.data, auth: auth } });
                 return true;
             }
             if (response.data.role == "ADMIN") {
-                history(`/admin/${response.data.login}`, { state: response.data });
+                history(`/admin/${response.data.login}`, { state: { response: response.data, auth: auth } });
                 return true;
             }
         }
@@ -40,20 +41,19 @@ export const Log = async (login, password, history) => {
                 headers: { 'Authorization': 'Basic ' + btoa(login + ':' + password) }
             }
         )
+        const auth = 'Basic ' + btoa(login + ':' + password)
         const state = response.data;
         if (response.data.login == login) {
-            // const token = response.headers.authorization.split(' ')[1];
-            // localStorage.setItem('token', token);
             if (response.data.role == "FARMER") {
-                history(`/farmer/${response.data.login}`, { state: response.data });
+                history(`/farmer/${response.data.login}`, { state: { response: response.data, auth: auth } });
                 return true;
             }
             if (response.data.role == "DRIVER") {
-                history(`/driver/${response.data.login}`, { state: response.data });
+                history(`/driver/${response.data.login}`, { state: { response: response.data, auth: auth } });
                 return response;
             }
             if (response.data.role == "ADMIN") {
-                history(`/admin/${response.data.login}`);
+                history(`/admin/${response.data.login}`, { state: { response: response.data, auth: auth } });
                 return true;
             }
         }

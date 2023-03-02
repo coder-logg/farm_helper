@@ -3,17 +3,19 @@ import '../../Farmer/Farmer.css';
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { Input } from "../../Input";
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { add_arbitration, get_arbitration } from "../../../action/admin";
 export const Arbitration = () => {
     const [orderId, setOrderId] = useState("");
     const [balance, setBalance] = useState("");
     const { login } = useParams();
     const [arbitrations, setArbitrations] = useState([]);
+    const { state } = useLocation();
+    const auth = state.auth;
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const arbitrations = await get_arbitration();
+                const arbitrations = await get_arbitration(auth);
                 console.log(arbitrations);
                 setArbitrations(arbitrations);
             } catch (error) {

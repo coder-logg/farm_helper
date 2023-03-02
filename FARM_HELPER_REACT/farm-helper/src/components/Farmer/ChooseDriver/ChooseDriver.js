@@ -3,7 +3,7 @@ import '../Farmer.css';
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { Input } from "../../Input";
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { add_driver, get_drivers, get_orders } from "../../../action/farmer";
@@ -13,6 +13,8 @@ export const ChooseDriver = () => {
     const { login } = useParams();
     const [drivers, setDrivers] = useState([]);
     const [orders, setOrders] = useState([]);
+    const { state } = useLocation();
+    const auth = state.auth
     useEffect(() => {
         const fetchData = async () => {
             try {

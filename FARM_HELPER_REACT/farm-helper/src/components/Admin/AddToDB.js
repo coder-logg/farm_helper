@@ -2,7 +2,7 @@ import { Container, Row, Col } from "react-bootstrap"
 import '../Farmer/Farmer.css';
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Input } from "../Input";
 import { add_equipment, add_plant, get_equipments, get_plants } from "../../action/admin";
 export const AddToDB = () => {
@@ -15,16 +15,17 @@ export const AddToDB = () => {
     const [plants, setPlants] = useState([]);
     const [equipments, setEquipments] = useState([]);
     const { login } = useParams();
+    const { state } = useLocation();
+    const auth = state.auth
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const plants = await get_plants();
-                const equipments = await get_equipments();
+                const plants = await get_plants(auth);
+                const equipments = await get_equipments(auth);
                 console.log(plants);
                 console.log(equipments);
                 setPlants(plants);
                 setEquipments(equipments);
-
             } catch (error) {
                 console.log(error);
             }
@@ -55,7 +56,7 @@ export const AddToDB = () => {
                                 {plants.map((plant) =>
                                     <tr>
                                         <td>{plant.id}</td>
-                                        <td>{plant.plant}</td>
+                                        <td>{plant.name}</td>
                                         <td>{plant.cost}</td>
                                         <td>{plant.timeForCompleted}</td>
                                     </tr>)}
@@ -65,8 +66,8 @@ export const AddToDB = () => {
                     <Col sm={4} xs={6} md={6}>
                         <Input value={plantName} setValue={setPlantName} id="formPlaintext" name="Plant" description="Name of plant" />
                         <Input value={plantCost} setValue={setPlantCost} id="formPlaintext" name="Cost" description="Cost of plant" />
-                        <Input value={plantTimeForCompleted} setValue={setPlantTimeForCompleted} id="formPlaintext" name="Time" description="timeForCompleted" />
-                        <Button className="add_button" onClick={() => { add_plant(plantName, plantCost, plantTimeForCompleted) }} variant="primary" type="submit">
+                        <Input value={plantTimeForCompleted} setValue={setPlantTimeForCompleted} id="formPlaintext" name="Times" description="timeForCompleted" />
+                        <Button className="add_button" onClick={() => { add_plant(plantName, plantCost, plantTimeForCompleted, auth) }} variant="primary" type="submit">
                             Confirm
                         </Button>
                     </Col>
@@ -99,7 +100,7 @@ export const AddToDB = () => {
                         <Input value={equipmentName} setValue={setEquipmentName} id="formPlaintext" name="Name" />
                         <Input value={equipmentCost} setValue={setEquipmentCost} id="formPlaintext" name="Cost" />
                         <Input value={equipmentLocation} setValue={setEquipmentLocation} id="formPlaintext" name="Location" />
-                        <Button className="add_button" onClick={() => { add_equipment(equipmentName, equipmentCost, equipmentLocation) }} variant="primary" type="submit">
+                        <Button className="add_button" onClick={() => { add_equipment(equipmentName, equipmentCost, equipmentLocation, auth) }} variant="primary" type="submit">
                             Confirm
                         </Button>
                     </Col>

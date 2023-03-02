@@ -6,7 +6,8 @@ import Button from 'react-bootstrap/Button';
 import { useNavigate, useLocation } from 'react-router-dom';
 export const Farmer = () => {
     const { state } = useLocation();
-    const balance = state.balance;
+    const auth = state.auth
+    const balance = state.response.balance;
     const { login } = useParams();
     const history = useNavigate();
     return (
@@ -25,22 +26,22 @@ export const Farmer = () => {
                 </Row>
                 <Row md={4} xs={2} xl={12} className="buttons">
                     <Col md={4} xs={12} xl={6}>
-                        <Button onClick={() => history(`/orders/${login}`)} variant="secondary" type="submit">
+                        <Button onClick={() => history(`/orders/${login}`, { state: { auth: auth } })} variant="secondary" type="submit">
                             Orders
                         </Button>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <Button onClick={() => history(`/farm/${login}`)} variant="secondary" type="submit">
+                        <Button onClick={() => history(`/farm/${login}`, { state: { auth: auth } })} variant="secondary" type="submit">
                             Your Farm
                         </Button>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <Button onClick={() => history(`/choose_driver/${login}`)} variant="secondary" type="submit">
+                        <Button onClick={() => history(`/choose_driver/${login}`, { state: { auth: auth } })} variant="secondary" type="submit">
                             Choose driver
                         </Button>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <Button onClick={() => history(`/reviews/${login}`)} variant="secondary" type="submit">
+                        <Button onClick={() => history(`/reviews/${login}`, { state: { auth: auth } })} variant="secondary" type="submit">
                             Reviews
                         </Button>
                     </Col>

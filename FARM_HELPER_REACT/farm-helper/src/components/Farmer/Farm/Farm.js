@@ -3,7 +3,7 @@ import '../Farmer.css';
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { Input } from "../../Input";
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { add_farm, get_farms } from "../../../action/farmer";
 export const Farm = () => {
     const [location, setLocation] = useState("");
@@ -13,10 +13,12 @@ export const Farm = () => {
     const [price, setPrice] = useState("");
     const { login } = useParams();
     const [farms, setFarms] = useState([]);
+    const { state } = useLocation();
+    const auth = state.auth
     useEffect(() => {
         const fetchData = async (login) => {
             try {
-                const farms = await get_farms();
+                const farms = await get_farms(login, auth);
                 console.log(farms);
                 setFarms(farms);
             } catch (error) {

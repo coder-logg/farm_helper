@@ -9,6 +9,7 @@ import { Log } from '../../action/user'
 import { useNavigate, useLocation } from 'react-router-dom';
 export const Login = () => {
     const history = useNavigate();
+
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     function handleSubmit(e) {

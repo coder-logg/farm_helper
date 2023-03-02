@@ -1,37 +1,29 @@
 import axios from 'axios';
-export const add_order = async (farmerLogin, deliveryAddress, plantAmount, plantId) => {
+export const add_order = async (farmerLogin, deliveryAddress, plantAmount, plantId, deliveryDate, customerId, auth) => {
     try {
-        const response = await axios.post('http://localhost:8190/order/add', {
+        const response = await axios.post('http://localhost:8190/orders/add', {
+            status: { location: "SPB" },
             farmerLogin,
             deliveryAddress,
             plantId,
             plantAmount,
-
-        })
-        if (response.ok) {
-            alert('ГУД!')
-        }
-        else {
-            alert('Беда')
-        }
+            deliveryDate,
+            customerId
+        }, { headers: { "Authorization": auth } })
+        window.location.reload();
     }
     catch (e) {
         console.log(e)
     }
 }
-export const add_driver = async (farmerLogin, orderId, driverId) => {
+export const add_driver = async (farmerLogin, orderId, driverId, auth) => {
     try {
         const response = await axios.post(`http://localhost:8190/choose_driver`, {
             farmerLogin,
             orderId,
             driverId
         })
-        if (response.ok) {
-            alert('ГУД!')
-        }
-        else {
-            alert('Беда')
-        }
+        window.location.reload()
     }
     catch (e) {
         console.log(e)
@@ -77,19 +69,13 @@ export const add_review = async (login, loginToReview, rate, message) => {
         console.log(e)
     }
 }
-export const get_orders = async (id) => {
+export const get_orders = async (id, auth) => {
     try {
-        const response = await axios.post(`http://localhost:8190/order/${id}`, {
-            id,
-        })
-        // return response.data;
-        return [
-            { "id": 0, "plant": "Apple", "delivery_date": "2023-05-04", "amount": 2, "address": "SPB", "customer": "Artur", "driver": "NULL" }]
+        const response = await axios.get(`http://localhost:8190/farmer/${id}/orders`, { headers: { "Authorization": auth } })
+        return response.data;
     }
     catch (e) {
         console.log(e)
-        return [
-            { "id": 0, "plant": "Apple", "delivery_date": "2023-05-04", "amount": 2, "address": "SPB", "customer": "Artur", "driver": "NULL" }]
     }
 }
 export const get_drivers = async () => {

@@ -3,10 +3,11 @@ import '../Farmer.css';
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { Input } from "../../Input";
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { add_order, get_orders } from "../../../action/farmer";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import { get_plants, get_customers } from "../../../action/admin";
 export const Orders = () => {
     const [plant, setPlant] = useState("");
     const [amount, setAmount] = useState("");
@@ -15,23 +16,20 @@ export const Orders = () => {
     const [customer, setCustomer] = useState("");
     const { login } = useParams();
     const [orders, setOrders] = useState([]);
-    const plants = ['Apple', 'EDIBLE', 'VARIEGATED', 'ORNAMENTAL', 'TRAILING', 'MEDICINAL', 'ROSE', 'HYDRANGEA']
-    const customers = ['Chanelle Mckee',
-        'Cynthia Underwood',
-        'Greta Howard',
-        'Stella Gamble',
-        'Riya Sullivan',
-        'Wilma Ayers',
-        'Lenny Blevins',
-        'Lili Meyer',
-        'Azaan Holt',
-        'Edwin Fisher']
+    const { state } = useLocation();
+    const auth = state.auth
+    const [plants, setPlants] = useState([]);
+    const [customers, setCustomers] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const orders = await get_orders(login);
+                const orders = await get_orders(login, auth);
+                const plants = await get_plants(auth);
+                const customers = await get_customers(auth);
                 console.log(orders);
                 setOrders(orders);
+                setPlants(plants)
+                setCustomers(customers)
             } catch (error) {
                 console.log(error);
             }
@@ -80,7 +78,7 @@ export const Orders = () => {
                         <DropdownButton value={plant} id="dropdown-item-button" title={plant ? plant : "Choose type of plant"}>
                             {plants.map(
                                 (plant_choose) => (
-                                    <Dropdown.Item value={plant_choose} onClick={() => setPlant(plant_choose)} >{plant_choose}</Dropdown.Item>))}
+                                    <Dropdown.Item value={plant_choose.id} onClick={() => setPlant(plant_choose.id)} >{plant_choose.name}</Dropdown.Item>))}
                         </DropdownButton>
                         <Input value={amount} setValue={setAmount} id="formPlaintext" name="Amount" description="Amount plant" />
                         <Input value={date} setValue={setDate} id="formPlaintext" name="Date" description="Delivery date" />
@@ -89,9 +87,9 @@ export const Orders = () => {
                         <DropdownButton value={customer} id="dropdown-item-button" title={customer ? customer : "Choose name of customer"}>
                             {customers.map(
                                 (customer_choose) => (
-                                    <Dropdown.Item value={customer_choose} onClick={() => setCustomer(customer_choose)} >{customer_choose}</Dropdown.Item>))}
+                                    <Dropdown.Item value={customer_choose.id} onClick={() => setCustomer(customer_choose.id)} >{customer_choose.name}</Dropdown.Item>))}
                         </DropdownButton>
-                        <Button className="add_button" onClick={() => { add_order(login, date, amount, plant) }} variant="warning" type="submit">
+                        <Button className="add_button" onClick={() => { add_order(login, address, amount, plant, date, customer, auth) }} variant="warning" type="submit">
                             ADD
                         </Button>
                     </Col>
