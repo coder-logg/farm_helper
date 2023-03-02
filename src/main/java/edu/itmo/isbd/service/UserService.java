@@ -46,9 +46,6 @@ public class UserService implements UserDetailsService {
 	@Lazy
 	private PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private ApplicationContext context;
-
 	@Deprecated
 	public User registration(User user) throws UserAlreadyRegisteredException {
 		if (userRepository.existsUserByLogin(user.getLogin()))
@@ -58,7 +55,6 @@ public class UserService implements UserDetailsService {
 			case ADMIN:
 				return adminService.saveAdminOrThrow(new Admin(user));
 			case DRIVER:
-				Driver driver = new Driver(user);
 				return driverService.saveOrThrow(new Driver(user));
 			case FARMER:
 				return farmerService.saveFarmerOrThrow(new Farmer(user));
@@ -66,8 +62,8 @@ public class UserService implements UserDetailsService {
 		throw new IllegalStateException("Error in UserService.registration(): Unknown user role!");
 	}
 
-	@AllArgsConstructor
 	@Getter
+	@AllArgsConstructor
 	public enum Role {
 		FARMER(FarmerRepository.class, Farmer.class),
 		DRIVER(DriverRepository.class, Driver.class),
@@ -82,7 +78,7 @@ public class UserService implements UserDetailsService {
 	public Role getUserRole(User user){
 		return getUserRole(user.getLogin());
 	}
-	
+
 	public Role getUserRole(String login) throws UsernameNotFoundException{
 		if (userRepository.existsUserByLogin(login)) {
 			if (driverService.checkExists(login))
@@ -92,7 +88,7 @@ public class UserService implements UserDetailsService {
 			else if (adminService.checkAdminExists(login))
 				return Role.ADMIN;
 		}
-		throw new UsernameNotFoundException("User with username: " + login + " doesn't exist.");
+		throw new UsernameNotFoundException("User '" + login + "' doesn't exist.");
 	}
 
 	public Optional<User> getUser(String login, Role role){
@@ -105,6 +101,17 @@ public class UserService implements UserDetailsService {
 				return Optional.of(driverService.getOrThrow(login));
 		}
 		return Optional.empty();
+	}
+
+	public Optional<? extends User> getUser(String login) {
+		Optional<? extends User> res = adminService.findAdmin(login);
+		if (res.isPresent())
+			return res;
+		res = farmerService.findFarmer(login);
+		if (res.isPresent())
+			return res;
+		res = driverService.findDriver(login);
+		return res;
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -121,9 +128,6 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User userFromDb = userRepository.findUserByLogin(username);
-		if (userFromDb == null)
-			throw new UsernameNotFoundException("Unknown user: " + username);
-		return userFromDb;
+		return getUser(username).orElseThrow(() -> new UsernameNotFoundException("Unknown user: " + username));
 	}
 }

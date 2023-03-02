@@ -17,10 +17,7 @@ public class Utils {
 //		return false;
 //	}
 
-    public static boolean checkAccessFor(Authentication auth, String farmerLogin){
-        List<String> roles = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        return !(roles.contains("ADMIN")
-                || (auth.getName().equals(farmerLogin)
-                && roles.contains("FARMER")));
+    public static List<String> getRoles(Authentication auth){
+        return auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
     }
 }

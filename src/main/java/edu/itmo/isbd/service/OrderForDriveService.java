@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderForDriveService {
 
@@ -31,6 +33,14 @@ public class OrderForDriveService {
 		return orderForDriveRepository
 				.findById(orderForDriveId)
 				.orElseThrow(() -> new EntityNotFoundException("Order for drive with id=" + orderForDriveId + " wasn't found"));
+	}
+
+	public List<OrderForDrive> getAllByFarmerLogin(String login) {
+		return orderForDriveRepository.findOrderForDrivesByFarmer_Login(login);
+	}
+
+	public List<OrderForDrive> getAllByDriverLogin(String login) {
+		return orderForDriveRepository.findOrderForDrivesByDriver_Login(login);
 	}
 
 	public boolean exists(int id){

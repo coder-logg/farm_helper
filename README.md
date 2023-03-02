@@ -19,7 +19,5 @@ HTTP Basic Authorization именем и паролем пользователя
 В ответе присылается редирект (поле `Location` в заголовках ответа) на главную страницу пользователя.
 
 #### Запуск Swagger
-URL: http://localhost:8192/swagger-ui.html \
+URL: http://localhost:8190/swagger-ui.html \
 Запускается вместе со Spring'ом 
-
-

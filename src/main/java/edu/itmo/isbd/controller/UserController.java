@@ -7,6 +7,7 @@ import edu.itmo.isbd.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
@@ -39,10 +40,9 @@ public class UserController {
 	}
 
 	@DeleteMapping("/user/delete")
-	public ResponseEntity<?> deleteUser(@RequestParam String username, Authentication authentication) {
-		if (authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).anyMatch(x -> x.equals("ADMIN"))) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> deleteUser(@RequestParam String username) {
 			userService.deleteUser(username);
 			return ResponseEntity.ok("User was deleted");
-		} else throw new HttpException("Access to user deleting have only administrator", HttpStatus.FORBIDDEN);
 	}
 }

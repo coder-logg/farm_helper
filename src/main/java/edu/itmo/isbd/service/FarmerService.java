@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Optional;
+
 @Service
 public class FarmerService {
 	@Autowired
@@ -24,6 +27,11 @@ public class FarmerService {
 				.orElseThrow(() -> new UsernameNotFoundException("Farmer with given username doesn't exist"));
 	}
 
+	@Transactional
+	public Optional<Farmer> findFarmer(String login) {
+		return farmerRepository.findFarmerByLogin(login);
+	}
+
 	public Farmer saveFarmerOrThrow(Farmer farmer){
 		if (!checkFarmerExists(farmer.getLogin())) {
 			farmer.setPassword(passwordEncoder.encode(farmer.getPassword()));
@@ -31,6 +39,7 @@ public class FarmerService {
 		} else throw new UserAlreadyRegisteredException("Farmer with username " + farmer.getLogin() + " already exists.");
 	}
 
+	@Transactional
 	public boolean checkFarmerExists(String login){
 		return farmerRepository.existsFarmerByLogin(login);
 	}

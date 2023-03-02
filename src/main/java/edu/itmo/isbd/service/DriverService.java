@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Optional;
+
 @Service
 public class DriverService {
 	@Autowired
@@ -23,6 +26,11 @@ public class DriverService {
 		return driverRepository
 				.findDriverByLogin(login)
 				.orElseThrow(() -> new UsernameNotFoundException("Driver with given username doesn't exist."));
+	}
+
+	@Transactional
+	public Optional<Driver> findDriver(String login) {
+		return driverRepository.findDriverByLogin(login);
 	}
 
 	public Driver saveOrThrow(Driver driver){

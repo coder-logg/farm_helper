@@ -33,6 +33,10 @@ public class Plant {
 			inverseJoinColumns=@JoinColumn(name="equipment_id"))
 	private List<Equipment> requiredEquipments;
 
+	public Plant(int id) {
+		this.id = id;
+	}
+
 	@Nullable
 	@JsonProperty
 	public List<Integer> getRequiredEquipmentIds(){

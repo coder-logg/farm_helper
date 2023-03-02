@@ -31,6 +31,10 @@ public class Customer {
 
 	public Customer() {}
 
+	public Customer(int id) {
+		this.id = id;
+	}
+
 	public Customer(int id, String name, String phone, String mail) {
 		this.id = id;
 		this.name = name;

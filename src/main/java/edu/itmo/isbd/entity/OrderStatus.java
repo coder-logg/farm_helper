@@ -3,10 +3,11 @@ package edu.itmo.isbd.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "status")
@@ -21,7 +22,7 @@ public class OrderStatus {
 	private String location;
 
 	@Enumerated(EnumType.STRING)
-	private Stages progress;
+	private ProgressStages progress;
 
 	@JsonIgnore
 	@ToString.Exclude
@@ -29,13 +30,22 @@ public class OrderStatus {
 	@OneToOne(mappedBy = "status")
 	private Order order;
 
-	enum Stages {
+	public enum ProgressStages {
 		STARTED, CULTIVATION, DELIVERY, FINISHED, ARBITRATION;
+	}
+
+	public void setProgress(ProgressStages progress) {
+		this.progress = progress;
 	}
 
 	public OrderStatus() {}
 
-	public OrderStatus(int id, String location, Stages progress) {
+	public OrderStatus(String location, ProgressStages progress) {
+		this.location = location;
+		this.progress = progress;
+	}
+
+	public OrderStatus(int id, String location, ProgressStages progress) {
 		this.id = id;
 		this.location = location;
 		this.progress = progress;

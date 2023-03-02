@@ -1,4 +1,4 @@
-CREATE TYPE progress_stages AS ENUM ('STARTED', 'CULTIVATION','DELIVERY','FINISHED','ARBITRATION');
+-- CREATE TYPE progress_stages AS ENUM ('STARTED', 'CULTIVATION','DELIVERY','FINISHED','ARBITRATION');
 
 CREATE TABLE _user(
 	id serial primary key,
@@ -17,7 +17,7 @@ CREATE TABLE Customer(
 	mail varchar(50) UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS car(
+CREATE TABLE IF NOT EXISTS car (
 	id serial primary key,
 	mark varchar(15) NOT NULL,
 	number varchar(6) NOT NULL UNIQUE,
@@ -27,7 +27,12 @@ CREATE TABLE IF NOT EXISTS car(
 CREATE TABLE IF NOT EXISTS status(
 	id serial primary key,
 	location varchar(30) NOT NULL,
-	progress progress_stages default 'STARTED'
+	progress varchar(14) default 'STARTED' check
+	    ( progress = 'STARTED'
+	          or progress = 'CULTIVATION'
+	          or progress = 'DELIVERY'
+	          or progress = 'FINISHED'
+	          or progress = 'ARBITRATION')
 );
 
 CREATE TABLE IF NOT EXISTS equipment(
@@ -128,7 +133,7 @@ CREATE TABLE IF NOT EXISTS _order(
 	customer_id int references customer(id) NOT NULL,
 	order_detail_id int references order_detail(id) NOT NULL UNIQUE,
 	status_id int references status(id) NOT NULL UNIQUE,
-	cost int check(cost > 0) NOT NULL
+	cost int check(cost >= 0) NOT NULL
 );
 
 CREATE INDEX order_cost ON _order(cost);

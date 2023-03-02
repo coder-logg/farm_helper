@@ -67,16 +67,26 @@ public class Order {
 		this.farmer = new Farmer(farmerLogin);
 	}
 
-	@JsonProperty
-	public void setPlant(Plant plant){
-		detail.setPlant(plant);
-	}
-
 	@Nullable
 	@JsonProperty
 	public Plant getPlant(){
+		if (Objects.isNull(detail))
+			return null;
 		return detail.getPlant();
 	}
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	public void setPlantId(Integer id){
+		detail.setPlant(new Plant(id));
+	}
+
+//	@Nullable
+//	@JsonProperty
+//	public Integer getPlantId(){
+//		if (Objects.isNull(detail.getPlant()))
+//			return null;
+//		return detail.getPlant().getId();
+//	}
 
 	@JsonProperty
 	public void setPlantAmount(Integer amount){
@@ -101,5 +111,19 @@ public class Order {
 	@JsonProperty
 	public void setDeliveryAddress(String deliveryAddress) {
 		detail.setDeliveryAddress(deliveryAddress);
+	}
+
+	@Nullable
+	@JsonProperty
+	public Integer getCustomerId() {
+		if (Objects.isNull(customer))
+			return null;
+		return customer.getId();
+	}
+
+	@Nullable
+	@JsonProperty
+	public void setCustomerId(Integer id) {
+		customer = new Customer(id);
 	}
 }
