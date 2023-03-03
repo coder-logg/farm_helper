@@ -1,9 +1,11 @@
 package edu.itmo.isbd.controller;
 
 
+import edu.itmo.isbd.entity.Driver;
 import edu.itmo.isbd.entity.Review;
 import edu.itmo.isbd.entity.User;
 import edu.itmo.isbd.exception.HttpException;
+import edu.itmo.isbd.service.DriverService;
 import edu.itmo.isbd.service.ReviewService;
 import edu.itmo.isbd.service.UserService;
 import lombok.AllArgsConstructor;
@@ -29,7 +31,7 @@ import java.util.List;
 @RequestMapping(value = "/")
 public class UserController {
 	private final UserService userService;
-
+	private final DriverService driverService;
 	private final ReviewService reviewService;
 
 	@PostMapping(value = "/registration", produces = "application/json")
@@ -51,6 +53,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{login}/my-reviews")
+	@PreAuthorize("#login == authentication.name")
 	public ResponseEntity<List<Review>> getAllMyReviews(@PathVariable String login){
 		return ResponseEntity.ok(reviewService.getAllBySenderLogin(login));
 	}
@@ -59,5 +62,12 @@ public class UserController {
 	@PreAuthorize("#login == authentication.name")
 	public ResponseEntity<List<Review>> getAllReviewsForMe(@PathVariable String login){
 		return ResponseEntity.ok(reviewService.getAllByRecipientLogin(login));
+	}
+
+	@GetMapping("/drivers")
+	public ResponseEntity<List<Driver>> getAllDrivers(@RequestParam(defaultValue = "0") Integer pageNo,
+													  @RequestParam(defaultValue = "10") Integer pageSize,
+													  @RequestParam(defaultValue = "login") String sortBy) {
+		return ResponseEntity.ok(driverService.getAllDrivers(pageNo, pageSize, sortBy));
 	}
 }

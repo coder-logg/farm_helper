@@ -26,7 +26,7 @@ public class OrderForDriveController {
 	private OrderForDriveService orderForDriveService;
 
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('FARMER')")
+	@PreAuthorize("hasAnyRole('FARMER', 'ADMIN')")
 	public ResponseEntity<OrderForDrive> getOrderForDrive(@PathVariable Integer id, Authentication auth) {
 		OrderForDrive orderForDrive = orderForDriveService.get(id);
 		User user = (User) auth.getPrincipal();

@@ -126,4 +126,15 @@ public class Order {
 	public void setCustomerId(Integer id) {
 		customer = new Customer(id);
 	}
+
+	@JsonProperty
+	public void setPlantsAmount(Integer amount){
+		detail.setAmount(amount);
+	}
+
+	@Nullable
+	@JsonProperty
+	public Integer getPlantsAmount(){
+		return detail.getAmount();
+	}
 }

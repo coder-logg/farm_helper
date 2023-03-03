@@ -26,12 +26,10 @@ public class OrderController {
 	private OrderService orderService;
 
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAnyRole('FARMER','ADMIN')")
 	public ResponseEntity<Order> getOrder(@PathVariable int id, Authentication auth) {
 		Order orderFromDb = orderService.get(id);
 		List<String> roles = Utils.getRoles(auth);
-		if (roles.contains("ROLE_ADMIN")
-				|| (auth.getName().equals(orderFromDb.getFarmerLogin()) && roles.contains("ROLE_FARMER")))
+		if (!(auth.getName().equals(orderFromDb.getFarmerLogin()) && roles.contains("ROLE_FARMER")))
 			throw new HttpException("You don't have access for requested data", HttpStatus.FORBIDDEN);
 		return ResponseEntity.ok(orderFromDb);
 	}

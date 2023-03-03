@@ -1,7 +1,7 @@
 package edu.itmo.isbd.service;
 
 import edu.itmo.isbd.entity.Review;
-import edu.itmo.isbd.entity.Review;
+import edu.itmo.isbd.entity.User;
 import edu.itmo.isbd.exception.EntityNotFoundException;
 import edu.itmo.isbd.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,12 +20,15 @@ public class ReviewService {
 	@Autowired
 	private ReviewRepository reviewRepository;
 
+	@Autowired
+	private UserService userService;
+
 	public List<Review> getAllBySenderLogin(String login) {
-		return reviewRepository.findAllBySenderLogin(login);
+		return reviewRepository.findReviewsBySender_Login(login);
 	}
 
 	public List<Review> getAllByRecipientLogin(String login) {
-		return reviewRepository.findAllByRecipientLogin(login);
+		return reviewRepository.findReviewsByRecipient_Login(login);
 	}
 
 	public Optional<Review> getReview(int id){
@@ -37,7 +41,10 @@ public class ReviewService {
 				.orElseThrow(() -> new EntityNotFoundException("Review with id = " + id + " wasn't found"));
 	}
 
+	@Transactional
 	public Review saveReview(Review review) {
+		review.setRecipient((User) userService.loadUserByUsername(review.getRecipientLogin()));
+		review.setSender((User) userService.loadUserByUsername(review.getSenderLogin()));
 		return reviewRepository.save(review);
 	}
 

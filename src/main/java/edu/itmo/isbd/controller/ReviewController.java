@@ -4,7 +4,8 @@ import edu.itmo.isbd.entity.Review;
 import edu.itmo.isbd.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -22,7 +23,8 @@ public class ReviewController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> postReview(@RequestBody Review review) throws URISyntaxException {
+	@PreAuthorize("#review.senderLogin == authentication.name")
+	public ResponseEntity<?> postReview(@RequestBody @P("review") Review review) throws URISyntaxException {
 		return ResponseEntity.created(new URI("/reviews/" + reviewService.saveReview(review).getId())).build();
 	}
 }

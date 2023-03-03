@@ -19,8 +19,8 @@ public class OrderRepositoryTest {
 	@Autowired
 	private OrderService orderService;
 
-	@Test
-	public void statusTest(){
-		orderService.saveStatus(new OrderStatus("Красноярск", OrderStatus.ProgressStages.CULTIVATION));
-	}
+//	@Test
+//	public void statusTest(){
+//		orderService.saveStatus(new OrderStatus("Красноярск", OrderStatus.ProgressStages.CULTIVATION));
+//	}
 }

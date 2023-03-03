@@ -22,13 +22,13 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String login;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String phone;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String mail;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
