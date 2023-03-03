@@ -6,15 +6,13 @@ import Button from 'react-bootstrap/Button';
 import { NavLink } from "react-router-dom";
 import { Input } from "../Input";
 import { Log } from '../../action/user'
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 export const Login = () => {
     const history = useNavigate();
-
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     function handleSubmit(e) {
         e.preventDefault();
-
     }
     return (
         <section className="main_page" id="login">

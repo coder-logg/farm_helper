@@ -45,11 +45,11 @@ export const add_farm = async (farmerLogin, location, square, soil_type, sunligh
         console.log(e)
     }
 }
-export const add_review = async (login, loginToReview, rate, message, auth) => {
+export const add_review = async (senderLogin, recipientLogin, rate, message, auth) => {
     try {
-        const response = await axios.post(`http://localhost:8190/add_review`, {
-            login,
-            loginToReview,
+        const response = await axios.post(`http://localhost:8190/reviews`, {
+            senderLogin,
+            recipientLogin,
             rate,
             message
         }, { headers: { "Authorization": auth } })
@@ -79,9 +79,7 @@ export const get_drivers = async (auth) => {
 }
 export const get_reviews = async (id, auth) => {
     try {
-        const response = await axios.get(`http://localhost:8190/reviews/`, {
-            id
-        }, { headers: { "Authorization": auth } })
+        const response = await axios.get(`http://localhost:8190/${id}/reviews-for-me`, { headers: { "Authorization": auth } })
         return response.data;
     }
     catch (e) {

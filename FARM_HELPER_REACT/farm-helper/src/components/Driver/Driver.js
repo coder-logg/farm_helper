@@ -9,7 +9,8 @@ export const Driver = () => {
     const { login } = useParams();
     const history = useNavigate();
     const { state } = useLocation();
-    const balance = state.balance;
+    const auth = state.auth;
+    const balance = state.response.balance;
     return (
         <section className="main_page" id="login">
             <Container className="container">
@@ -22,24 +23,22 @@ export const Driver = () => {
                         </div>
                     </div>
                     <div className="hello">Привет водитель {login}</div>
+                    <div className="hello">Ваш баланс: {balance}</div>
                 </Row>
                 <Row md={4} xs={2} xl={12} className="buttons">
                     <Col md={4} xs={12} xl={6}>
-                        <NavLink to='/drive_order'>
-                            <Button variant="secondary" type="submit">
-                                Orders
-                            </Button>
-                        </NavLink>
+                        <Button onClick={() => history(`/drive_order/${login}`, { state: { auth: auth } })} variant="secondary" type="submit">
+                            Orders
+                        </Button>
+
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <NavLink to='/car'>
-                            <Button variant="secondary" type="submit">
-                                Your car
-                            </Button>
-                        </NavLink>
+                        <Button onClick={() => history(`/car/${login}`, { state: { auth: auth } })} variant="secondary" type="submit">
+                            Your car
+                        </Button>
                     </Col>
                     <Col md={4} xs={12} xl={6}>
-                        <Button onClick={() => history(`/reviews/${login}`)} variant="secondary" type="submit">
+                        <Button onClick={() => history(`/reviews/${login}`, { state: { auth: auth } })} variant="secondary" type="submit">
                             Reviews
                         </Button>
                     </Col>

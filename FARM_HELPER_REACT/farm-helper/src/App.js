@@ -30,8 +30,8 @@ function App() {
           <Route path='/driver/:login/' element={<Driver />} />
           <Route path='/admin/:login' element={<Admin />} />
           <Route path='/add_to_db/:login' element={<AddToDB />} />
-          <Route path='/car' element={<Car />} />
-          <Route path='/drive_order' element={<DriveOrder />} />
+          <Route path='/car/:login/' element={<Car />} />
+          <Route path='/drive_order/:login/' element={<DriveOrder />} />
           <Route path='/farmer/:login/' element={<Farmer />} />
           {/* <Route path="/farmer/:login/*" element={<PrivateRoute element={<Farmer />} />} /> */}
         </Routes>

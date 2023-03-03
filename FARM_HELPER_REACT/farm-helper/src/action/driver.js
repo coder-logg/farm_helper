@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const add_order = async (driverLogin, orderId, auth) => {
+export const completed_order = async (driverLogin, orderId, auth) => {
     try {
         const response = await axios.post('http://localhost:8190/order_driver/add', {
             driverLogin,
@@ -11,16 +11,13 @@ export const add_order = async (driverLogin, orderId, auth) => {
         console.log(e)
     }
 }
-export const get_orders = async (driverLogin, auth) => {
+export const get_orders_driver = async (driverLogin, auth) => {
     try {
-        const response = await axios.post('http://localhost:8190/order_driver/get', {
-            driverLogin
-        }, { headers: { "Authorization": auth } })
+        const response = await axios.get(`http://localhost:8190/driver/${driverLogin}/orders-for-drive`, { headers: { "Authorization": auth } })
         return response.data;
     }
     catch (e) {
         console.log(e)
-        return [{ "id": 1, "plant": "Apple", "amount": 2, "address1": "SPB", "address2": "Kazan", "farmerName": "Ashot", "date": "2023-05-23" }]
     }
 }
 export const add_car = async (driverLogin, mark, number, capacity, auth) => {

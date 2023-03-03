@@ -18,9 +18,9 @@ export const Farm = () => {
     useEffect(() => {
         const fetchData = async (login) => {
             try {
-                const farms = await get_farms(login, auth);
-                console.log(farms);
-                setFarms(farms);
+                // const farms = await get_farms(login, auth);
+                // console.log(farms);
+                // setFarms(farms);
             } catch (error) {
                 console.log(error);
             }
@@ -67,7 +67,7 @@ export const Farm = () => {
                         <Input value={soil} setValue={setSoil} id="formPlaintext" name="Soil_type" description="Land in Farm" />
                         <Input value={sunlight} setValue={setSunlight} id="formPlaintext" name="Sunlight" description="Sun amount" />
                         <Input value={price} setValue={setPrice} id="formPlaintext" name="Price" description="Price per month" />
-                        <Button onClick={() => { add_farm(login, location, square, soil, sunlight, price) }} className="add_button" variant="primary" type="submit">
+                        <Button onClick={() => { add_farm(login, location, square, soil, sunlight, price, auth) }} className="add_button" variant="primary" type="submit">
                             ADD
                         </Button>
                     </Col>

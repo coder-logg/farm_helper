@@ -55,20 +55,20 @@ export const Orders = () => {
                                     <th>Amount</th>
                                     <th>Delivery_Date</th>
                                     <th>Address </th>
-                                    <th>Customer_Phone</th>
-                                    <th>Driver</th>
+                                    <th>Customer</th>
+                                    <th>farmerLogin</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {orders.map((order) =>
                                     <tr>
                                         <td>{order.id}</td>
-                                        <td>{order.plant}</td>
+                                        <td>{order.plant.name}</td>
                                         <td>{order.amount}</td>
-                                        <td>{order.delivery_date}</td>
-                                        <td>{order.address}</td>
-                                        <td>{order.customer}</td>
-                                        <td>{order.driver}</td>
+                                        <td>{order.deliveryDate}</td>
+                                        <td>{order.deliveryAddress}</td>
+                                        <td>{order.customerId}</td>
+                                        <td>{order.farmerLogin}</td>
                                     </tr>)}
                             </tbody>
                         </Table>

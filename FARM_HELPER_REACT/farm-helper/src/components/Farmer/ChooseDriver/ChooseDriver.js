@@ -18,10 +18,10 @@ export const ChooseDriver = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const drivers = await get_drivers();
-                console.log(drivers);
-                setDrivers(drivers);
-                const orders = await get_orders(login);
+                // const drivers = await get_drivers(auth);
+                // console.log(drivers);
+                // setDrivers(drivers);
+                const orders = await get_orders(login, auth);
                 console.log(orders);
                 setOrders(orders);
             } catch (error) {
@@ -31,7 +31,7 @@ export const ChooseDriver = () => {
         fetchData();
     }, [login]);
     return (
-        <section className="main_page" id="login">
+        < section className="main_page" id="login" >
             <Container>
                 <Row>
                     <Col sm={4} xs={12} md={12} className="name">
@@ -48,18 +48,20 @@ export const ChooseDriver = () => {
                                     <th>Amount</th>
                                     <th>Delivery_Date</th>
                                     <th>Address </th>
-                                    <th>Driver</th>
+                                    <th>Customer</th>
+                                    <th>farmerLogin</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {orders.map((order) =>
                                     <tr>
                                         <td>{order.id}</td>
-                                        <td>{order.plant}</td>
+                                        <td>{order.plant.name}</td>
                                         <td>{order.amount}</td>
-                                        <td>{order.delivery_date}</td>
-                                        <td>{order.address}</td>
-                                        <td>{order.driver}</td>
+                                        <td>{order.deliveryDate}</td>
+                                        <td>{order.deliveryAddress}</td>
+                                        <td>{order.customerId}</td>
+                                        <td>{order.farmerLogin}</td>
                                     </tr>)}
                             </tbody>
                         </Table>
@@ -93,7 +95,7 @@ export const ChooseDriver = () => {
                                 (driver_choose) => (
                                     <Dropdown.Item value={driver_choose.name} onClick={() => setDriver(driver_choose.name)}>{driver_choose.name}</Dropdown.Item>))}
                         </DropdownButton>
-                        <Button className="add_button" onClick={() => { add_driver(login, order, driver) }} variant="warning" type="submit">
+                        <Button className="add_button" onClick={() => { add_driver(login, order, driver, auth) }} variant="warning" type="submit">
                             Confirm
                         </Button>
                     </Col>
