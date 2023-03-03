@@ -31,7 +31,7 @@ public class Admin extends User  {
 	@JsonIgnore
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy = "admin")
+	@OneToMany(mappedBy = "admin", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Arbitration> arbitrations;
 
 	{

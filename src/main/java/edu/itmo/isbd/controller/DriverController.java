@@ -1,5 +1,6 @@
 package edu.itmo.isbd.controller;
 
+import edu.itmo.isbd.entity.Car;
 import edu.itmo.isbd.entity.Driver;
 import edu.itmo.isbd.entity.OrderForDrive;
 import edu.itmo.isbd.service.DriverService;
@@ -35,10 +36,22 @@ public class DriverController {
 	}
 
 	@GetMapping("/{login}/orders-for-drive")
-	@PreAuthorize("login.equals(authentication.name)")
+	@PreAuthorize("#login == authentication.name")
 	public ResponseEntity<List<OrderForDrive>> getOrdersForDrive(@PathVariable String login) {
-		return ResponseEntity.ok(orderForDriveService.getAllByFarmerLogin(login));
+		return ResponseEntity.ok(orderForDriveService.getAllByDriverLogin(login));
 	}
 
-//	@Pa
+	@GetMapping("/{login}/car")
+	@PreAuthorize("#login == authentication.name")
+	public ResponseEntity<Car> getCar(@PathVariable String login) {
+		return ResponseEntity.ok(driverService.getOrThrow(login).getCar());
+	}
+
+	@PutMapping("/{login}/car")
+	@PreAuthorize("#login == authentication.name")
+	public ResponseEntity<?> setCarForDriver(@PathVariable String login, @RequestBody Car car) throws URISyntaxException {
+		return ResponseEntity
+				.created(new URI("/cars/" + driverService.createOrUpdateCar(login, car).getId()))
+				.build();
+	}
 }

@@ -147,6 +147,7 @@ CREATE TRIGGER update_order_cost_rq
 	FOR EACH ROW
 EXECUTE FUNCTION update_order_cost_if_required_equipment_added();
 
+--todo check for order_id doesn't exists
 CREATE OR REPLACE FUNCTION check_order_belongs_to_farmer() RETURNS TRIGGER AS $$
 declare
 	row record;

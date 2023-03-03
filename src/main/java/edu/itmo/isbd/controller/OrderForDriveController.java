@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -37,8 +38,8 @@ public class OrderForDriveController {
 	}
 
 	@PostMapping("/add-order")
-	@PreAuthorize("(hasRole('FARMER') and authentication.name.equals(orderForDrive.farmerLogin)) or hasRole('ADMIN')")
-	public ResponseEntity<OrderForDrive> addOrderForDrive(@RequestBody OrderForDrive orderForDrive) throws URISyntaxException {
+	@PreAuthorize("(hasRole('FARMER') and authentication.name == #orderForDrive.farmerLogin) or hasRole('ADMIN')")
+	public ResponseEntity<OrderForDrive> addOrderForDrive(@RequestBody @P("orderForDrive") OrderForDrive orderForDrive) throws URISyntaxException {
 		if (!ObjectUtils.allNotNull(orderForDrive.getFarmerLogin(), orderForDrive.getOrderId()))
 			throw new HttpException("Incomplete data was given. Required fields: farmerLogin, orderId.", HttpStatus.UNPROCESSABLE_ENTITY);
 		OrderForDrive orderForDriveFromDb = orderForDriveService.saveOrThrow(orderForDrive);
@@ -48,7 +49,7 @@ public class OrderForDriveController {
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN', 'FARMER')")
-	@DeleteMapping("/drop/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteOrderForDrive(@PathVariable Integer id, Authentication auth){
 		OrderForDrive orderForDriveFromDb = orderForDriveService.get(id);
 		List<String> roles = Utils.getRoles(auth);

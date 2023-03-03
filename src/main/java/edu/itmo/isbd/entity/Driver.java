@@ -24,7 +24,7 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 		property = "id")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Driver extends User {
-	@ManyToOne(fetch = FetchType.LAZY,
+	@ManyToOne(fetch = FetchType.EAGER,
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name = "car_id", referencedColumnName = "id")
 	private Car car;

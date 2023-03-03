@@ -6,10 +6,13 @@ import edu.itmo.isbd.entity.OrderForDrive;
 import edu.itmo.isbd.service.FarmerService;
 import edu.itmo.isbd.service.OrderForDriveService;
 import edu.itmo.isbd.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping("/farmer")
 public class FarmerController {
 	@Autowired
@@ -43,8 +47,8 @@ public class FarmerController {
 	}
 
 	@GetMapping("/{login}/orders")
-	@PreAuthorize("login.equals(authentication.name)")
-	public ResponseEntity<List<Order>> getOrders(@PathVariable String login) {
+	@PreAuthorize("#login == authentication.name")
+	public ResponseEntity<List<Order>> getOrders(@PathVariable String login, Authentication auth) {
 		return ResponseEntity.ok(orderService.getOrdersByFarmerLogin(login));
 	}
 
@@ -60,5 +64,6 @@ public class FarmerController {
 		return ResponseEntity.ok(orderForDriveService.getAllByFarmerLogin(login));
 	}
 
+	
 
 }

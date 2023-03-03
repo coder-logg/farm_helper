@@ -10,8 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,9 +37,9 @@ public class OrderController {
 	}
 
 	@PostMapping("/add")
-	@PreAuthorize("(hasRole('FARMER') and authentication.name.equals(order.farmerLogin)) or hasRole('ADMIN')")
-	public ResponseEntity<Order> postOrder(@RequestBody Order order, Authentication authentication){
+	@PreAuthorize("(hasRole('FARMER') and authentication.name == #order.farmer.login) or hasRole('ADMIN')")
+	public ResponseEntity<Order> postOrder(@RequestBody @P("order") Order order) throws URISyntaxException {
 		Order orderFromDb = orderService.saveOrder(order);
-		return ResponseEntity.ok(orderFromDb);
+		return ResponseEntity.created(new URI("/orders/" + orderFromDb.getId())).build();
 	}
 }

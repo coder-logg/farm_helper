@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -22,21 +23,21 @@ public class OrderForDrive {
 	private int id;
 
 	@JsonIgnore
-	@ManyToOne(optional = false, cascade = CascadeType.ALL)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "driver_id", referencedColumnName = "user_id")
 	private Driver driver;
 
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToOne(optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "farmer_id", referencedColumnName = "user_id")
 	private Farmer farmer;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "creation_date")
-	private Date creationDate;
+	@Column(name = "creation_date", columnDefinition = "timestamp NOT NULL default current_timestamp")
+	private Date creationDate = new Date();
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "closing_date")
+	@Column(name = "closing_date", columnDefinition = "timestamp default NULL")
 	private Date closingDate;
 
 	@JsonIgnore
@@ -105,16 +106,4 @@ public class OrderForDrive {
 			return order.getId();
 		return null;
 	}
-
-//	@JsonProperty
-//	public void set(___){
-//
-//	}
-
-
-//	@Nullable
-//	@JsonProperty
-//	public ___ get(){
-//
-//	}
 }

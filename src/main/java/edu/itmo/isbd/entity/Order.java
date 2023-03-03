@@ -38,7 +38,7 @@ public class Order {
 	@JoinColumn(name = "order_detail_id", unique = true)
 	private OrderDetail detail;
 
-	@OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "status_id", unique = true)
 	private OrderStatus status;
 
