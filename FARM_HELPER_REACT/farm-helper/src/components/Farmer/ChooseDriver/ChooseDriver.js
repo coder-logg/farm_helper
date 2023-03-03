@@ -18,9 +18,9 @@ export const ChooseDriver = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // const drivers = await get_drivers(auth);
-                // console.log(drivers);
-                // setDrivers(drivers);
+                const drivers = await get_drivers(auth);
+                console.log(drivers);
+                setDrivers(drivers);
                 const orders = await get_orders(login, auth);
                 console.log(orders);
                 setOrders(orders);
