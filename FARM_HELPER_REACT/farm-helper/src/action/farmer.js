@@ -59,6 +59,19 @@ export const add_review = async (senderLogin, recipientLogin, rate, message, aut
         console.log(e)
     }
 }
+export const create_customer = async (name, phone, mail, auth) => {
+    try {
+        const response = await axios.post(`http://localhost:8190/customers`, {
+            name,
+            phone,
+            mail
+        }, { headers: { "Authorization": auth } })
+        window.location.reload();
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 export const get_orders = async (id, auth) => {
     try {
         const response = await axios.get(`http://localhost:8190/farmer/${id}/orders`, { headers: { "Authorization": auth } })

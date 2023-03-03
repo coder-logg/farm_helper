@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { useParams, useLocation } from 'react-router-dom';
 import { completed_order, get_orders_driver } from "../../action/driver";
-import { get_orders } from "../../action/farmer";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
@@ -26,7 +25,7 @@ export const DriveOrder = () => {
             }
         };
         fetchData();
-    });
+    }, [login]);
     return (
         <section className="main_page" id="login">
             <Container>
@@ -42,26 +41,18 @@ export const DriveOrder = () => {
                                 <tr>
                                     <th>Order Id</th>
                                     <th>Farmer Login</th>
-                                    <th>Address1</th>
-                                    <th>Address2</th>
                                     <th>Closing Date</th>
                                     <th>Cost</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {orders.map(async (order) => {
-                                    const ordersAll = await get_orders(order.farmerLogin, auth);
-                                    setOrdersFarmer(ordersAll)
-                                    return (
-                                        <tr key={order.orderId}>
-                                            <td>{order.status.location}</td>
-                                            <td>{order.delieveryAddress}</td>
-                                            <td>{order.farmerLogin}</td>
-                                            <td>{order.closingDate}</td>
-                                            <td>{order.cost}</td>
-                                        </tr>
-                                    );
-                                })}
+                                {orders.map((order) =>
+                                    <tr>
+                                        <td>{order.orderId}</td>
+                                        <td>{order.farmerLogin}</td>
+                                        <td>{order.closingDate}</td>
+                                        <td>{order.cost}</td>
+                                    </tr>)}
                             </tbody>
                         </Table>
                     </Col>

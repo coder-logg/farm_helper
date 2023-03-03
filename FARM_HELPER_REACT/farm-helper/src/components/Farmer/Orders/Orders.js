@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { Input } from "../../Input";
 import { useParams, useLocation } from 'react-router-dom';
-import { add_order, get_orders } from "../../../action/farmer";
+import { add_order, get_orders, create_customer } from "../../../action/farmer";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { get_plants, get_customers } from "../../../action/admin";
@@ -14,12 +14,15 @@ export const Orders = () => {
     const [date, setDate] = useState("");
     const [address, setAddress] = useState("");
     const [customer, setCustomer] = useState("");
+    const [customers, setCustomers] = useState([]);
+    const [customerName, setCustomerName] = useState("");
+    const [customerPhone, setCustomerPhone] = useState("");
+    const [customerMail, setCustomerMail] = useState("");
     const { login } = useParams();
     const [orders, setOrders] = useState([]);
     const { state } = useLocation();
     const auth = state.auth
     const [plants, setPlants] = useState([]);
-    const [customers, setCustomers] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -93,7 +96,16 @@ export const Orders = () => {
                             ADD
                         </Button>
                     </Col>
-
+                    <Col sm={4} xs={6} md={6}> </Col>
+                    <Col sm={4} xs={6} md={6}>
+                        Customer
+                        <Input value={customerName} setValue={setCustomerName} id="formPlaintext" name="Name" />
+                        <Input value={customerPhone} setValue={setCustomerPhone} id="formPlaintext" name="Phone" />
+                        <Input value={customerMail} setValue={setCustomerMail} id="formPlaintext" name="Email" />
+                        <Button className="add_button" onClick={() => { create_customer(customerName, customerPhone, customerMail, auth) }} variant="warning" type="submit">
+                            Create Customer
+                        </Button>
+                    </Col>
                 </Row>
             </Container>
         </section >

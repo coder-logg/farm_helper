@@ -22,7 +22,7 @@ export const get_orders_driver = async (driverLogin, auth) => {
 }
 export const add_car = async (driverLogin, mark, number, capacity, auth) => {
     try {
-        const response = await axios.post('http://localhost:8190/car_driver/add', {
+        const response = await axios.post(`http://localhost:8190/driver/${driverLogin}/car`, {
             driverLogin,
             mark,
             number,
@@ -34,11 +34,25 @@ export const add_car = async (driverLogin, mark, number, capacity, auth) => {
         console.log(e)
     }
 }
+export const change_car = async (driverLogin, mark, number, capacity, auth) => {
+    try {
+        const response = await axios.put(`http://localhost:8190/driver/${driverLogin}/car`, {
+            driverLogin,
+            mark,
+            number,
+            capacity
+        }, { headers: { "Authorization": auth } })
+        window.location.reload();
+        console.log(driverLogin)
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 export const get_cars = async (driverLogin, auth) => {
     try {
-        const response = await axios.post('http://localhost:8190/order_driver/get', {
-            driverLogin
-        }, { headers: { "Authorization": auth } })
+        const response = await axios.get(`http://localhost:8190/driver/${driverLogin}/car`, { headers: { "Authorization": auth } })
+        return response.data;
     }
     catch (e) {
         console.log(e)
