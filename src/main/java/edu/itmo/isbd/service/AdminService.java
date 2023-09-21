@@ -33,7 +33,7 @@ public class AdminService{
 
 	@Autowired
 	@Lazy
-	PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 
 	@PersistenceContext
 	private Session session;

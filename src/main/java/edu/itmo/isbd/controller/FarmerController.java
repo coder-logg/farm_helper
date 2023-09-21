@@ -1,6 +1,7 @@
 package edu.itmo.isbd.controller;
 
 import edu.itmo.isbd.entity.*;
+import edu.itmo.isbd.service.CustomerService;
 import edu.itmo.isbd.service.FarmerService;
 import edu.itmo.isbd.service.OrderForDriveService;
 import edu.itmo.isbd.service.OrderService;
@@ -34,6 +35,9 @@ public class FarmerController {
 	@Autowired
 	private OrderForDriveService orderForDriveService;
 
+	@Autowired
+	private CustomerService customerService;
+
 	@GetMapping("/login")
 	public ResponseEntity<Farmer> getFarmer(Principal principal){
 		return ResponseEntity.ok(farmerService.getFarmerOrThrow(principal.getName()));
@@ -56,11 +60,11 @@ public class FarmerController {
 		return ResponseEntity.ok(orderForDriveService.getAllByFarmerLogin(login));
 	}
 
-	@GetMapping("/{login}/customers")
-	@PreAuthorize("#login == authentication.name")
-	public ResponseEntity<List<OrderForDrive>> getFarmerCustomers(@PathVariable String login) {
-		return ResponseEntity.ok(orderForDriveService.getAllByFarmerLogin(login));
-	}
+//	@GetMapping("/{login}/customers")
+//	@PreAuthorize("#login == authentication.name")
+//	public ResponseEntity<List<Customer>> getFarmerCustomers(@PathVariable String login) {
+//		return ResponseEntity.ok(customerService.getAllByCustomers(login));
+//	}
 
 	@GetMapping("/{login}/farm")
 	@PreAuthorize("#login == authentication.name")
