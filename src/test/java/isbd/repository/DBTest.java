@@ -2,7 +2,6 @@ package isbd.repository;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
-import org.postgresql.ds.PGSimpleDataSource;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,11 +22,11 @@ public class DBTest {
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-		PGSimpleDataSource ds = new PGSimpleDataSource();
-		ds.setURL(url);
-		ds.setPassword(pass);
-		ds.setUser(user);
-		connection = ds.getConnection();
+//		PGSimpleDataSource ds = new PGSimpleDataSource();
+//		ds.setURL(url);
+//		ds.setPassword(pass);
+//		ds.setUser(user);
+//		connection = ds.getConnection();
 //		execSQLFile("src/test/resources/sql/import.sql");
 	};
 
