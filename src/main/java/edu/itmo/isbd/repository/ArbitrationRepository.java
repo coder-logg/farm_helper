@@ -1,6 +1,6 @@
 package edu.itmo.isbd.repository;
 
-import edu.itmo.isbd.entity.Arbitration;
+import edu.itmo.isbd.model.Arbitration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

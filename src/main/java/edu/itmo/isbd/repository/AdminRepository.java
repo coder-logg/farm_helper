@@ -1,7 +1,6 @@
 package edu.itmo.isbd.repository;
 
-import edu.itmo.isbd.entity.Admin;
-import edu.itmo.isbd.entity.User;
+import edu.itmo.isbd.model.Admin;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

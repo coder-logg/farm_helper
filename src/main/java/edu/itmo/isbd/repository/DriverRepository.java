@@ -1,6 +1,6 @@
 package edu.itmo.isbd.repository;
 
-import edu.itmo.isbd.entity.Driver;
+import edu.itmo.isbd.model.Driver;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

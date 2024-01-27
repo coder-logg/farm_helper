@@ -19,7 +19,7 @@ const plant_number = 150
 const car_number = 500
 const review_number = 15000
 const location_number = 5000
-const order_for_drive_number = 10000
+const delivery_order_number = 10000
 
 Mock.email_suffix = ["@gmail.com", "@yahoo.com", "@msn.com", "@hotmail.com",
     "@aol.com", "@ask.com", "@live.com", "@qq.com", "@0355.net", "@163.com",
@@ -267,10 +267,10 @@ for (i = 1; i <= order_number; i++){
 
 // console.log(getRandomElm(Array.from(farmerOrders.keys())))
 
-for (i = 1; i <= order_for_drive_number; i++) {
+for (i = 1; i <= delivery_order_number; i++) {
     let farmerId = getRandomElm(Array.from(farmerOrders.keys()))
-    console.log("INSERT INTO Order_for_drive (driver_id, farmer_id, order_id, cost) VALUES (" + getRandomElm(drivers) + "," + farmerId + "," + getRandomElm(farmerOrders.get(farmerId)) + "," + getRandomInt(100) + ");");
-    console.log("INSERT INTO Arbitration (order_for_drive_id, admin_id, driver_id, farmer_id) VALUES (" + i + ", " + getRandomElm(admins) + "," + getRandomElm(drivers) + "," + farmerId + ");");
+    console.log("INSERT INTO delivery_order (driver_id, farmer_id, order_id, cost) VALUES (" + getRandomElm(drivers) + "," + farmerId + "," + getRandomElm(farmerOrders.get(farmerId)) + "," + getRandomInt(100) + ");");
+    console.log("INSERT INTO Arbitration (delivery_order_id, admin_id, driver_id, farmer_id) VALUES (" + i + ", " + getRandomElm(admins) + "," + getRandomElm(drivers) + "," + farmerId + ");");
 }
 
 

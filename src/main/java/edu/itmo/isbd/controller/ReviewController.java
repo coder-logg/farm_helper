@@ -1,6 +1,6 @@
 package edu.itmo.isbd.controller;
 
-import edu.itmo.isbd.entity.Review;
+import edu.itmo.isbd.model.Review;
 import edu.itmo.isbd.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

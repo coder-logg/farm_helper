@@ -1,11 +1,9 @@
 package edu.itmo.isbd.service;
 
-import edu.itmo.isbd.entity.Car;
-import edu.itmo.isbd.entity.Driver;
-import edu.itmo.isbd.entity.Plant;
+import edu.itmo.isbd.model.Car;
+import edu.itmo.isbd.model.Driver;
 import edu.itmo.isbd.exception.UserAlreadyRegisteredException;
 import edu.itmo.isbd.repository.DriverRepository;
-import edu.itmo.isbd.repository.OrderForDriveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;

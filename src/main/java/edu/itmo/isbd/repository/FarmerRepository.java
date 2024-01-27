@@ -1,7 +1,6 @@
 package edu.itmo.isbd.repository;
 
-import edu.itmo.isbd.entity.Farmer;
-import edu.itmo.isbd.entity.User;
+import edu.itmo.isbd.model.Farmer;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

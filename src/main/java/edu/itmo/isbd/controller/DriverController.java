@@ -1,10 +1,10 @@
 package edu.itmo.isbd.controller;
 
-import edu.itmo.isbd.entity.Car;
-import edu.itmo.isbd.entity.Driver;
-import edu.itmo.isbd.entity.OrderForDrive;
+import edu.itmo.isbd.model.Car;
+import edu.itmo.isbd.model.Driver;
+import edu.itmo.isbd.model.DeliveryOrder;
 import edu.itmo.isbd.service.DriverService;
-import edu.itmo.isbd.service.OrderForDriveService;
+import edu.itmo.isbd.service.DeliveryOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +24,7 @@ public class DriverController {
 	private DriverService driverService;
 
 	@Autowired
-	private OrderForDriveService orderForDriveService;
+	private DeliveryOrderService deliveryOrderService;
 
 	@GetMapping("/login")
 	public ResponseEntity<Driver> getFarmer(Principal principal) {
@@ -36,10 +36,10 @@ public class DriverController {
 		return ResponseEntity.created(new URI("/driver/login")).body(driverService.saveOrThrow(driver));
 	}
 
-	@GetMapping("/{login}/orders-for-drive")
+	@GetMapping("/{login}/delivery-orders")
 	@PreAuthorize("#login == authentication.name")
-	public ResponseEntity<List<OrderForDrive>> getOrdersForDrive(@PathVariable @P("login") String login) {
-		return ResponseEntity.ok(orderForDriveService.getAllByDriverLogin(login));
+	public ResponseEntity<List<DeliveryOrder>> getDeliveryOrders(@PathVariable @P("login") String login) {
+		return ResponseEntity.ok(deliveryOrderService.getAllByDriverLogin(login));
 	}
 
 	@GetMapping("/{login}/car")

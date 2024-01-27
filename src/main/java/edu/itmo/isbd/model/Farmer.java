@@ -1,13 +1,10 @@
-package edu.itmo.isbd.entity;
+package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.*;
-import edu.itmo.isbd.service.UserService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.lang.Nullable;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.*;
@@ -34,7 +31,7 @@ public class Farmer extends User{
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "farmer", fetch=FetchType.LAZY)
-	private Set<OrderForDrive> deliveryOrders;
+	private Set<DeliveryOrder> deliveryOrders;
 
 	@JsonIgnore
 	@ToString.Exclude
@@ -43,7 +40,7 @@ public class Farmer extends User{
 	private Set<Order> orders;
 
 	{
-		super.ROLE = UserService.Role.FARMER;
+		super.ROLE = Role.FARMER;
 	}
 
 	public Farmer() {}
@@ -57,16 +54,16 @@ public class Farmer extends User{
 	}
 
 	@JsonProperty
-	public void setOrderForDriveIds(List<Integer> orderForDriveIds){
+	public void setDeliveryOrderIds(List<Integer> deliveryOrderIds){
 		deliveryOrders = new HashSet<>();
-		orderForDriveIds.forEach(id -> deliveryOrders.add(new OrderForDrive(id)));
+		deliveryOrderIds.forEach(id -> deliveryOrders.add(new DeliveryOrder(id)));
 	}
 
 	@Nullable
 	@JsonProperty
-	public List<Integer> getOrderForDriveIds(){
+	public List<Integer> getDeliveryOrderIds(){
 		if (deliveryOrders != null)
-			return deliveryOrders.stream().map(OrderForDrive::getId).collect(Collectors.toList());
+			return deliveryOrders.stream().map(DeliveryOrder::getId).collect(Collectors.toList());
 		return null;
 	}
 

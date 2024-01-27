@@ -1,6 +1,6 @@
 package edu.itmo.isbd.controller;
 
-import edu.itmo.isbd.entity.Customer;
+import edu.itmo.isbd.model.Customer;
 import edu.itmo.isbd.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

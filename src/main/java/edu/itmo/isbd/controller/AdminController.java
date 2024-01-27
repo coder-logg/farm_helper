@@ -1,7 +1,7 @@
 package edu.itmo.isbd.controller;
 
-import edu.itmo.isbd.entity.Admin;
-import edu.itmo.isbd.entity.Arbitration;
+import edu.itmo.isbd.model.Admin;
+import edu.itmo.isbd.model.Arbitration;
 import edu.itmo.isbd.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

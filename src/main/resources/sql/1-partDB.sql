@@ -14,7 +14,7 @@ CREATE FUNCTION Transfer_Money_Arbitration(@percent INT, @fermer INT, @driver IN
 RETURNS INT
 BEGIN
 DECLARE @balance1 int, @balance2 int, @cost int
-SELECT @cost = cost  FROM Order_for_drive Where fermer_id=@fermer AND driver_id=@driver
+SELECT @cost = cost  FROM delivery_order Where fermer_id=@fermer AND driver_id=@driver
 SELECT @balance1 = balance FROM User Where id=@fermer
 SELECT @balance2 = balance FROM User Where id=@driver
 IF (@thuth=1){
@@ -32,9 +32,9 @@ CREATE FUNCTION Send_Money(@id INT)
     RETURNS INT
     BEGIN
     DECLARE @cost INT, @driver_balance INT,@farmer_balance INT
-    SELECT @cost=cost from Order_for_drive Where id=@id
-    SELECT @driver_balance=balance from Driver Where id=(SELECT id from Order_for_drive Where id=@id)
-    SELECT @farmer_balance=balance from Farmer Where id=(SELECT id from Order_for_drive Where id=@id)
+    SELECT @cost=cost from delivery_order Where id=@id
+    SELECT @driver_balance=balance from Driver Where id=(SELECT id from delivery_order Where id=@id)
+    SELECT @farmer_balance=balance from Farmer Where id=(SELECT id from delivery_order Where id=@id)
     SET @driver_balance= @driver_balance+cost
     SET @farmer_balance= @farmer_balance-cost
     UPDATE Fermer SET balance=@farmer_balance

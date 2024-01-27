@@ -2,7 +2,7 @@ package isbd;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.itmo.isbd.entity.Plant;
+import edu.itmo.isbd.model.Plant;
 import org.junit.Test;
 
 import java.util.Arrays;

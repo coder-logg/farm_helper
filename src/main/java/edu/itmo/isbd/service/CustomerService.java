@@ -1,7 +1,6 @@
 package edu.itmo.isbd.service;
 
-import edu.itmo.isbd.entity.Customer;
-import edu.itmo.isbd.entity.Plant;
+import edu.itmo.isbd.model.Customer;
 import edu.itmo.isbd.exception.EntityNotFoundException;
 import edu.itmo.isbd.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;

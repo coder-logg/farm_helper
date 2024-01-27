@@ -1,4 +1,4 @@
-package edu.itmo.isbd.entity;
+package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,33 +15,30 @@ import java.util.List;
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
-public class Equipment {
+public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name;
-	private int cost;
-	private String location;
+	private String phone;
+	private String mail;
 
 	@JsonIgnore
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
-	@ManyToMany
-	@JoinTable(name="required_equipment",
-			joinColumns=@JoinColumn(name="equipment_id"),
-			inverseJoinColumns=@JoinColumn(name="plant_id"))
-	private List<Plant> plants;
+	@OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+	private List<Order> orders;
 
-	public Equipment() {}
+	public Customer() {}
 
-	public Equipment(int id) {
+	public Customer(int id) {
 		this.id = id;
 	}
 
-	public Equipment(int id, String name, int cost, String location) {
+	public Customer(int id, String name, String phone, String mail) {
 		this.id = id;
 		this.name = name;
-		this.cost = cost;
-		this.location = location;
+		this.phone = phone;
+		this.mail = mail;
 	}
 }

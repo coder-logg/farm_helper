@@ -1,10 +1,9 @@
-package edu.itmo.isbd.entity;
+package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -12,12 +11,12 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "order_for_drive")
+@Table(name = "delivery_order")
 @Data
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
-public class OrderForDrive {
+public class DeliveryOrder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -50,19 +49,19 @@ public class OrderForDrive {
 	@JsonIgnore
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy = "orderForDrive")
+	@OneToMany(mappedBy = "deliveryOrder")
 	private List<Arbitration> arbitrations;
 
-	public OrderForDrive() {}
+	public DeliveryOrder() {}
 
-	public OrderForDrive(int id, Driver driver, Farmer farmer, int cost) {
+	public DeliveryOrder(int id, Driver driver, Farmer farmer, int cost) {
 		this.id = id;
 		this.driver = driver;
 		this.farmer = farmer;
 		this.cost = cost;
 	}
 
-	public OrderForDrive(int id) {
+	public DeliveryOrder(int id) {
 		this.id = id;
 	}
 

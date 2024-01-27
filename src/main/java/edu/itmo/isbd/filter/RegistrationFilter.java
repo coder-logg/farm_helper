@@ -1,7 +1,7 @@
 package edu.itmo.isbd.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.itmo.isbd.entity.User;
+import edu.itmo.isbd.model.User;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StreamUtils;

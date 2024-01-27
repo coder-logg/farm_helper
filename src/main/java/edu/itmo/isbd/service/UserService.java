@@ -1,20 +1,13 @@
 package edu.itmo.isbd.service;
 
-import edu.itmo.isbd.entity.*;
+import edu.itmo.isbd.model.*;
 import edu.itmo.isbd.exception.HttpException;
 import edu.itmo.isbd.exception.UserAlreadyRegisteredException;
-import edu.itmo.isbd.repository.AdminRepository;
-import edu.itmo.isbd.repository.DriverRepository;
-import edu.itmo.isbd.repository.FarmerRepository;
 import edu.itmo.isbd.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,19 +53,6 @@ public class UserService implements UserDetailsService {
 				return farmerService.saveFarmerOrThrow(new Farmer(user));
 		}
 		throw new IllegalStateException("Error in UserService.registration(): Unknown user role!");
-	}
-
-	@Getter
-	@AllArgsConstructor
-	public enum Role {
-		FARMER(FarmerRepository.class, Farmer.class),
-		DRIVER(DriverRepository.class, Driver.class),
-		ADMIN(AdminRepository.class, Admin.class);
-		private final Class<? extends CrudRepository<?, ?>> repository;
-		private final Class<? extends User> entity;
-		public Class<? extends CrudRepository<?, ?>> getRepository() {
-			return repository;
-		}
 	}
 
 	public Role getUserRole(User user){

@@ -1,7 +1,7 @@
 package edu.itmo.isbd.service;
 
-import edu.itmo.isbd.entity.Review;
-import edu.itmo.isbd.entity.User;
+import edu.itmo.isbd.model.Review;
+import edu.itmo.isbd.model.User;
 import edu.itmo.isbd.exception.EntityNotFoundException;
 import edu.itmo.isbd.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;

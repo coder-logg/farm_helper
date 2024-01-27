@@ -94,15 +94,15 @@ CREATE OR REPLACE FUNCTION update_order_date_if_status_set_finished() RETURNS TR
 declare
 	cost int;
 	order_row record;
-	order_for_drive_row record;
+	delivery_order_row record;
 begin
 	if new.progress == 'FINISHED' then
 		order_row = (select * from _order where status_id = new.id);
 		UPDATE order_detail SET delivery_date = current_timestamp where id = order_row.order_detail_id;
-		order_for_drive_row = (SELECT * from order_for_drive where farmer_id = order_row.farmer_id);
-		cost = order_for_drive_row.cost;
+		delivery_order_row = (SELECT * from delivery_order where farmer_id = order_row.farmer_id);
+		cost = delivery_order_row.cost;
 		UPDATE farmer SET balance = balance - cost where user_id = order_row.farmer_id;
-		UPDATE driver SET balance = balance + cost where user_id = order_for_drive_row.driver_id;
+		UPDATE driver SET balance = balance + cost where user_id = delivery_order_row.driver_id;
 	end if;
 	return new;
 end;
@@ -179,6 +179,6 @@ end;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER order_belongs_to_farmer
-BEFORE INSERT ON order_for_drive
+BEFORE INSERT ON delivery_order
 FOR EACH ROW
 EXECUTE FUNCTION check_order_belongs_to_farmer();

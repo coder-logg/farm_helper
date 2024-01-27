@@ -1,7 +1,7 @@
 package isbd.repository;
 
 import edu.itmo.isbd.FarmHelper;
-import edu.itmo.isbd.entity.Admin;
+import edu.itmo.isbd.model.Admin;
 import edu.itmo.isbd.repository.AdminRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;

@@ -1,10 +1,9 @@
-package edu.itmo.isbd.entity;
+package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import edu.itmo.isbd.service.UserService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -35,7 +34,7 @@ public class Admin extends User  {
 	private List<Arbitration> arbitrations;
 
 	{
-		super.ROLE = UserService.Role.ADMIN;
+		super.ROLE = Role.ADMIN;
 	}
 
 	public Admin() {}
@@ -46,7 +45,7 @@ public class Admin extends User  {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Arrays.stream(UserService.Role.values())
+		return Arrays.stream(Role.values())
 				.map(x -> new SimpleGrantedAuthority("ROLE_" + x.name()))
 				.collect(Collectors.toList());
 	}

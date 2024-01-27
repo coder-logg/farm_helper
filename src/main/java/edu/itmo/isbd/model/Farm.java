@@ -1,4 +1,4 @@
-package edu.itmo.isbd.entity;
+package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,16 +24,9 @@ public class Farm {
 	@JoinColumn(name = "location_id")
 	private Location location;
 
-	@JsonIgnore
-	@ToString.Exclude
-	@EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy = "farm")
-	private List<Farmer> owners;
+	@Column(name = "price_per_month")
+	private int pricePerMonth;
 
-	public Farm() {}
-
-	public Farm(int id, Location location) {
-		this.id = id;
-		this.location = location;
-	}
+	@Column(name = "square")
+	private int square;
 }

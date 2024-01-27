@@ -1,9 +1,7 @@
 package edu.itmo.isbd.service;
 
-import edu.itmo.isbd.entity.Car;
-import edu.itmo.isbd.entity.Driver;
-import edu.itmo.isbd.entity.Farm;
-import edu.itmo.isbd.entity.Farmer;
+import edu.itmo.isbd.model.Farm;
+import edu.itmo.isbd.model.Farmer;
 import edu.itmo.isbd.exception.UserAlreadyRegisteredException;
 import edu.itmo.isbd.repository.FarmRepository;
 import edu.itmo.isbd.repository.FarmerRepository;

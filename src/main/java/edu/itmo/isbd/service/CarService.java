@@ -1,7 +1,6 @@
 package edu.itmo.isbd.service;
 
-import edu.itmo.isbd.entity.Car;
-import edu.itmo.isbd.entity.Car;
+import edu.itmo.isbd.model.Car;
 import edu.itmo.isbd.exception.EntityNotFoundException;
 import edu.itmo.isbd.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;

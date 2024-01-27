@@ -1,4 +1,4 @@
-package edu.itmo.isbd.entity;
+package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.Data;

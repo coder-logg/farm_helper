@@ -1,8 +1,7 @@
 package edu.itmo.isbd.service;
 
-import edu.itmo.isbd.entity.Admin;
-import edu.itmo.isbd.entity.Arbitration;
-import edu.itmo.isbd.entity.Farmer;
+import edu.itmo.isbd.model.Admin;
+import edu.itmo.isbd.model.Arbitration;
 import edu.itmo.isbd.exception.UserAlreadyRegisteredException;
 import edu.itmo.isbd.repository.AdminRepository;
 import edu.itmo.isbd.repository.ArbitrationRepository;
@@ -15,8 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;

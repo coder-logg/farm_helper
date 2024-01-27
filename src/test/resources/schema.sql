@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS _order(
 
 CREATE INDEX order_cost ON _order(cost);
 
-CREATE TABLE Order_for_drive(
+CREATE TABLE delivery_order(
 	id serial PRIMARY KEY,
 	farmer_id int NOT NULL,
 	driver_id int NOT NULL,

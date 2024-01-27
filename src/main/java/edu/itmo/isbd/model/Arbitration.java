@@ -1,4 +1,4 @@
-package edu.itmo.isbd.entity;
+package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,8 +24,8 @@ public class Arbitration {
 	private Admin admin;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "order_for_drive_id", referencedColumnName = "id")
-	private OrderForDrive orderForDrive;
+	@JoinColumn(name = "delivery_order_id", referencedColumnName = "id")
+	private DeliveryOrder deliveryOrder;
 
 	@ManyToOne
 	@JoinColumn(name = "farmer_id", referencedColumnName = "user_id")

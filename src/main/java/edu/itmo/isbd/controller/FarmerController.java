@@ -1,22 +1,17 @@
 package edu.itmo.isbd.controller;
 
-import edu.itmo.isbd.entity.*;
+import edu.itmo.isbd.model.*;
 import edu.itmo.isbd.service.CustomerService;
 import edu.itmo.isbd.service.FarmerService;
-import edu.itmo.isbd.service.OrderForDriveService;
+import edu.itmo.isbd.service.DeliveryOrderService;
 import edu.itmo.isbd.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
@@ -33,7 +28,7 @@ public class FarmerController {
 	private OrderService orderService;
 
 	@Autowired
-	private OrderForDriveService orderForDriveService;
+	private DeliveryOrderService deliveryOrderService;
 
 	@Autowired
 	private CustomerService customerService;
@@ -54,17 +49,11 @@ public class FarmerController {
 		return ResponseEntity.ok(orderService.getOrdersByFarmerLogin(login));
 	}
 
-	@GetMapping("/{login}/orders-for-drive")
+	@GetMapping("/{login}/delivery-orders")
 	@PreAuthorize("#login == authentication.name")
-	public ResponseEntity<List<OrderForDrive>> getOrdersForDrive(@PathVariable String login) {
-		return ResponseEntity.ok(orderForDriveService.getAllByFarmerLogin(login));
+	public ResponseEntity<List<DeliveryOrder>> getOrdersForDrive(@PathVariable String login) {
+		return ResponseEntity.ok(deliveryOrderService.getAllByFarmerLogin(login));
 	}
-
-//	@GetMapping("/{login}/customers")
-//	@PreAuthorize("#login == authentication.name")
-//	public ResponseEntity<List<Customer>> getFarmerCustomers(@PathVariable String login) {
-//		return ResponseEntity.ok(customerService.getAllByCustomers(login));
-//	}
 
 	@GetMapping("/{login}/farm")
 	@PreAuthorize("#login == authentication.name")

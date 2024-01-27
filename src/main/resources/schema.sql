@@ -1,6 +1,6 @@
 -- CREATE TYPE progress_stages AS ENUM ('STARTED', 'CULTIVATION','DELIVERY','FINISHED','ARBITRATION');
 
-CREATE TABLE _user(
+CREATE TABLE IF NOT EXISTS _user(
 	id serial primary key,
 	login varchar(10) NOT NULL UNIQUE,
 	phone varchar(12) NOT NULL UNIQUE,
@@ -10,7 +10,7 @@ CREATE TABLE _user(
 
 CREATE INDEX user_login ON _user(login);
 
-CREATE TABLE Customer(
+CREATE TABLE IF NOT EXISTS customer(
 	id serial PRIMARY KEY,
 	name varchar(50),
 	phone varchar(12) NOT NULL UNIQUE,
@@ -20,7 +20,7 @@ CREATE TABLE Customer(
 CREATE TABLE IF NOT EXISTS car (
 	id serial primary key,
 	mark varchar(15) NOT NULL,
-	number varchar(6) NOT NULL UNIQUE,
+	license_number varchar(6) NOT NULL UNIQUE,
 	capacity int
 );
 
@@ -39,21 +39,21 @@ CREATE TABLE IF NOT EXISTS equipment(
 	id serial primary key,
 	name varchar(40) UNIQUE NOT NULL,
 	cost int NOT NULL,
-	location varchar(30)
+	location point
 );
 
 CREATE INDEX equipment_cost ON equipment(cost);
 
-CREATE TABLE Review(
+CREATE TABLE IF NOT EXISTS review(
 	id serial PRIMARY KEY,
 	sender_id int references _user(id) NOT NULL,
 	recipient_id int references _user(id) NOT NULL,
-	message varchar(255) NOT NULL,
+	message varchar(255) NOT NULL check (char_length(message) > 0),
 	rate int CHECK(rate>=0 AND rate<=5),
-	UNIQUE (sender_id, recipient_id), CHECK (sender_id != Review.recipient_id)
+	UNIQUE (sender_id, recipient_id), CHECK (sender_id != review.recipient_id)
 );
 
-CREATE INDEX idx_rate on Review(rate);
+CREATE INDEX idx_rate on review(rate);
 
 CREATE TABLE IF NOT EXISTS admin(
 	user_id serial primary key references _user(id)
@@ -92,36 +92,36 @@ CREATE TABLE IF NOT EXISTS required_equipment(
 	UNIQUE (plant_id, equipment_id)
 );
 
-CREATE TABLE Country(
-	name varchar(30) PRIMARY KEY,
-	soil_type varchar(30) NOT NULL,
-	sunlight_amount int,
-	CONSTRAINT CHK_Country CHECK(sunlight_amount>0 AND (soil_type='почва' OR soil_type='чернозем' OR soil_type='глина'))
-);
+-- CREATE TABLE Country(
+-- 	name varchar(30) PRIMARY KEY,
+-- 	soil_type varchar(30) NOT NULL,
+-- 	sunlight_amount int,
+-- 	CONSTRAINT CHK_Country CHECK(sunlight_amount>0 AND (soil_type='почва' OR soil_type='чернозем' OR soil_type='глина'))
+-- );
 
-CREATE INDEX idx_sunlight_amount on Country(sunlight_amount);
+-- CREATE INDEX idx_sunlight_amount on Country(sunlight_amount);
 
-CREATE TABLE Location(
+CREATE TABLE location(
 	id serial PRIMARY KEY,
-	country_name varchar(30) NOT NULL,
-	price_per_month int NOT NULL,
-	square int CHECK(square>0) NOT NULL,
-	FOREIGN KEY(country_name)
-	REFERENCES country(name)
+	name text not null unique,
+	coordinates point not null unique,
+	sunlight_amount int
 );
 
-CREATE INDEX idx_price_per_month on Location(price_per_month);
+CREATE INDEX idx_price_per_month on location(name);
 
-CREATE TABLE Farm(
+CREATE TABLE IF NOT EXISTS farm(
 	id serial PRIMARY KEY,
 	location_id int NOT NULL,
+    price_per_month int NOT NULL,
+    square int CHECK(square>0) NOT NULL,
 	FOREIGN KEY(location_id)
-	REFERENCES Location(id)
+	REFERENCES location(id)
 );
 
-CREATE TABLE Farmer(
+CREATE TABLE IF NOT EXISTS farmer(
 	user_id serial PRIMARY KEY references _user(id),
-	balance int,
+	balance int default 0,
 	farm_id int,
 	FOREIGN KEY(farm_id)
 	REFERENCES farm(id)
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS _order(
 
 CREATE INDEX order_cost ON _order(cost);
 
-CREATE TABLE Order_for_drive(
+CREATE TABLE delivery_order(
 	id serial PRIMARY KEY,
 	farmer_id int NOT NULL,
 	driver_id int default NULL,
@@ -152,14 +152,14 @@ CREATE TABLE Order_for_drive(
 	REFERENCES farmer(user_id)
 );
 
-CREATE TABLE Arbitration(
+CREATE TABLE arbitration(
 	id serial PRIMARY KEY,
 	admin_id int references admin(user_id) NOT NULL,
-	order_for_drive_id int NOT NULL,
+	delivery_order_id int NOT NULL,
 	driver_id int NOT NULL,
 	farmer_id int NOT NULL,
-	FOREIGN KEY(order_for_drive_id)
-	REFERENCES order_for_drive(id),
+	FOREIGN KEY(delivery_order_id)
+	REFERENCES delivery_order(id),
 	FOREIGN KEY(driver_id)
 	REFERENCES driver(user_id),
 	FOREIGN KEY(farmer_id)

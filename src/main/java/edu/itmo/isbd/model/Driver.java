@@ -1,13 +1,10 @@
-package edu.itmo.isbd.entity;
+package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.*;
-import edu.itmo.isbd.service.UserService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.lang.Nullable;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.*;
@@ -34,10 +31,10 @@ public class Driver extends User {
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "driver", fetch = FetchType.LAZY)
-	private List<OrderForDrive> orders;
+	private List<DeliveryOrder> orders;
 
 	{
-		super.ROLE = UserService.Role.DRIVER;
+		super.ROLE = Role.DRIVER;
 	}
 
 	public Driver() {}
@@ -48,16 +45,16 @@ public class Driver extends User {
 
 	@Nullable
 	@JsonProperty
-	public List<Integer> getOrderForDriveIds(){
+	public List<Integer> getDeliveryOrderIds(){
 		if (orders != null)
-			return orders.stream().map(OrderForDrive::getId).collect(Collectors.toList());
+			return orders.stream().map(DeliveryOrder::getId).collect(Collectors.toList());
 		return null;
 	}
 
 	@JsonProperty
 	public void setOrdersIds(List<Integer> ordersIds){
 		orders = new ArrayList<>();
-		ordersIds.forEach(id -> orders.add(new OrderForDrive(id)));
+		ordersIds.forEach(id -> orders.add(new DeliveryOrder(id)));
 	}
 
 }

@@ -1,4 +1,4 @@
-package edu.itmo.isbd.entity;
+package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
@@ -6,7 +6,6 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -121,7 +120,6 @@ public class Order {
 		return customer.getId();
 	}
 
-	@Nullable
 	@JsonProperty
 	public void setCustomerId(Integer id) {
 		customer = new Customer(id);

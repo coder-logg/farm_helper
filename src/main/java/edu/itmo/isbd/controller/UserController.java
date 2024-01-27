@@ -1,21 +1,17 @@
 package edu.itmo.isbd.controller;
 
 
-import edu.itmo.isbd.entity.Driver;
-import edu.itmo.isbd.entity.Review;
-import edu.itmo.isbd.entity.User;
-import edu.itmo.isbd.exception.HttpException;
+import edu.itmo.isbd.model.Driver;
+import edu.itmo.isbd.model.Review;
+import edu.itmo.isbd.model.Role;
+import edu.itmo.isbd.model.User;
 import edu.itmo.isbd.service.DriverService;
 import edu.itmo.isbd.service.ReviewService;
 import edu.itmo.isbd.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
@@ -41,7 +37,7 @@ public class UserController {
 
 	@GetMapping(value = "/login")
 	public void login(HttpServletRequest request, HttpServletResponse response, Principal principal) throws ServletException, IOException {
-		UserService.Role role = userService.getUserRole(principal.getName());
+		Role role = userService.getUserRole(principal.getName());
 		request.getRequestDispatcher("/" + role.name().toLowerCase() + "/login").forward(request, response);
 	}
 
@@ -52,13 +48,13 @@ public class UserController {
 			return ResponseEntity.ok("User was deleted");
 	}
 
-	@GetMapping("/{login}/my-reviews")
+	@GetMapping("/{login}/reviews/my")
 	@PreAuthorize("#login == authentication.name")
 	public ResponseEntity<List<Review>> getAllMyReviews(@PathVariable String login){
 		return ResponseEntity.ok(reviewService.getAllBySenderLogin(login));
 	}
 
-	@GetMapping("/{login}/reviews-for-me")
+	@GetMapping("/{login}/reviews/for-me")
 	@PreAuthorize("#login == authentication.name")
 	public ResponseEntity<List<Review>> getAllReviewsForMe(@PathVariable String login){
 		return ResponseEntity.ok(reviewService.getAllByRecipientLogin(login));

@@ -2,9 +2,7 @@ package isbd.service;
 
 
 import edu.itmo.isbd.FarmHelper;
-import edu.itmo.isbd.entity.OrderStatus;
 import edu.itmo.isbd.service.OrderService;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
