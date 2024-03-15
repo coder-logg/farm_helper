@@ -19,15 +19,12 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(unique = true, nullable = false)
 	private String name;
+	@Column(unique = true, nullable = false)
 	private String phone;
+	@Column(unique = true, nullable = false)
 	private String mail;
-
-	@JsonIgnore
-	@ToString.Exclude
-	@EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-	private List<Order> orders;
 
 	public Customer() {}
 
@@ -37,6 +34,12 @@ public class Customer {
 
 	public Customer(int id, String name, String phone, String mail) {
 		this.id = id;
+		this.name = name;
+		this.phone = phone;
+		this.mail = mail;
+	}
+
+	public Customer(String name, String phone, String mail) {
 		this.name = name;
 		this.phone = phone;
 		this.mail = mail;

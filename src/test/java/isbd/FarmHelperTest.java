@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @TestPropertySource(
-		locations = "classpath:application.properties")
+		locations = "classpath:application.yml")
 @SpringBootTest(classes = FarmHelper.class)
 public class FarmHelperTest {
 

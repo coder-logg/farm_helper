@@ -1,5 +1,6 @@
 package edu.itmo.isbd.service;
 
+import edu.itmo.isbd.model.Customer;
 import edu.itmo.isbd.model.Farm;
 import edu.itmo.isbd.model.Farmer;
 import edu.itmo.isbd.exception.UserAlreadyRegisteredException;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 

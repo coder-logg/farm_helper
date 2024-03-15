@@ -7,11 +7,15 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,6 +24,7 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Entity
 @Data
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @JsonIdentityInfo(
@@ -34,13 +39,18 @@ public class Admin extends User  {
 	private List<Arbitration> arbitrations;
 
 	{
-		super.ROLE = Role.ADMIN;
+		super.role = Role.ADMIN;
 	}
 
 	public Admin() {}
 
 	public Admin(User user){
 		copyProperties(user, this);
+		super.role = Role.ADMIN;
+	}
+	public Admin(String login, String phone, String mail, String password){
+		super(login, phone, mail, password);
+		super.role = Role.ADMIN;
 	}
 
 	@Override
@@ -60,6 +70,8 @@ public class Admin extends User  {
 
 	@JsonProperty
 	public void setArbitrationIds(List<Integer> arbitrationIds){
+		if (Objects.isNull(arbitrationIds))
+			return;
 		this.arbitrations = new ArrayList<>();
 		arbitrationIds.forEach(x -> {
 			Arbitration arbitr = new Arbitration();

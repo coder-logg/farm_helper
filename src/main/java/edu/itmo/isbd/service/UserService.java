@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,14 +43,13 @@ public class UserService implements UserDetailsService {
 	public User registration(User user) throws UserAlreadyRegisteredException {
 		if (userRepository.existsUserByLogin(user.getLogin()))
 			throw new UserAlreadyRegisteredException("User with login '" + user.getLogin() +"' already exists.");
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		switch (user.getROLE()){
+		switch (user.getRole()){
 			case ADMIN:
-				return adminService.saveAdminOrThrow(new Admin(user));
+				return adminService.saveAdminOrThrow((Admin) user);
 			case DRIVER:
-				return driverService.saveOrThrow(new Driver(user));
+				return driverService.saveOrThrow((Driver) user);
 			case FARMER:
-				return farmerService.saveFarmerOrThrow(new Farmer(user));
+				return farmerService.saveFarmerOrThrow(new Farmer(user, null));
 		}
 		throw new IllegalStateException("Error in UserService.registration(): Unknown user role!");
 	}
@@ -94,7 +93,7 @@ public class UserService implements UserDetailsService {
 		return res;
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
+	@Secured("ADMIN")
 	@Transactional
 	public void deleteUser(String login){
 		if (userRepository.existsUserByLogin(login))

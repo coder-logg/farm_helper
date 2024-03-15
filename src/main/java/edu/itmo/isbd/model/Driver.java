@@ -1,12 +1,15 @@
 package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,6 +17,7 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Entity
 @Data
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @JsonIdentityInfo(
@@ -31,10 +35,10 @@ public class Driver extends User {
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy = "driver", fetch = FetchType.LAZY)
-	private List<DeliveryOrder> orders;
+	private List<DeliveryOrder> orders = new ArrayList<>();
 
 	{
-		super.ROLE = Role.DRIVER;
+		super.role = Role.DRIVER;
 	}
 
 	public Driver() {}
@@ -43,18 +47,15 @@ public class Driver extends User {
 		copyProperties(user, this);
 	}
 
-	@Nullable
-	@JsonProperty
-	public List<Integer> getDeliveryOrderIds(){
-		if (orders != null)
-			return orders.stream().map(DeliveryOrder::getId).collect(Collectors.toList());
-		return null;
+	public Driver(int id, String login, String phone, String mail, String password, Set<Review> myReviews,
+				  List<Review> reviewsForMe, Role role, Car car, int balance, List<DeliveryOrder> orders) {
+		super(id, login, phone, mail, password, myReviews, reviewsForMe, role);
+		this.car = car;
+		this.balance = balance;
+		this.orders = orders;
 	}
 
-	@JsonProperty
-	public void setOrdersIds(List<Integer> ordersIds){
-		orders = new ArrayList<>();
-		ordersIds.forEach(id -> orders.add(new DeliveryOrder(id)));
+	public Driver(String login, String phone, String mail, String password) {
+		super(login, phone, mail, password);
 	}
-
 }

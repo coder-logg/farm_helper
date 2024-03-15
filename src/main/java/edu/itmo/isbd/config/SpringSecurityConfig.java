@@ -32,7 +32,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -65,10 +65,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin/*").hasRole("ADMIN")
 				.anyRequest().authenticated()
 				.expressionHandler(webExpressionHandler())
-//			.and()
-//				.logout()
-//				.permitAll()
-//				.logoutSuccessUrl("/")
 			.and().httpBasic();
 	}
 

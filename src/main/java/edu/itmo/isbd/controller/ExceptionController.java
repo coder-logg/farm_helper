@@ -1,7 +1,9 @@
 package edu.itmo.isbd.controller;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import edu.itmo.isbd.exception.HttpException;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,8 +25,9 @@ public class ExceptionController {
 		response.sendError(HttpStatus.NOT_FOUND.value(), exc.getMessage());
 	}
 
-	@ExceptionHandler({ConstraintViolationException.class})
-	public void sqlConstraintsExceptionsHandler(ConstraintViolationException exc, final HttpServletResponse response) throws IOException {
+	@ExceptionHandler({ConstraintViolationException.class, DataIntegrityViolationException.class, JsonMappingException.class})
+	public void sqlConstraintsExceptionsHandler(Exception exc, final HttpServletResponse response) throws IOException {
 		response.sendError(HttpStatus.UNPROCESSABLE_ENTITY.value(), exc.getMessage());
 	}
+
 }

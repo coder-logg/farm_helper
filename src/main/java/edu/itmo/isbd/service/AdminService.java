@@ -35,7 +35,7 @@ public class AdminService{
 	@PersistenceContext
 	private Session session;
 
-	public Admin registration(Admin user){
+	public Admin save(Admin user){
 		return adminRepository.save(user);
 	}
 

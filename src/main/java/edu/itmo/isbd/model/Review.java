@@ -1,7 +1,9 @@
 package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import javax.persistence.*;
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +34,6 @@ public class Review {
 
 	private int rate;
 
-	public Review() {}
-
 	@Nullable
 	@JsonProperty
 	public String getRecipientLogin(){
@@ -40,21 +42,11 @@ public class Review {
 		return null;
 	}
 
-	@JsonProperty
-	public void setRecipientLogin(String login){
-		recipient = new User(login);
-	}
-
 	@Nullable
 	@JsonProperty
 	public String getSenderLogin(){
 		if (sender != null)
 			return sender.getLogin();
 		return null;
-	}
-
-	@JsonProperty
-	public void setSenderLogin(String login){
-		sender = new User(login);
 	}
 }

@@ -1,5 +1,6 @@
 package edu.itmo.isbd.service;
 
+import edu.itmo.isbd.dto.ReviewDto;
 import edu.itmo.isbd.model.Review;
 import edu.itmo.isbd.model.User;
 import edu.itmo.isbd.exception.EntityNotFoundException;
@@ -46,6 +47,10 @@ public class ReviewService {
 		review.setRecipient((User) userService.loadUserByUsername(review.getRecipientLogin()));
 		review.setSender((User) userService.loadUserByUsername(review.getSenderLogin()));
 		return reviewRepository.save(review);
+	}
+	@Transactional
+	public Review saveReview(ReviewDto review) {
+		return reviewRepository.save(review.mapToReview(userService));
 	}
 
 	public List<Review> getAllReviews(Integer pageNo, Integer pageSize, String sortBy) {

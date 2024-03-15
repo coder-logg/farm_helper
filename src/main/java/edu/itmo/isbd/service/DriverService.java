@@ -1,6 +1,9 @@
 package edu.itmo.isbd.service;
 
+import edu.itmo.isbd.dto.DriverDto;
 import edu.itmo.isbd.model.Car;
+import edu.itmo.isbd.model.DeliveryOrder;
+import edu.itmo.isbd.model.DeliveryOrderProgressStage;
 import edu.itmo.isbd.model.Driver;
 import edu.itmo.isbd.exception.UserAlreadyRegisteredException;
 import edu.itmo.isbd.repository.DriverRepository;
@@ -28,6 +31,9 @@ public class DriverService {
 	private CarService carService;
 
 	@Autowired
+	private DeliveryOrderService deliveryOrderService;
+
+	@Autowired
 	@Lazy
 	PasswordEncoder passwordEncoder;
 
@@ -42,11 +48,19 @@ public class DriverService {
 		return driverRepository.findDriverByLogin(login);
 	}
 
+	@Transactional
 	public Driver saveOrThrow(Driver driver){
 		if (!checkExists(driver.getLogin())) {
 			driver.setPassword(passwordEncoder.encode(driver.getPassword()));
 			return driverRepository.save(driver);
 		} else throw new UserAlreadyRegisteredException("Driver with username " + driver.getLogin() + " already exists.");
+	}
+
+	public Driver saveOrThrow(DriverDto driverDto){
+		if (!checkExists(driverDto.getLogin())) {
+			driverDto.setPassword(passwordEncoder.encode(driverDto.getPassword()));
+			return driverRepository.save(driverDto.mapToDriver());
+		} else throw new UserAlreadyRegisteredException("Driver with username " + driverDto.getLogin() + " already exists.");
 	}
 
 	public boolean checkExists(String login){
@@ -69,5 +83,15 @@ public class DriverService {
 		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 		Page<Driver> pagedResult = driverRepository.findAll(paging);
 		return pagedResult.getContent();
+	}
+
+	public List<DeliveryOrder> getMyDeliveryOrders(String login) {
+		return deliveryOrderService.getAllByDriverLogin(login);
+	}
+
+	public DeliveryOrder updateDeliveryOrderStage(String login, Integer deliveryOrderId, DeliveryOrderProgressStage stage) {
+		DeliveryOrder deliveryOrderFromDb = deliveryOrderService.get(deliveryOrderId);
+		deliveryOrderFromDb.setStatus(stage);
+		return deliveryOrderService.saveOrThrow(deliveryOrderFromDb);
 	}
 }

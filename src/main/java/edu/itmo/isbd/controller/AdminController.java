@@ -1,5 +1,7 @@
 package edu.itmo.isbd.controller;
 
+import edu.itmo.isbd.dto.RegistrationDto;
+import edu.itmo.isbd.dto.UserDto;
 import edu.itmo.isbd.model.Admin;
 import edu.itmo.isbd.model.Arbitration;
 import edu.itmo.isbd.service.AdminService;
@@ -21,13 +23,14 @@ public class AdminController {
 	private AdminService adminService;
 
 	@GetMapping("/login")
-	public ResponseEntity<?> getAdmin(Principal principal){
-		return ResponseEntity.ok(adminService.getAdminOrThrow(principal.getName()));
+	public ResponseEntity<UserDto> getAdmin(Principal principal){
+		return ResponseEntity.ok(new UserDto(adminService.getAdminOrThrow(principal.getName())));
 	}
 
 	@PostMapping(value = "/registration", produces = "application/json")
-	public ResponseEntity<Admin> register(@RequestBody Admin admin) throws URISyntaxException {
-		return ResponseEntity.created(new URI("/admin/login")).body(adminService.saveAdminOrThrow(admin));
+	public ResponseEntity<UserDto> register(@RequestBody RegistrationDto adminDto) throws URISyntaxException {
+		return ResponseEntity.created(new URI("/admin/login"))
+				.body(new UserDto(adminService.saveAdminOrThrow(new Admin(adminDto.getLogin(), adminDto.getPhone(), adminDto.getMail(), adminDto.getPassword()))));
 	}
 
 	@GetMapping("/{login}/arbitrations")

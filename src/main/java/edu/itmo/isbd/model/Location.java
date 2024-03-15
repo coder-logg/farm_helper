@@ -1,6 +1,7 @@
 package edu.itmo.isbd.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,12 +22,17 @@ public class Location {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@JoinColumn(name = "coordinates", unique = true)
+	@JoinColumn(name = "coordinates", unique = true, nullable = false)
 	private Point coordinates;
 
-	@Column(unique = true)
-	private String name;
+	@Column(unique = true, nullable = false)
+	private String address;
 
-	@Column(name = "sunlight_amount")
-	private int sunlightAmount;
+	@Column(nullable = false)
+	private String country;
+
+	@JsonIgnore
+	public void setCoordinates(Double x, Double y) {
+		this.coordinates = new Point(x, y);
+	}
 }

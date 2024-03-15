@@ -4,6 +4,7 @@ import edu.itmo.isbd.model.Customer;
 import edu.itmo.isbd.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class CustomerController {
 	}
 
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> createCustomer(@RequestBody Customer customer) throws URISyntaxException {
 		return ResponseEntity.created(new URI("/customers/" + customerService.save(customer).getId())).build();
 	}

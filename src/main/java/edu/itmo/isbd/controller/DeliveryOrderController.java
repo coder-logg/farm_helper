@@ -1,6 +1,8 @@
 package edu.itmo.isbd.controller;
 
 import edu.itmo.isbd.Utils;
+import edu.itmo.isbd.dto.CreationDeliveryOrderDto;
+import edu.itmo.isbd.dto.DeliveryOrderDto;
 import edu.itmo.isbd.model.DeliveryOrder;
 import edu.itmo.isbd.model.Role;
 import edu.itmo.isbd.model.User;
@@ -26,24 +28,24 @@ public class DeliveryOrderController {
 	private DeliveryOrderService deliveryOrderService;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<DeliveryOrder> getDeliveryOrder(@PathVariable Integer id, Authentication auth) {
+	public ResponseEntity<DeliveryOrderDto> getDeliveryOrder(@PathVariable Integer id, Authentication auth) {
 		DeliveryOrder deliveryOrder = deliveryOrderService.get(id);
 		User user = (User) auth.getPrincipal();
-		if (user.getLogin().equals(deliveryOrder.getDriverLogin())
-				|| user.getLogin().equals(deliveryOrder.getFarmerLogin())
-				|| user.getROLE().equals(Role.ADMIN))
-			return ResponseEntity.ok(deliveryOrder);
+		if (user.getLogin().equals(deliveryOrder.getDriver().getLogin())
+				|| user.getLogin().equals(deliveryOrder.getFarmer().getLogin())
+				|| user.getRole().equals(Role.ADMIN))
+			return ResponseEntity.ok(new DeliveryOrderDto(deliveryOrder));
 		else throw new HttpException("You don't have access for requested data.", HttpStatus.FORBIDDEN);
 	}
 
+	@PostMapping
 	@PreAuthorize("(hasRole('FARMER') and authentication.name == #deliveryOrder.farmerLogin) or hasRole('ADMIN')")
-	public ResponseEntity<DeliveryOrder> addDeliveryOrder(@RequestBody @P("deliveryOrder") DeliveryOrder deliveryOrder) throws URISyntaxException {
-		if (!ObjectUtils.allNotNull(deliveryOrder.getFarmerLogin(), deliveryOrder.getOrderId()))
+	public ResponseEntity<DeliveryOrderDto> addDeliveryOrder(@RequestBody @P("deliveryOrder") CreationDeliveryOrderDto creationDeliveryOrderDto) throws URISyntaxException {
+		if (!ObjectUtils.allNotNull(creationDeliveryOrderDto.getFarmerLogin(), creationDeliveryOrderDto.getOrderId()))
 			throw new HttpException("Incomplete data was given. Required fields: farmerLogin, orderId.", HttpStatus.UNPROCESSABLE_ENTITY);
-		DeliveryOrder deliveryOrderFromDb = deliveryOrderService.saveOrThrow(deliveryOrder);
 		return ResponseEntity
-				.created(new URI("/delivery-orders/" + deliveryOrder.getId()))
-				.body(deliveryOrderFromDb);
+				.created(new URI("/delivery-orders/" + creationDeliveryOrderDto.getId()))
+				.body(new DeliveryOrderDto(deliveryOrderService.create(creationDeliveryOrderDto)));
 	}
 
 	@DeleteMapping("/{id}")
@@ -51,7 +53,7 @@ public class DeliveryOrderController {
 		DeliveryOrder deliveryOrderFromDb = deliveryOrderService.get(id);
 		List<String> roles = Utils.getRoles(auth);
 		if (!(roles.contains("ROLE_ADMIN")
-				|| (auth.getName().equals(deliveryOrderFromDb.getFarmerLogin()) && roles.contains("ROLE_FARMER"))))
+				|| (auth.getName().equals(deliveryOrderFromDb.getFarmer().getLogin()) && roles.contains("ROLE_FARMER"))))
 			throw new HttpException("You don't have access to delete order for drive with id = " + id, HttpStatus.FORBIDDEN);
 		deliveryOrderService.removeOrThrow(id);
 		return ResponseEntity.ok("Entity deleted");

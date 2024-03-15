@@ -20,9 +20,6 @@ public class CustomerService {
 	@Autowired
 	private CustomerRepository customerRepository;
 
-	@Autowired
-	private OrderService orderService;
-
 	@Transactional
 	public Customer save(Customer customer) {
 		return customerRepository.save(customer);
@@ -36,13 +33,15 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public Optional<Customer> getCustomer(int id) {
-		return customerRepository.findById(id);
+	public Customer getCustomerOrThrow(String name) {
+		return customerRepository
+				.findByName(name)
+				.orElseThrow(() -> new EntityNotFoundException("Not found customer with name = " + name));
 	}
 
 	@Transactional
-	public Set<Customer> getAllCustomersByFarmerLogin(String login) {
-		return customerRepository.findDistinctByOrdersIn(orderService.getOrdersByFarmerLogin(login));
+	public Optional<Customer> getCustomer(int id) {
+		return customerRepository.findById(id);
 	}
 
 	@Transactional

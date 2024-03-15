@@ -1,5 +1,6 @@
 package edu.itmo.isbd.controller;
 
+import edu.itmo.isbd.dto.ReviewDto;
 import edu.itmo.isbd.model.Review;
 import edu.itmo.isbd.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ReviewController {
 
 	@PostMapping
 	@PreAuthorize("#review.senderLogin == authentication.name")
-	public ResponseEntity<?> postReview(@RequestBody @P("review") Review review) throws URISyntaxException {
+	public ResponseEntity<?> postReview(@RequestBody ReviewDto review) throws URISyntaxException {
 		return ResponseEntity.created(new URI("/reviews/" + reviewService.saveReview(review).getId())).build();
 	}
 }

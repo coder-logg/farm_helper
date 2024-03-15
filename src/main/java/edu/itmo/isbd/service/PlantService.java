@@ -28,6 +28,12 @@ public class PlantService {
 				.orElseThrow(() -> new EntityNotFoundException("Plant with id = " + id + " wasn't found"));
 	}
 
+	public Plant getPlantOrThrow(String name){
+		return plantRepository
+				.findPlantByName(name)
+				.orElseThrow(() -> new EntityNotFoundException("Plant with name = " + name + " wasn't found"));
+	}
+
 	public Plant savePlant(Plant plant) {
 		return plantRepository.save(plant);
 	}

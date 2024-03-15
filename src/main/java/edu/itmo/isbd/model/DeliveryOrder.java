@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -13,20 +14,15 @@ import java.util.List;
 @Entity
 @Table(name = "delivery_order")
 @Data
-@JsonIdentityInfo(
-		generator = ObjectIdGenerators.PropertyGenerator.class,
-		property = "id")
 public class DeliveryOrder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 
-	@JsonIgnore
 	@ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "driver_id", referencedColumnName = "user_id")
 	private Driver driver;
 
-	@JsonIgnore
 	@ManyToOne(optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "farmer_id", referencedColumnName = "user_id")
 	private Farmer farmer;
@@ -39,18 +35,21 @@ public class DeliveryOrder {
 	@Column(name = "closing_date", columnDefinition = "timestamp default NULL")
 	private Date closingDate;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "order_id", referencedColumnName = "id")
 	private Order order;
 
+	@Column
+	@Enumerated(EnumType.STRING)
+	private DeliveryOrderProgressStage status;
+
 	private int cost;
 
-	@JsonIgnore
-	@ToString.Exclude
-	@EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy = "deliveryOrder")
-	private List<Arbitration> arbitrations;
+	@Column(name = "to_address")
+	private String toAddress;
+
+	@Column(name = "from_address")
+	private String fromAddress;
 
 	public DeliveryOrder() {}
 
@@ -63,46 +62,5 @@ public class DeliveryOrder {
 
 	public DeliveryOrder(int id) {
 		this.id = id;
-	}
-
-	@Nullable
-	@JsonProperty
-	public String getDriverLogin(){
-		if (this.driver != null)
-			return driver.getLogin();
-		return null;
-	}
-
-	@JsonProperty
-	public void setDriverLogin(String login){
-		this.driver = new Driver();
-		this.driver.setLogin(login);
-	}
-
-	@Nullable
-	@JsonProperty
-	public String getFarmerLogin(){
-		if (this.farmer != null)
-			return farmer.getLogin();
-		return null;
-	}
-
-	@JsonProperty
-	public void setFarmerLogin(String login){
-		this.farmer = new Farmer();
-		this.farmer.setLogin(login);
-	}
-
-	@JsonProperty
-	public void setOrderId(Integer id){
-		this.order = new Order(id);
-	}
-
-	@Nullable
-	@JsonProperty
-	public Integer getOrderId(){
-		if (order != null)
-			return order.getId();
-		return null;
 	}
 }

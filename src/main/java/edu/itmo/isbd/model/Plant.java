@@ -1,65 +1,54 @@
 package edu.itmo.isbd.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Data
-@JsonIdentityInfo(
-		generator = ObjectIdGenerators.PropertyGenerator.class,
-		property = "id")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Plant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(unique = true, nullable = false)
 	private String name;
 	private int cost;
 	private int timeForCompleted;
 
-	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name="required_equipment",
 			joinColumns=@JoinColumn(name="plant_id"),
 			inverseJoinColumns=@JoinColumn(name="equipment_id"))
-	private List<Equipment> requiredEquipments;
+	private List<Equipment> requiredEquipment = new ArrayList<>();
 
 	public Plant(int id) {
 		this.id = id;
 	}
 
-	@Nullable
-	@JsonProperty
-	public List<Integer> getRequiredEquipmentIds(){
-		if (requiredEquipments == null)
-			return null;
-		return requiredEquipments.stream().map(Equipment::getId).collect(Collectors.toList());
+	public Plant(String name, int cost, int timeForCompleted) {
+		this.name = name;
+		this.cost = cost;
+		this.timeForCompleted = timeForCompleted;
 	}
 
-	@JsonProperty
-	public void setRequiredEquipmentIds(List<Integer> requiredEquipments){
-		this.requiredEquipments = new ArrayList<>();
-		requiredEquipments.forEach(x -> {
-			Equipment eq = new Equipment(x);
-			this.requiredEquipments.add(eq);
-		});
+	public Plant(int id, String name, int cost, int timeForCompleted) {
+		this.id = id;
+		this.name = name;
+		this.cost = cost;
+		this.timeForCompleted = timeForCompleted;
 	}
 
-	@JsonIgnore
-	@ToString.Exclude
-	@EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy = "plant")
-	private List<OrderDetail> orderDetails;
+	public Plant(String name) {
+		this.name = name;
+	}
 
-	public Plant() {}
+	public void addRequiredEquipment(Equipment equipment){
+		requiredEquipment.add(equipment);
+	}
 
 }

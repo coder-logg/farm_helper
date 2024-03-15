@@ -3,15 +3,15 @@ package edu.itmo.isbd.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
@@ -20,7 +20,7 @@ public class Farm {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@OneToOne(optional = false)
+	@ManyToOne(optional = false, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "location_id")
 	private Location location;
 
@@ -29,4 +29,14 @@ public class Farm {
 
 	@Column(name = "square")
 	private int square;
+
+	public Farm(Location location, int pricePerMonth, int square) {
+		this.location = location;
+		this.pricePerMonth = pricePerMonth;
+		this.square = square;
+	}
+
+	public Farm(int id) {
+		this.id = id;
+	}
 }

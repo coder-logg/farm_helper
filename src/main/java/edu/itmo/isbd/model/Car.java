@@ -24,12 +24,6 @@ public class Car {
 	private String number;
 	private int capacity;
 
-	@JsonIgnore
-	@ToString.Exclude
-	@EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy = "car")
-	private List<Driver> drivers;
-
 	public Car() {}
 
 	public Car(int id, String mark, String number, int capacity) {
